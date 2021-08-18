@@ -1,0 +1,5 @@
+.elixir_ls
+.vscode
+.DS_Store
+.cfg
+.iex.exs
