@@ -48,6 +48,10 @@ set PATH /usr/lib/dart/bin $PATH
 set -x LC_ALL en_US.UTF-8
 set -x WORK $HOME/Workspace
 set PATH $HOME/bin $HOME/sbin /usr/local/bin $HOME/.local/bin $PATH
+set EDITOR nvim
+
+# Import GPG keys
+set GPG_TTY (tty)
 
 # iTerm
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
@@ -76,6 +80,20 @@ starship init fish | source
 # Google Cloud SDK.
 if [ -f '/Users/nandofarias/Workspace/google-cloud-sdk/path.fish.inc' ]; . '/Users/nandofarias/Workspace/google-cloud-sdk/path.fish.inc'; end
 
+# Blvd
+set MATCHWORKER_PREFER_PREBUILT 1
+# Okta
+if test -d ~/.okta
+	set PATH $HOME/.okta/bin $PATH
+	source ~/.okta/fish_functions/okta-aws.fish
+	source ~/.okta/fish_functions/okta-sls.fish
+end
+
 # Emacs
 set -x DOOMDIR $HOME/.doom.d
 set PATH $HOME/.emacs.d/bin $PATH
+
+# Zoxide
+zoxide init fish | source
+
+
