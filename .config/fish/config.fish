@@ -51,7 +51,7 @@ set PATH $HOME/bin $HOME/sbin /usr/local/bin $HOME/.local/bin $PATH
 set EDITOR nvim
 
 # Import GPG keys
-set GPG_TTY (tty)
+set -x GPG_TTY (tty)
 
 # iTerm
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
@@ -73,6 +73,7 @@ alias rest="cmatrix -C black"
 alias v="nvim ."
 alias t="tmux new -s (pwd | sed 's/.*\///g')"
 alias ta="tmux attach -t"
+alias pluginstall="nvim +PlugInstall +qa"
 
 # Starship
 starship init fish | source
