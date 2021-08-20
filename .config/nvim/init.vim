@@ -65,8 +65,7 @@ nnoremap <C-y> :NERDTreeFind<CR>
 let g:NERDTreeWinPos = "right"
 
 " copy to clipboard
-nnoremap Y "*y
-vnoremap Y "*y
+set clipboard=unnamed
 
 " airline
 let g:airline_theme='deus'
@@ -74,10 +73,6 @@ let g:airline#extensions#tabline#formatter = 'unique_tail'
 
 " vim-fugitive
 nnoremap <C-g><C-g> :Git<CR>
-
-" tabs
-nnoremap ] :tabnext<CR>
-nnoremap [ :tabprevious<CR>
 
 " Terminal mode remap
 tnoremap <Esc> <C-\><C-n>:q!<CR>
