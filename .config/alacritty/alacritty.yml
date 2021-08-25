@@ -60,3 +60,15 @@ colors:
     magenta: '0xff99cc'
     cyan:    '0x99ffee'
     white:   '0xffffff'
+
+key_bindings:
+  # Keybindings for tmux split and move https://www.hamvocke.com/blog/a-guide-to-customizing-your-tmux-conf/
+  - { key: D, mods: Command, chars: "\x02\x76" }
+  - { key: D, mods: Command|Shift, chars: "\x02\x73" }
+  - { key: W, mods: Command, chars: "\x02\x78" }
+  - { key: H, mods: Command, chars: "\x02\x68" }
+  - { key: J, mods: Command, chars: "\x02\x6a" }
+  - { key: K, mods: Command, chars: "\x02\x6b" }
+  - { key: L, mods: Command, chars: "\x02\x6c" }
+  - { key: T, mods: Command, chars: "\x02\x63" }
+
