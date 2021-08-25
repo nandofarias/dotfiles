@@ -150,6 +150,9 @@ set clipboard=unnamed
 " Search
 nmap <space> :nohlsearch <bar> :pc<CR>
 
+" Close buffer
+nnoremap <leader>q :bdelete<CR>
+
 " Dracula PRO
 packadd! dracula_pro
 syntax enable
