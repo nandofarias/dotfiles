@@ -1,6 +1,15 @@
 # Fish
 set -gx fish_greeting "Welcome to Summoner's Rift"
 
+# General
+set -x LC_ALL en_US.UTF-8
+set -x WORK $HOME/Workspace
+set PATH $HOME/bin $HOME/sbin /usr/local/bin $HOME/.local/bin $PATH
+set -x EDITOR nvim
+
+# Fix curl
+fish_add_path /usr/local/opt/curl/bin
+
 # Android
 set -gx ANDROID_HOME $HOME/Library/Android/sdk
 set PATH $ANDROID_HOME/tools/bin $ANDROID_HOME/tools $ANDROID_HOME/platform-tools $ANDROID_HOME/emulator $PATH
@@ -44,12 +53,6 @@ set PATH $HOME/.elixir-ls/release $PATH
 # Dart
 set PATH /usr/lib/dart/bin $PATH
 
-# General
-set -x LC_ALL en_US.UTF-8
-set -x WORK $HOME/Workspace
-set PATH $HOME/bin $HOME/sbin /usr/local/bin $HOME/.local/bin $PATH
-set EDITOR nvim
-
 # Import GPG keys
 set -x GPG_TTY (tty)
 
@@ -70,7 +73,7 @@ alias mps="mix phx.server"
 alias dc="docker-compose"
 alias bfg="java -jar $HOME/Workspace/bfg.jar"
 alias rest="cmatrix -C black"
-alias v="nvim ."
+alias v="nvim"
 alias t="tmux new -s (pwd | sed 's/.*\///g')"
 alias ta="tmux attach -t"
 alias pluginstall="nvim +PlugInstall +qa"
