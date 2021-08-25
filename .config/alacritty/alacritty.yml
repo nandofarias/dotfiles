@@ -71,4 +71,6 @@ key_bindings:
   - { key: K, mods: Command, chars: "\x02\x6b" }
   - { key: L, mods: Command, chars: "\x02\x6c" }
   - { key: T, mods: Command, chars: "\x02\x63" }
+  - { key: LBracket, mods: Shift|Command, chars: "\x02\x70" }
+  - { key: RBracket, mods: Shift|Command, chars: "\x02\x6e" }
 
