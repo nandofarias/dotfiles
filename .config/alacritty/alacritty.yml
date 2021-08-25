@@ -7,7 +7,17 @@ font:
  
   size: 15.0
 
-# Colors (Dracula PRO - Van Helsing)
+window:
+  padding:
+    x: 10
+    y: 10
+  dynamic_padding: false
+  decorations: buttonless
+  startup_mode: SimpleFullScreen # or Maximized
+
+background_opacity: 0.9
+
+# Start Colors (Dracula PRO - Van Helsing)
 colors:
   # Default colors
   primary:
@@ -60,6 +70,8 @@ colors:
     magenta: '0xff99cc'
     cyan:    '0x99ffee'
     white:   '0xffffff'
+
+# End Colors (Dracula PRO - Van Helsing)
 
 key_bindings:
   # Keybindings for tmux split and move https://www.hamvocke.com/blog/a-guide-to-customizing-your-tmux-conf/
