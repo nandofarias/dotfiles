@@ -153,6 +153,10 @@ nmap <space> :nohlsearch <bar> :pc<CR>
 " Close buffer
 nnoremap <leader>q :bdelete<CR>
 
+" Persistent undo
+set undofile
+set undodir=~/.vimundo/
+
 " Dracula PRO
 packadd! dracula_pro
 syntax enable
