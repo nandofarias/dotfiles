@@ -18,9 +18,12 @@
 [url "git@github.com:nandofarias/"]
 	insteadOf = "nandofarias:"
 
+[url "git@github.com:Boulevard/"]
+	insteadOf = "blvd:"
+
 [alias]
   st = status -s
-  ht = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+  ht = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(magenta)%h%C(reset) %C(green)(%ar)%C(reset) %C(red)%d%C(reset) %C(white)%s%C(reset) - %C(blue)%an%C(reset)'
   
   # Git Commit, Add all and Push — in one step.
   cap = "!f() { git commit -m \"$@\"; }; f"
