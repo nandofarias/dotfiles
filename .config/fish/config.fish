@@ -78,6 +78,7 @@ alias v="nvim"
 alias t="tmux new -s (pwd | sed 's/.*\///g')"
 alias ta="tmux attach -t"
 alias pluginstall="nvim +PlugInstall +qa"
+alias cat='bat'
 
 # Starship
 starship init fish | source
