@@ -6,6 +6,7 @@ set -x LC_ALL en_US.UTF-8
 set -x WORK $HOME/Workspace
 set PATH $HOME/bin $HOME/sbin /usr/local/bin $HOME/.local/bin $PATH
 set -x EDITOR nvim
+ulimit -S -n 2048 # increase the number of files a process can open
 
 # Fix curl
 fish_add_path /usr/local/opt/curl/bin
