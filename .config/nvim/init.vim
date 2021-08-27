@@ -162,6 +162,12 @@ nnoremap <leader>q :bdelete<CR>
 set undofile
 set undodir=~/.vimundo/
 
+" Open config
+nnoremap <Leader>nv :e ~/.config/nvim/init.vim <CR>
+nnoremap <Leader>tm :e ~/.config/tmux/tmux.conf <CR>
+nnoremap <Leader>fs :e ~/.config/fish/config.fish <CR>
+nnoremap <Leader>al :e ~/.config/alacritty/alacritty.yml <CR>
+
 " Dracula PRO
 packadd! dracula_pro
 syntax enable
