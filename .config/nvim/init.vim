@@ -133,10 +133,14 @@ let g:dashboard_custom_shortcut={
 \ 'find_word'          : '\ f a',
 \ 'book_marks'         : '\ f b',
 \ }
-let g:dashboard_preview_command = 'lolcat'
-let g:dashboard_preview_file_height = 9
-let g:dashboard_preview_file_width = 55
-let g:dashboard_preview_file = '~/.config/nvim/neovim.cat'
+let g:dashboard_custom_header = [
+\ ' ███╗   ██╗ ███████╗ ██████╗  ██╗   ██╗ ██╗ ███╗   ███╗',
+\ ' ████╗  ██║ ██╔════╝██╔═══██╗ ██║   ██║ ██║ ████╗ ████║',
+\ ' ██╔██╗ ██║ █████╗  ██║   ██║ ██║   ██║ ██║ ██╔████╔██║',
+\ ' ██║╚██╗██║ ██╔══╝  ██║   ██║ ╚██╗ ██╔╝ ██║ ██║╚██╔╝██║',
+\ ' ██║ ╚████║ ███████╗╚██████╔╝  ╚████╔╝  ██║ ██║ ╚═╝ ██║',
+\ ' ╚═╝  ╚═══╝ ╚══════╝ ╚═════╝    ╚═══╝   ╚═╝ ╚═╝     ╚═╝',
+\]
 nmap <Leader>ss :<C-u>SessionSave<CR>
 nmap <Leader>sl :<C-u>SessionLoad<CR>
 nnoremap <silent> <Leader>fh :DashboardFindHistory<CR>
@@ -158,6 +162,13 @@ set shiftwidth=2
 set softtabstop=2
 set expandtab
 set clipboard=unnamed
+set splitright
+" Dracula PRO
+packadd! dracula_pro
+syntax enable
+let g:dracula_colorterm = 0
+colorscheme dracula_pro_van_helsing
+
 
 " Search
 nmap <space> :nohlsearch <bar> :pc<CR>
@@ -174,10 +185,4 @@ nnoremap <Leader>nv :e ~/.config/nvim/init.vim <CR>
 nnoremap <Leader>tm :e ~/.config/tmux/tmux.conf <CR>
 nnoremap <Leader>fs :e ~/.config/fish/config.fish <CR>
 nnoremap <Leader>al :e ~/.config/alacritty/alacritty.yml <CR>
-
-" Dracula PRO
-packadd! dracula_pro
-syntax enable
-let g:dracula_colorterm = 0
-colorscheme dracula_pro_van_helsing
 
