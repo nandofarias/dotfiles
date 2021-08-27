@@ -77,8 +77,9 @@ alias rest="cmatrix -C black"
 alias v="nvim"
 alias t="tmux new -s (pwd | sed 's/.*\///g')"
 alias ta="tmux attach -t"
-alias pluginstall="nvim +PlugInstall +qa"
+alias plug_sync="nvim +PlugInstall +PlugClean! +qa"
 alias cat='bat'
+alias v_profile='nvim --startuptime timeCost.txt timeCost.txt; and rm timeCost.txt'
 
 # Starship
 starship init fish | source
