@@ -5,7 +5,6 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'TimUntersberger/neogit'
-Plug 'vimsence/vimsence'
 Plug 'dylanaraps/root.vim'
 
 " Statusline
@@ -32,7 +31,6 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ }
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
 
 " React/Typescript
 Plug 'pangloss/vim-javascript'
