@@ -4,8 +4,11 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 " Utilities
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'TimUntersberger/neogit'
 Plug 'dylanaraps/root.vim'
+
+" Git
+Plug 'TimUntersberger/neogit'
+Plug 'sindrets/diffview.nvim'
 
 " Statusline
 Plug 'glepnir/galaxyline.nvim' , {'branch': 'main'}
@@ -110,7 +113,11 @@ let g:root#patterns = ['.git', 'mix.exs', '_build', 'deps', 'node_modules', 'REA
 
 " neogit
 lua << EOF
-require("neogit").setup{}
+require("neogit").setup{
+  integrations = {
+    diffview = true
+  }
+}
 EOF
 nnoremap <C-g> :Neogit<CR>
 
