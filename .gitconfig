@@ -44,6 +44,8 @@
 	ls = log -p -S
 	lg = log -p -G
 
+  unstage = restore --staged
+
 [core]
 	excludesfile = /Users/nandofarias/.gitignore
 	autocrlf = input
