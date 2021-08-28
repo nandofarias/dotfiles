@@ -180,6 +180,9 @@ nnoremap <leader>q :bdelete<CR>
 set undofile
 set undodir=~/.vimundo/
 
+" Back to normal mode with Ctrl-c
+inoremap <C-c> <esc>
+
 " Open config
 nnoremap <Leader>nv :e ~/.config/nvim/init.vim <CR>
 nnoremap <Leader>tm :e ~/.config/tmux/tmux.conf <CR>
