@@ -44,6 +44,12 @@ Plug 'jparise/vim-graphql'
 
 call plug#end()
 
+
+" Default autogroup
+augroup default
+au!
+augroup END
+
 " nvim-treesitter
 lua <<EOF
 require("nvim-treesitter.configs").setup {
@@ -70,11 +76,16 @@ let g:LanguageClient_serverCommands = {
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-autocmd BufWritePre *.ex call FormatOnSave()
-autocmd BufWritePre *.exs call FormatOnSave()
+" Format on save
+autocmd default BufWritePre *.ex call FormatOnSave()
+autocmd default BufWritePre *.exs call FormatOnSave()
+
 function FormatOnSave()
-    noautocmd call LanguageClient#textDocument_formatting()
-    noautocmd w 
+  noautocmd call LanguageClient#textDocument_formatting({}, funcref('AfterFormat'))
+endfunction
+
+function AfterFormat(...)
+  noautocmd w
 endfunction
 
 " deoplate
@@ -169,9 +180,8 @@ syntax enable
 let g:dracula_colorterm = 0
 colorscheme dracula_pro_van_helsing
 
-
-" Search
-nmap <space> :nohlsearch <bar> :pc<CR>
+" Clear all things
+nmap <silent><space> :nohlsearch <bar> :pc<CR>
 
 " Close buffer
 nnoremap <leader>q :bdelete<CR>
@@ -188,4 +198,9 @@ nnoremap <Leader>nv :e ~/.config/nvim/init.vim <CR>
 nnoremap <Leader>tm :e ~/.config/tmux/tmux.conf <CR>
 nnoremap <Leader>fs :e ~/.config/fish/config.fish <CR>
 nnoremap <Leader>al :e ~/.config/alacritty/alacritty.yml <CR>
+
+" Operators
+onoremap ic i{
+onoremap ib i[
+onoremap ip i(
 
