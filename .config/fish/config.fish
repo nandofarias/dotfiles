@@ -103,4 +103,5 @@ set PATH $HOME/.emacs.d/bin $PATH
 # Zoxide
 zoxide init fish | source
 
-
+# McFly
+mcfly init fish | source
