@@ -15,6 +15,7 @@ def convert_to_module(path):
 # `lib/`).
 def module_from_path(path):
 		path       = re.sub(r'^(.*?)lib\/', '', path)
+		path       = re.sub(r'^(.*?)test\/', '', path)
 		path, _ext = os.path.splitext(path)
 		return convert_to_module(path)
 # Returns the a proper Elixir module name given a `path` (assumed to be a test
