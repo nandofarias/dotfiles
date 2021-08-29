@@ -42,6 +42,10 @@ Plug 'peitalin/vim-jsx-typescript'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'jparise/vim-graphql'
 
+" Test
+Plug 'vim-test/vim-test'
+Plug 'preservim/vimux'
+
 call plug#end()
 
 
@@ -161,8 +165,14 @@ nnoremap <silent> <Leader>fa :DashboardFindWord<CR>
 nnoremap <silent> <Leader>fb :DashboardJumpMark<CR>
 nnoremap <silent> <Leader>cn :DashboardNewFile<CR>
 
-" Terminal mode remap
-tnoremap <Esc> <C-\><C-n>:q!<CR>
+" vim-test
+nmap <silent> tn :TestNearest<CR>
+nmap <silent> tf :TestFile<CR>
+nmap <silent> ts :TestSuite<CR>
+nmap <silent> tl :TestLast<CR>
+nmap <silent> tg :TestVisit<CR>
+let test#strategy = 'vimux'
+let g:test#preserve_screen = 0
 
 " Appearence
 set number cursorline
@@ -180,8 +190,11 @@ syntax enable
 let g:dracula_colorterm = 0
 colorscheme dracula_pro_van_helsing
 
+" Terminal mode remap
+tnoremap <Esc> <C-\><C-n>:q!<CR>
+
 " Clear all things
-nmap <silent><space> :nohlsearch <bar> :pc<CR>
+nmap <silent><space> :nohlsearch<CR>
 
 " Close buffer
 nnoremap <leader>q :bdelete<CR>
