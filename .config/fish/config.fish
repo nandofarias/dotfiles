@@ -76,6 +76,7 @@ alias bfg="java -jar $HOME/Workspace/bfg.jar"
 alias rest="cmatrix -C black"
 alias v="nvim"
 alias t="tmux new -s (pwd | sed 's/.*\///g')"
+alias tls="tmux ls"
 alias ta="tmux attach -t"
 alias plug_sync="nvim +PlugInstall +PlugClean! +qa"
 alias cat='bat'
