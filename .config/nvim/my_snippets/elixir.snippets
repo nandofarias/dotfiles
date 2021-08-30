@@ -25,7 +25,15 @@ def module_from_test_path(path):
 		path = re.sub(r'^(.*?)lib\/', '', path)
 		path = re.sub(r'_test\.exs$', '', path)
 		return convert_to_module(path)
+# Returns the name of the principal context.
+def app_context(path):
+		path = re.sub(r'^(.*?)test\/', '', path)
+		path = re.sub(r'^(.*?)lib\/', '', path)
+		components = path.split('/')
+
+		return underscore_to_camelcase(components[0])
 endglobal
+
 
 snippet defm "Regular module definition" b
 defmodule $1 do
@@ -56,8 +64,24 @@ defmodule `!p snip.rv = module_from_test_path(path)`Test do
 end
 endsnippet
 
+snippet deflvtest "LiveView named-test-module definition" b
+defmodule `!p snip.rv = module_from_test_path(path)`Test do
+	use `!p snip.rv = app_context(path)`.ConnCase, async: true
+
+	import Phoenix.LiveViewTest
+
+	$2
+end
+endsnippet
+
 snippet t "Single test macro" b
 test "$1" do
+	$2
+end
+endsnippet
+
+snippet tconn "Single test macro" b
+test "$1", %{conn: conn} do
 	$2
 end
 endsnippet
