@@ -72,6 +72,7 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 set hidden
 let g:LanguageClient_serverCommands = {
     \ 'elixir': ['language_server.sh'],
+    \ 'eelixir': ['language_server.sh'],
     \ 'javascript': ['typescript-language-server', '--stdio'],
     \ 'typescript': ['typescript-language-server', '--stdio'],
     \ 'javascript.jsx': ['typescript-language-server', '--stdio'],
@@ -94,6 +95,8 @@ endfunction
 
 " deoplate
 let g:deoplete#enable_at_startup = 1
+set completeopt-=preview
+inoremap <silent><expr> <CR> pumvisible() ? "\<C-Y>" : "\<CR>"
 
 " ultisnips
 let g:UltiSnipsExpandTrigger="<tab>"
