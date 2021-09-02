@@ -67,6 +67,8 @@ nnoremap <C-p> <cmd>Telescope find_files<cr>
 nnoremap <C-f> <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+" fix this issue https://github.com/nvim-telescope/telescope.nvim/issues/161
+autocmd FileType TelescopePrompt call deoplete#custom#buffer_option('auto_complete', v:false) 
 
 " lsp
 set hidden
@@ -187,6 +189,7 @@ set softtabstop=2
 set expandtab
 set clipboard=unnamed
 set splitright
+set mouse=a
 " Dracula PRO
 packadd! dracula_pro
 syntax enable
