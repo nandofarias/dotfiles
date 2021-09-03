@@ -9,6 +9,7 @@ Plug 'dylanaraps/root.vim'
 " Git
 Plug 'TimUntersberger/neogit'
 Plug 'sindrets/diffview.nvim'
+Plug 'mhinz/vim-signify'
 
 " Statusline
 Plug 'glepnir/galaxyline.nvim' , {'branch': 'main'}
@@ -179,6 +180,9 @@ nmap <silent> tg :TestVisit<CR>
 let test#strategy = 'vimux'
 let g:test#preserve_screen = 0
 
+" vim-signify
+set updatetime=100
+
 " Appearence
 set number cursorline
 set showcmd cmdheight=1
@@ -190,6 +194,7 @@ set expandtab
 set clipboard=unnamed
 set splitright
 set mouse=a
+set wrap
 " Dracula PRO
 packadd! dracula_pro
 syntax enable
@@ -222,4 +227,7 @@ nnoremap <Leader>al :e ~/.config/alacritty/alacritty.yml <CR>
 onoremap ic i{
 onoremap ib i[
 onoremap ip i(
+
+" open quickfix
+nnoremap <Leader>e :cw<CR>
 
