@@ -8,6 +8,9 @@ set PATH $HOME/bin $HOME/sbin /usr/local/bin $HOME/.local/bin $PATH
 set -x EDITOR nvim
 ulimit -n 65536 # See: https://stackoverflow.com/a/45004802 
 
+# Vim mode
+fish_hybrid_key_bindings
+
 # Fix curl
 fish_add_path /usr/local/opt/curl/bin
 
@@ -43,12 +46,13 @@ set PATH $HOME/.fnm $PATH
 /usr/local/bin/fnm env | source
 
 # Elixir/Erlang
-set ERL_LIBS /usr/lib/elixir/lib
+set -x ERL_LIBS /usr/lib/elixir/lib
 set -x ERL_AFLAGS "-kernel shell_history enabled"
-set ELIXIR_EDITOR code
-set PLUG_EDITOR "vscode://file/__FILE__:__LINE__"
-set KERL_BUILD_DOCS yes
-set CFLAGS "-O2 -g -fno-stack-check -Wno-error=implicit-function-declaration"
+set -x ELIXIR_EDITOR code
+set -x PLUG_EDITOR "vscode://file/__FILE__:__LINE__"
+set -x ERL_BUILD_DOCS yes
+set -x CFLAGS "-O2 -g -fno-stack-check -Wno-error=implicit-function-declaration"
+set -x ELIXIR_ERL_OPTIONS "+S 6:6"
 set PATH $HOME/.elixir-ls/release $PATH
 
 # Dart
@@ -106,3 +110,4 @@ zoxide init fish | source
 
 # McFly
 mcfly init fish | source
+
