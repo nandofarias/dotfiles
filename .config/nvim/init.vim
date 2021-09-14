@@ -2,6 +2,7 @@
 call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 
 " Utilities
+Plug 'nvim-lua/plenary.nvim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'dylanaraps/root.vim'
@@ -9,7 +10,7 @@ Plug 'dylanaraps/root.vim'
 " Git
 Plug 'TimUntersberger/neogit'
 Plug 'sindrets/diffview.nvim'
-Plug 'mhinz/vim-signify'
+Plug 'lewis6991/gitsigns.nvim'
 
 " Statusline
 Plug 'glepnir/galaxyline.nvim' , {'branch': 'main'}
@@ -24,10 +25,10 @@ Plug 'akinsho/bufferline.nvim' "tab layout
 
 " Fuzzy finder
 Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 
 " Language support
+Plug 'elixir-editors/vim-elixir'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
@@ -78,15 +79,14 @@ let g:LanguageClient_serverCommands = {
     \ 'eelixir': ['language_server.sh'],
     \ 'javascript': ['typescript-language-server', '--stdio'],
     \ 'typescript': ['typescript-language-server', '--stdio'],
-    \ 'javascript.jsx': ['typescript-language-server', '--stdio'],
-    \ 'typescript.tsx': ['typescript-language-server', '--stdio'],
+    \ 'javascriptreact': ['typescript-language-server', '--stdio'],
+    \ 'typescriptreact': ['typescript-language-server', '--stdio'],
     \ }
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 " Format on save
-autocmd default BufWritePre *.ex call FormatOnSave()
-autocmd default BufWritePre *.exs call FormatOnSave()
+autocmd default BufWritePre *.ex,*.exs call FormatOnSave()
 
 function FormatOnSave()
   noautocmd call LanguageClient#textDocument_formatting({}, funcref('AfterFormat'))
@@ -180,8 +180,10 @@ nmap <silent> tg :TestVisit<CR>
 let test#strategy = 'vimux'
 let g:test#preserve_screen = 0
 
-" vim-signify
-set updatetime=100
+" gitsigns.nvim
+lua << EOF
+require('gitsigns').setup()
+EOF
 
 " Appearence
 set number cursorline
