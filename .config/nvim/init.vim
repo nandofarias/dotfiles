@@ -6,8 +6,10 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'dylanaraps/root.vim'
+Plug 'andymass/vim-matchup'
+Plug 'szw/vim-maximizer'
 
-" Git
+" Better Git 
 Plug 'TimUntersberger/neogit'
 Plug 'sindrets/diffview.nvim'
 Plug 'lewis6991/gitsigns.nvim'
@@ -30,6 +32,7 @@ Plug 'nvim-telescope/telescope.nvim'
 " Language support
 Plug 'elixir-editors/vim-elixir'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
@@ -61,6 +64,18 @@ lua <<EOF
 require("nvim-treesitter.configs").setup {
   ensure_installed = "maintained",
   highlight = { enable = true },
+  textobjects = {
+    select = {
+      enable = true,
+      lookahead = true,
+      keymaps = {
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+        ["ic"] = "@class.inner",
+      },
+    },
+  },
 }
 EOF
 
@@ -185,6 +200,15 @@ lua << EOF
 require('gitsigns').setup()
 EOF
 
+" vim-matchup
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  matchup = {
+    enable = true
+  },
+}
+EOF
+
 " Appearence
 set number cursorline
 set showcmd cmdheight=1
@@ -210,7 +234,7 @@ tnoremap <Esc> <C-\><C-n>:q!<CR>
 nmap <silent><space> :nohlsearch<CR>
 
 " Close buffer
-nnoremap <leader>q :bdelete<CR>
+nnoremap <silent><leader>q :bp<bar>sp<bar>bn<bar>bd<CR>
 
 " Persistent undo
 set undofile
@@ -230,6 +254,9 @@ onoremap ic i{
 onoremap ib i[
 onoremap ip i(
 
-" open quickfix
+" Open quickfix
 nnoremap <Leader>e :cw<CR>
+
+" Reload config
+nnoremap <silent><Leader>r :source ~/.config/nvim/init.vim <CR>
 
