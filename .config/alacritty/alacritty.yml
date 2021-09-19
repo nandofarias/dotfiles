@@ -5,7 +5,7 @@ font:
     family: FiraCode Nerd Font
     style: Regular
  
-  size: 15.0
+  size: 14.0
 
 window:
   padding:
@@ -15,7 +15,7 @@ window:
   decorations: buttonless
   startup_mode: SimpleFullScreen # or Maximized
 
-background_opacity: 0.9
+background_opacity: 1.0
 
 # Start Colors (Dracula PRO - Van Helsing)
 colors:
