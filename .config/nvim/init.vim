@@ -16,9 +16,9 @@ Plug 'sindrets/diffview.nvim'
 Plug 'lewis6991/gitsigns.nvim'
 
 " Statusline
-Plug 'glepnir/galaxyline.nvim' , {'branch': 'main'}
+Plug 'NTBBloodbath/galaxyline.nvim'
+Plug 'folke/tokyonight.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
-Plug 'Avimitin/nerd-galaxyline'
 
 " File explorer
 Plug 'glepnir/dashboard-nvim'
@@ -34,12 +34,14 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'p00f/nvim-ts-rainbow'
+Plug 'folke/twilight.nvim'
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'SirVer/ultisnips'
+Plug 'elixir-editors/vim-elixir'
 
 " React/Typescript
 Plug 'pangloss/vim-javascript'
@@ -53,7 +55,6 @@ Plug 'vim-test/vim-test'
 Plug 'preservim/vimux'
 
 call plug#end()
-
 
 " Default autogroup
 augroup default
@@ -78,12 +79,19 @@ syntax enable
 let g:dracula_colorterm = 0
 colorscheme dracula_pro_van_helsing
 
+" galaxyline
+lua require('statusline');
 
 " nvim-treesitter
-lua <<EOF
+lua << EOF
 require("nvim-treesitter.configs").setup {
   ensure_installed = "maintained",
-  highlight = { enable = true },
+  highlight = {
+    enable = true,
+    disable = { "elixir" },
+    use_languagetree = true
+  },
+  indent = { enable = true },
   textobjects = {
     select = {
       enable = true,
@@ -219,7 +227,7 @@ let g:test#preserve_screen = 0
 lua require('gitsigns').setup()
 
 " vim-matchup
-lua <<EOF
+lua << EOF
 require'nvim-treesitter.configs'.setup {
   matchup = {
     enable = true
@@ -228,18 +236,28 @@ require'nvim-treesitter.configs'.setup {
 EOF
 
 " nvim-ts-rainbow
-lua <<EOF
+lua << EOF
 require'nvim-treesitter.configs'.setup {
   rainbow = {
     enable = true,
     extended_mode = true,
-    colors = { "#FFFF80", "#FF80BF", "#80FFEA", "#FF9580" },                                                                                              
+    max_file_lines = nil,
+    colors = { "#FFCA80", "#FF80BF", "#80FFEA", "#FF9580" },
   }
 }
 EOF
 
 " nvim-colorizer
 lua require'colorizer'.setup()
+
+" twilight.nvim
+lua << EOF
+  require("twilight").setup {}
+EOF
+nnoremap <Leader>z :Twilight<CR>
+
+" vim-maximizer
+nnoremap <Leader>m :MaximizerToggle<CR>
 
 " Terminal mode remap
 tnoremap <Esc> <C-\><C-n>:q!<CR>
