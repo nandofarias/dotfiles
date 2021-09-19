@@ -157,11 +157,15 @@ nnoremap <C-n> :NvimTreeToggle<CR>
 nnoremap <C-y> :NvimTreeFindFile<CR>
 let g:nvim_tree_side = 'right'
 let g:nvim_tree_width = 50
+" https://github.com/kyazdani42/nvim-tree.lua/issues/549
+set shell=/bin/bash
 
 " bufferline
 lua << EOF
 require("bufferline").setup{}
 EOF
+nnoremap <silent>]b :BufferLineCycleNext<CR>
+nnoremap <silent>[b :BufferLineCyclePrev<CR>
 nnoremap <silent><leader>1 <Cmd>BufferLineGoToBuffer 1<CR>
 nnoremap <silent><leader>2 <Cmd>BufferLineGoToBuffer 2<CR>
 nnoremap <silent><leader>3 <Cmd>BufferLineGoToBuffer 3<CR>
@@ -291,4 +295,3 @@ nnoremap <Leader>e :cw<CR>
 
 " Reload config
 nnoremap <silent><Leader>r :source ~/.config/nvim/init.vim <CR>
-
