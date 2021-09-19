@@ -8,6 +8,7 @@ Plug 'tpope/vim-commentary'
 Plug 'dylanaraps/root.vim'
 Plug 'andymass/vim-matchup'
 Plug 'szw/vim-maximizer'
+Plug 'norcalli/nvim-colorizer.lua'
 
 " Better Git 
 Plug 'TimUntersberger/neogit'
@@ -30,9 +31,9 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 
 " Language support
-Plug 'elixir-editors/vim-elixir'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+Plug 'p00f/nvim-ts-rainbow'
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
@@ -58,6 +59,25 @@ call plug#end()
 augroup default
 au!
 augroup END
+
+" Appearence
+set number cursorline
+set showcmd cmdheight=1
+set termguicolors background=dark t_Co=256
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+set clipboard=unnamed
+set splitright
+set mouse=a
+set wrap
+" Dracula PRO
+packadd! dracula_pro
+syntax enable
+let g:dracula_colorterm = 0
+colorscheme dracula_pro_van_helsing
+
 
 " nvim-treesitter
 lua <<EOF
@@ -196,36 +216,30 @@ let test#strategy = 'vimux'
 let g:test#preserve_screen = 0
 
 " gitsigns.nvim
-lua << EOF
-require('gitsigns').setup()
-EOF
+lua require('gitsigns').setup()
 
 " vim-matchup
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
   matchup = {
     enable = true
-  },
+  }
 }
 EOF
 
-" Appearence
-set number cursorline
-set showcmd cmdheight=1
-set termguicolors background=dark t_Co=256
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
-set expandtab
-set clipboard=unnamed
-set splitright
-set mouse=a
-set wrap
-" Dracula PRO
-packadd! dracula_pro
-syntax enable
-let g:dracula_colorterm = 0
-colorscheme dracula_pro_van_helsing
+" nvim-ts-rainbow
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  rainbow = {
+    enable = true,
+    extended_mode = true,
+    colors = { "#FFFF80", "#FF80BF", "#80FFEA", "#FF9580" },                                                                                              
+  }
+}
+EOF
+
+" nvim-colorizer
+lua require'colorizer'.setup()
 
 " Terminal mode remap
 tnoremap <Esc> <C-\><C-n>:q!<CR>
