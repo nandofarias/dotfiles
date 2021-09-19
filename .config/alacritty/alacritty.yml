@@ -4,7 +4,10 @@ font:
   normal:
     family: FiraCode Nerd Font
     style: Regular
- 
+  italic:
+     family: JetBrains Mono 
+     style: Italic
+
   size: 14.0
 
 window:
