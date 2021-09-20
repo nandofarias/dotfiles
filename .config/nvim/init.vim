@@ -10,6 +10,7 @@ Plug 'andymass/vim-matchup'
 Plug 'szw/vim-maximizer'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'windwp/nvim-autopairs'
 
 " Better Git 
 Plug 'TimUntersberger/neogit'
@@ -266,6 +267,9 @@ require("indent_blankline").setup {
   show_current_context = true,
 }
 EOF
+
+" nvim-autopairs
+lua require('nvim-autopairs').setup{}
 
 " Terminal mode remap
 tnoremap <Esc> <C-\><C-n>:q!<CR>
