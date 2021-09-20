@@ -145,7 +145,8 @@ nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 
 " Neoformat
-autocmd default BufWritePre * undojoin | Neoformat
+" https://github.com/sbdchd/neoformat/issues/134
+au default BufWritePre * try | undojoin | Neoformat | catch /^Vim\%((\a\+)\)\=:E790/ | finally | silent Neoformat | endtry
 
 " deoplate
 let g:deoplete#enable_at_startup = 1
