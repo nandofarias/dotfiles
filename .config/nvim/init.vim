@@ -223,7 +223,14 @@ let test#strategy = 'vimux'
 let g:test#preserve_screen = 0
 
 " gitsigns.nvim
-lua require('gitsigns').setup()
+lua << EOF
+require('gitsigns').setup {
+  current_line_blame = true,
+  current_line_blame_opts = {
+    delay = 500,
+  },
+}
+EOF
 
 " vim-matchup
 lua << EOF
