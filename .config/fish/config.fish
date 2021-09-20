@@ -25,7 +25,7 @@ set PATH $GOPATH/bin $PATH
 set -x GO111MODULE on
 
 # mkcert
-test -e mkcert ; and set -gx NODE_EXTRA_CA_CERTS (mkcert -CAROOT)/rootCA.pem
+test -e mkcert; and set -gx NODE_EXTRA_CA_CERTS (mkcert -CAROOT)/rootCA.pem
 
 # Ruby
 set -gx GEM_HOME $HOME/.gem
@@ -36,7 +36,7 @@ set -gx CARGO_HOME $HOME/.cargo
 set PATH $CARGO_HOME/bin $PATH
 
 # Deno
-set PATH /Users/nandofarias/.deno/bin $PATH 
+set PATH /Users/nandofarias/.deno/bin $PATH
 
 # Flutter
 set PATH $HOME/Workspace/flutter/bin $PATH
@@ -62,7 +62,7 @@ set PATH /usr/lib/dart/bin $PATH
 set -x GPG_TTY (tty)
 
 # iTerm
-test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+test -e {$HOME}/.iterm2_shell_integration.fish; and source {$HOME}/.iterm2_shell_integration.fish
 
 # Versioning
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
@@ -70,8 +70,8 @@ alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 # asdf
 source ~/.asdf/asdf.fish
 
-set -g fish_user_paths "/usr/local/sbin" $fish_user_paths
-set -g fish_user_paths "/usr/local/opt/libpq/bin" $fish_user_paths
+set -g fish_user_paths /usr/local/sbin $fish_user_paths
+set -g fish_user_paths /usr/local/opt/libpq/bin $fish_user_paths
 
 # Aliases
 alias mps="mix phx.server"
@@ -83,22 +83,23 @@ alias t="tmux new -s (pwd | sed 's/.*\///g')"
 alias tls="tmux ls"
 alias ta="tmux attach -t"
 alias plug_sync="nvim +PlugInstall +PlugClean! +qa"
-alias cat='bat'
 alias v_profile='nvim --startuptime timeCost.txt timeCost.txt; and rm timeCost.txt'
 
 # Starship
 starship init fish | source
 
 # Google Cloud SDK.
-if [ -f '/Users/nandofarias/Workspace/google-cloud-sdk/path.fish.inc' ]; . '/Users/nandofarias/Workspace/google-cloud-sdk/path.fish.inc'; end
+if [ -f '/Users/nandofarias/Workspace/google-cloud-sdk/path.fish.inc' ]
+    . '/Users/nandofarias/Workspace/google-cloud-sdk/path.fish.inc'
+end
 
 # Blvd
 set MATCHWORKER_PREFER_PREBUILT 1
 # Okta
 if test -d ~/.okta
-	set PATH $HOME/.okta/bin $PATH
-	source ~/.okta/fish_functions/okta-aws.fish
-	source ~/.okta/fish_functions/okta-sls.fish
+    set PATH $HOME/.okta/bin $PATH
+    source ~/.okta/fish_functions/okta-aws.fish
+    source ~/.okta/fish_functions/okta-sls.fish
 end
 
 # Emacs
@@ -110,4 +111,3 @@ zoxide init fish | source
 
 # McFly
 mcfly init fish | source
-
