@@ -96,6 +96,10 @@ snippet ins "IO.inspect"
 IO.inspect(${0})
 endsnippet
 
+snippet pins "Piped IO.inspect"
+|> IO.inspect(label: "${0}")
+endsnippet
+
 snippet def "defines a new function with a multiline block" !b
 def ${1:name}(${2:params}) do
   $0
