@@ -11,6 +11,7 @@ Plug 'szw/vim-maximizer'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'windwp/nvim-autopairs'
+Plug 'karb94/neoscroll.nvim'
 
 " Better Git 
 Plug 'TimUntersberger/neogit'
@@ -140,7 +141,6 @@ autocmd default BufWritePre * undojoin | Neoformat
 " deoplate
 let g:deoplete#enable_at_startup = 1
 set completeopt-=preview
-inoremap <silent><expr> <CR> pumvisible() ? "\<C-Y>" : "\<CR>"
 
 " ultisnips
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -152,7 +152,7 @@ let g:python_host_prog="~/.asdf/shims/python"
 
 " nvim-tree
 nnoremap <C-n> :NvimTreeToggle<CR>
-nnoremap <C-y> :NvimTreeFindFile<CR>
+nnoremap <C-m> :NvimTreeFindFile<CR>
 let g:nvim_tree_side = 'right'
 let g:nvim_tree_width = 50
 " https://github.com/kyazdani42/nvim-tree.lua/issues/549
@@ -187,6 +187,8 @@ nnoremap <C-g> :Neogit<CR>
 
 " dashboard-nvim
 let g:mapleader='\'
+let g:dashboard_disable_statusline = 1
+
 let g:dashboard_default_executive = 'telescope'
 let g:dashboard_custom_shortcut={
 \ 'last_session'       : '\ s l',
@@ -272,13 +274,27 @@ lua << EOF
 require("indent_blankline").setup {
   enabled = true,
   use_treesitter = true,
+  show_first_indent_level = false,
   show_trailing_blankline_indent = false,
   show_current_context = true,
+  filetype_exclude = {
+    "help",
+    "terminal",
+    "dashboard",
+    "packer",
+    "lspinfo",
+    "TelescopePrompt",
+    "TelescopeResults",
+  },
+  buftype_exclude = { "terminal" },
 }
 EOF
 
 " nvim-autopairs
 lua require('nvim-autopairs').setup{}
+
+" neoscroll.nvim
+lua require('neoscroll').setup()
 
 " Terminal mode remap
 tnoremap <Esc> <C-\><C-n>:q!<CR>
