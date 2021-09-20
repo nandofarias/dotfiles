@@ -9,6 +9,7 @@ Plug 'dylanaraps/root.vim'
 Plug 'andymass/vim-matchup'
 Plug 'szw/vim-maximizer'
 Plug 'norcalli/nvim-colorizer.lua'
+Plug 'lukas-reineke/indent-blankline.nvim'
 
 " Better Git 
 Plug 'TimUntersberger/neogit'
@@ -62,7 +63,7 @@ au!
 augroup END
 
 " Appearence
-set number cursorline
+set number
 set showcmd cmdheight=1
 set termguicolors background=dark t_Co=256
 set tabstop=2
@@ -161,9 +162,7 @@ let g:nvim_tree_width = 50
 set shell=/bin/bash
 
 " bufferline
-lua << EOF
-require("bufferline").setup{}
-EOF
+lua require("bufferline").setup{}
 nnoremap <silent>]b :BufferLineCycleNext<CR>
 nnoremap <silent>[b :BufferLineCyclePrev<CR>
 nnoremap <silent><leader>1 <Cmd>BufferLineGoToBuffer 1<CR>
@@ -255,13 +254,24 @@ EOF
 lua require'colorizer'.setup()
 
 " twilight.nvim
-lua << EOF
-  require("twilight").setup {}
-EOF
+lua require("twilight").setup {}
 nnoremap <Leader>z :Twilight<CR>
 
 " vim-maximizer
 nnoremap <Leader>m :MaximizerToggle<CR>
+
+" indent-blankline.nvim
+highlight IndentBlanklineChar guifg=#202020 gui=nocombine
+highlight IndentBlanklineContextChar guifg=#454545 gui=nocombine
+
+lua << EOF
+require("indent_blankline").setup {
+  enabled = true,
+  use_treesitter = true,
+  show_trailing_blankline_indent = false,
+  show_current_context = true,
+}
+EOF
 
 " Terminal mode remap
 tnoremap <Esc> <C-\><C-n>:q!<CR>
