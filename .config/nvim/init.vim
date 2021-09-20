@@ -45,6 +45,7 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'SirVer/ultisnips'
 Plug 'elixir-editors/vim-elixir'
 Plug 'sbdchd/neoformat'
+Plug 'tpope/vim-projectionist'
 
 " React/Typescript
 Plug 'pangloss/vim-javascript'
@@ -133,7 +134,7 @@ nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 
 " Neoformat
-autocmd BufWritePre * undojoin | Neoformat
+autocmd default BufWritePre * undojoin | Neoformat
 
 " deoplate
 let g:deoplete#enable_at_startup = 1
