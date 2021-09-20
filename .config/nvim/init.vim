@@ -85,8 +85,17 @@ syntax enable
 let g:dracula_colorterm = 0
 colorscheme dracula_pro_van_helsing
 
+" nvim-autopairs
+lua require('nvim-autopairs').setup{}
+
+" neoscroll.nvim
+lua require('neoscroll').setup()
+
 " galaxyline
 lua require('statusline');
+
+" nvim-colorizer
+lua require'colorizer'.setup()
 
 " nvim-treesitter
 lua << EOF
@@ -149,7 +158,6 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsSnippetDirectories=["UltiSnips", "my_snippets"]
 let g:python_host_prog="~/.asdf/shims/python"
 
-
 " nvim-tree
 nnoremap <C-n> :NvimTreeToggle<CR>
 nnoremap <C-m> :NvimTreeFindFile<CR>
@@ -188,7 +196,6 @@ nnoremap <C-g> :Neogit<CR>
 " dashboard-nvim
 let g:mapleader='\'
 let g:dashboard_disable_statusline = 1
-
 let g:dashboard_default_executive = 'telescope'
 let g:dashboard_custom_shortcut={
 \ 'last_session'       : '\ s l',
@@ -256,9 +263,6 @@ require'nvim-treesitter.configs'.setup {
 }
 EOF
 
-" nvim-colorizer
-lua require'colorizer'.setup()
-
 " twilight.nvim
 lua require("twilight").setup {}
 nnoremap <Leader>z :Twilight<CR>
@@ -289,12 +293,6 @@ require("indent_blankline").setup {
   buftype_exclude = { "terminal" },
 }
 EOF
-
-" nvim-autopairs
-lua require('nvim-autopairs').setup{}
-
-" neoscroll.nvim
-lua require('neoscroll').setup()
 
 " Terminal mode remap
 tnoremap <Esc> <C-\><C-n>:q!<CR>
