@@ -43,6 +43,7 @@ Plug 'autozimu/LanguageClient-neovim', {
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'SirVer/ultisnips'
 Plug 'elixir-editors/vim-elixir'
+Plug 'sbdchd/neoformat'
 
 " React/Typescript
 Plug 'pangloss/vim-javascript'
@@ -129,16 +130,9 @@ let g:LanguageClient_serverCommands = {
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-" Format on save
-autocmd default BufWritePre *.ex,*.exs call FormatOnSave()
 
-function FormatOnSave()
-  noautocmd call LanguageClient#textDocument_formatting({}, funcref('AfterFormat'))
-endfunction
-
-function AfterFormat(...)
-  noautocmd w
-endfunction
+" Neoformat
+autocmd BufWritePre * undojoin | Neoformat
 
 " deoplate
 let g:deoplete#enable_at_startup = 1
