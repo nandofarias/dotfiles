@@ -77,6 +77,7 @@ set clipboard=unnamed
 set splitright
 set mouse=a
 set wrap
+set signcolumn=yes
 " Dracula PRO
 packadd! dracula_pro
 syntax enable
