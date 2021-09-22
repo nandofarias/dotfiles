@@ -44,7 +44,6 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ }
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'SirVer/ultisnips'
-Plug 'elixir-editors/vim-elixir'
 Plug 'sbdchd/neoformat'
 Plug 'tpope/vim-projectionist'
 
@@ -103,7 +102,6 @@ require("nvim-treesitter.configs").setup {
   ensure_installed = "maintained",
   highlight = {
     enable = true,
-    disable = { "elixir" },
     use_languagetree = true
   },
   indent = { enable = true },
