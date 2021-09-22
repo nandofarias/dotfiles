@@ -19,9 +19,7 @@ Plug 'sindrets/diffview.nvim'
 Plug 'lewis6991/gitsigns.nvim'
 
 " Statusline
-Plug 'NTBBloodbath/galaxyline.nvim'
-Plug 'folke/tokyonight.nvim'
-Plug 'kyazdani42/nvim-web-devicons'
+Plug 'vim-airline/vim-airline'
 
 " File explorer
 Plug 'glepnir/dashboard-nvim'
@@ -90,8 +88,8 @@ lua require('nvim-autopairs').setup{}
 " neoscroll.nvim
 lua require('neoscroll').setup()
 
-" galaxyline
-lua require('statusline');
+" vim-airline
+let g:airline_theme = 'dracula_pro'
 
 " nvim-colorizer
 lua require'colorizer'.setup()
