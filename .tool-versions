@@ -4,5 +4,5 @@ gleam 0.16.1
 ruby 2.7.2
 bazel 3.1.0
 python 3.6.7
-nodejs 14.17.5
+nodejs 14.15.4
 yarn 1.22.5
