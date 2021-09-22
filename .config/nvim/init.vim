@@ -338,6 +338,7 @@ require("indent_blankline").setup {
     "lspinfo",
     "TelescopePrompt",
     "TelescopeResults",
+    "NvimTree",
   },
   buftype_exclude = { "terminal" },
 }
