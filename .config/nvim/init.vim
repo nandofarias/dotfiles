@@ -224,7 +224,7 @@ au default BufWritePre * try | undojoin | Neoformat | catch /^Vim\%((\a\+)\)\=:E
 
 " nvim-tree
 nnoremap <C-n> :NvimTreeToggle<CR>
-nnoremap <C-b> :NvimTreeFindFile<CR>
+nnoremap <S-n> :NvimTreeFindFile<CR>
 let g:nvim_tree_side = 'right'
 let g:nvim_tree_width = 50
 let g:nvim_tree_auto_close = 1
