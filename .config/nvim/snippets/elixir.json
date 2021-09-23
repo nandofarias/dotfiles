@@ -1,0 +1,137 @@
+{
+  "defmodule_test_block": {
+    "prefix": "deft",
+    "body": [
+      "defmodule $1Test do",
+      "  use ExUnit.Case, async: true\n",
+      "  $2",
+      "end"
+    ],
+    "description": "Creates a new test module"
+  },
+  "defmodule_test_liveview_block": {
+    "prefix": "deflvtest",
+    "body": [
+      "defmodule $1Test do",
+      "  use $2.ConnCase, async: true\n",
+      "  import Phoenix.LiveViewTest\n",
+      "  $2",
+      "end"
+    ],
+    "description": "Creates a new live view test module"
+  },
+  "describe_block": {
+    "prefix": "desc",
+    "body": [
+      "describe \"$1\" do",
+      "  $2",
+      "end"
+    ]
+  },
+  "test_block": {
+    "prefix": "t",
+    "body": [
+      "test \"$1\" do",
+      "  $2",
+      "end"
+    ],
+    "description": "Creates a test block for unit tests"
+  },
+  "test_conn_block": {
+    "prefix": "tconn",
+    "body": [
+      "test \"$1\", %{conn: conn} do",
+      "  $2",
+      "end"
+    ],
+    "description": "Creates a test block for conn cases"
+  },
+  "inspect": {
+    "prefix": "ins",
+    "body": "IO.inspect($1)",
+    "description": "IO.inspect"
+  },
+  "pipe_inspect": {
+    "prefix": "ins",
+    "body": "|> IO.inspect(label: $1)",
+    "description": "|> IO.inspect"
+  },
+  "def_inline": {
+    "prefix": "defl",
+    "body": "def $1($2), do: $3",
+    "description": "Creates a new inline function"
+  },
+  "defp_inline": {
+    "prefix": "defpl",
+    "body": "defp $1($2), do: $3",
+    "description": "Creates a new private inline function"
+  },
+  "FIXME: if_else_block": {
+    "prefix": "ifel",
+    "body": [
+      "if $1 do",
+      "  $2",
+      "else",
+      "  $3",
+      "end"
+    ],
+    "description": "Inserts a new if and else block"
+  },
+  "capture_fn": {
+    "prefix": "&",
+    "body": "&($1)$2",
+    "description": "Inserts simple capture function"
+  },
+  "doc_block": {
+    "prefix": "doc",
+    "body": [
+      "@doc \"\"\"",
+      "$1",
+      "\"\"\""
+    ],
+    "description": "Inserts a function documentation block"
+  },
+  "moduledoc_block": {
+    "prefix": "mdoc",
+    "body": [
+      "@moduledoc \"\"\"",
+      "$1",
+      "\"\"\""
+    ],
+    "description": "Inserts a module documentation block"
+  },
+  "string_interpolation": {
+    "prefix": "#",
+    "body": "#{$1}$2",
+    "description": "Inserts a string interpolation"
+  },
+  "map_expansion": {
+    "prefix": "%",
+    "body": "%{$1: $2}$3",
+    "description": "Inserts a new map with atom as key"
+  },
+  "string_map_expansion": {
+    "prefix": "%s",
+    "body": "%{\"$1\" => $2}$3",
+    "description": "Inserts a new map with string as key"
+  },
+  "ok_tuple_expansion": {
+    "prefix": "ok",
+    "body": "{:ok, $1}$2",
+    "description": "Inserts an ok tuple"
+  },
+  "error_tuple_expansion": {
+    "prefix": "err",
+    "body": "{:error, $1}$2",
+    "description": "Inserts an error tuple"
+  },
+  "override_do_end_block": {
+    "prefix": "do",
+    "body": [
+      "do",
+      "  $1",
+      "end"
+    ],
+    "description": "Overrides lsp do end completion with proper indentation"
+  }
+}
