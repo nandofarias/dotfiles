@@ -61,6 +61,9 @@ Plug 'jparise/vim-graphql'
 Plug 'vim-test/vim-test'
 Plug 'preservim/vimux'
 
+" Rest
+Plug 'NTBBloodbath/rest.nvim'
+
 call plug#end()
 
 " Default autogroup
@@ -82,6 +85,7 @@ set mouse=a
 set wrap
 set signcolumn=yes
 set completeopt=menu,menuone,noselect
+set hidden
 " Dracula PRO
 packadd! dracula_pro
 syntax enable
@@ -120,6 +124,15 @@ require("nvim-treesitter.configs").setup {
         ["ic"] = "@class.inner",
       },
     },
+  },
+}
+
+local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
+parser_configs.http = {
+  install_info = {
+    url = "https://github.com/NTBBloodbath/tree-sitter-http",
+    files = { "src/parser.c" },
+    branch = "main",
   },
 }
 EOF
@@ -210,10 +223,12 @@ EOF
 au default BufWritePre * try | undojoin | Neoformat | catch /^Vim\%((\a\+)\)\=:E790/ | finally | silent Neoformat | endtry
 
 " nvim-tree
-nnoremap <C-t> :NvimTreeToggle<CR>
-nnoremap <C-y> :NvimTreeFindFile<CR>
+nnoremap <C-n> :NvimTreeToggle<CR>
+nnoremap <C-b> :NvimTreeFindFile<CR>
 let g:nvim_tree_side = 'right'
 let g:nvim_tree_width = 50
+let g:nvim_tree_auto_close = 1
+let g:nvim_tree_lsp_diagnostics = 1
 " https://github.com/kyazdani42/nvim-tree.lua/issues/549
 set shell=/bin/bash
 
@@ -364,6 +379,9 @@ require("indent_blankline").setup {
 }
 EOF
 
+" rest.nvim
+lua require("rest-nvim").setup()
+
 " Terminal mode remap
 tnoremap <Esc> <C-\><C-n>:q!<CR>
 
@@ -372,6 +390,9 @@ nmap <silent><space> :nohlsearch<CR>
 
 " Close buffer
 nnoremap <silent><leader>q :bp<bar>sp<bar>bn<bar>bd<CR>
+
+" New buffer
+nnoremap <silent><leader>n :enew<CR>
 
 " Persistent undo
 set undofile
