@@ -233,7 +233,13 @@ let g:nvim_tree_lsp_diagnostics = 1
 set shell=/bin/bash
 
 " bufferline
-lua require("bufferline").setup{}
+lua << EOF
+require("bufferline").setup{
+  options = {
+    diagnostics = "nvim_lsp"
+  }
+}
+EOF
 nnoremap <silent>]b :BufferLineCycleNext<CR>
 nnoremap <silent>[b :BufferLineCyclePrev<CR>
 nnoremap <silent><leader>1 <Cmd>BufferLineGoToBuffer 1<CR>
