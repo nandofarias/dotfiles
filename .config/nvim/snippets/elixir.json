@@ -52,7 +52,7 @@
     "description": "IO.inspect"
   },
   "pipe_inspect": {
-    "prefix": "ins",
+    "prefix": "pins",
     "body": "|> IO.inspect(label: $1)",
     "description": "|> IO.inspect"
   },
