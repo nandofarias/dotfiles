@@ -396,7 +396,7 @@ tnoremap <Esc> <C-\><C-n>:q!<CR>
 nmap <silent><space> :nohlsearch<CR>
 
 " Close buffer
-nnoremap <silent><leader>q :bp<bar>sp<bar>bn<bar>bd<CR>
+nnoremap <silent><leader>q :bdelete<CR>
 
 " New buffer
 nnoremap <silent><leader>n :enew<CR>
