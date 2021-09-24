@@ -56,6 +56,7 @@ Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'jparise/vim-graphql'
+Plug 'mattn/emmet-vim'
 
 " Test
 Plug 'vim-test/vim-test'
