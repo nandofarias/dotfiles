@@ -217,6 +217,8 @@ EOF
 " Neoformat
 " https://github.com/sbdchd/neoformat/issues/134
 au default BufWritePre * try | undojoin | Neoformat | catch /^Vim\%((\a\+)\)\=:E790/ | finally | silent Neoformat | endtry
+let g:neoformat_enabled_typescript = ['prettier', 'prettier-eslint', 'tslint']
+let g:neoformat_enabled_javascript = ['prettier', 'prettier-eslint']
 
 " nvim-tree
 nnoremap <C-n> :NvimTreeToggle<CR>
