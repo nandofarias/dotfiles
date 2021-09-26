@@ -111,6 +111,10 @@ require("nvim-treesitter.configs").setup {
   ensure_installed = "maintained",
   highlight = {
     enable = true,
+    custom_captures = {
+      ["symbol"] = "Constant",
+      ["parameter"] = "Constant",
+    },
     use_languagetree = true
   },
   textobjects = {
@@ -350,7 +354,7 @@ require'nvim-treesitter.configs'.setup {
     enable = true,
     extended_mode = true,
     max_file_lines = nil,
-    colors = { "#FFCA80", "#80FFEA", "#FF80BF" },
+    colors = { "#FFCA80", "#FF80BF", "#80FFEA" },
   }
 }
 EOF
