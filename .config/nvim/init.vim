@@ -34,6 +34,7 @@ Plug 'nvim-telescope/telescope.nvim'
 " Language support
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+Plug 'nvim-treesitter/playground'
 Plug 'p00f/nvim-ts-rainbow'
 Plug 'folke/twilight.nvim'
 Plug 'neovim/nvim-lspconfig'
