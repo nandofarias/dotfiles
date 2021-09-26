@@ -31,12 +31,15 @@ Plug 'akinsho/bufferline.nvim'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 
-" Language support
+" Language support - treesitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'nvim-treesitter/playground'
 Plug 'p00f/nvim-ts-rainbow'
 Plug 'folke/twilight.nvim'
+Plug 'JoosepAlviste/nvim-ts-context-commentstring'
+
+" Language server protocol
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 
@@ -93,6 +96,11 @@ set fillchars=fold:\ ,vert:\│,eob:\ ,msgsep:‾ " hide ~ at the end of vuffer
 packadd! dracula_pro
 let g:dracula_colorterm = 0
 colorscheme dracula_pro_van_helsing
+" Fix colors mapping with nvim-treesitter, https://github.com/dracula/vim/blob/master/after/plugin/dracula.vim#L70
+hi! link TSSymbol DraculaPurple
+hi! link TSVariable DraculaOrange
+hi! link TSParameter DraculaOrangeItalic
+hi! link TSTagAttribute DraculaGreenItalic
 
 " nvim-autopairs
 lua require('nvim-autopairs').setup{}
@@ -112,10 +120,6 @@ require("nvim-treesitter.configs").setup {
   ensure_installed = "maintained",
   highlight = {
     enable = true,
-    custom_captures = {
-      ["symbol"] = "Constant",
-      ["parameter"] = "Constant",
-    },
     use_languagetree = true
   },
   textobjects = {
@@ -357,7 +361,7 @@ lua << EOF
 require'nvim-treesitter.configs'.setup {
   rainbow = {
     enable = true,
-    extended_mode = true,
+    extended_mode = false,
     max_file_lines = nil,
     colors = { "#FFCA80", "#FF80BF", "#80FFEA" },
   }
@@ -367,6 +371,15 @@ EOF
 " twilight.nvim
 lua require("twilight").setup {}
 nnoremap <Leader>z :Twilight<CR>
+
+" nvim-ts-context-commentstring
+lua << EOF
+require'nvim-treesitter.configs'.setup {
+  context_commentstring = {
+    enable = true
+  }
+}
+EOF
 
 " vim-maximizer
 nnoremap <Leader>m :MaximizerToggle<CR>
