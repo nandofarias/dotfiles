@@ -25,7 +25,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'glepnir/dashboard-nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
-Plug 'akinsho/bufferline.nvim' "tab layout
+Plug 'akinsho/bufferline.nvim'
 
 " Fuzzy finder
 Plug 'nvim-lua/popup.nvim'
@@ -89,7 +89,6 @@ set completeopt=menu,menuone,noselect
 set hidden
 " Dracula PRO
 packadd! dracula_pro
-syntax enable
 let g:dracula_colorterm = 0
 colorscheme dracula_pro_van_helsing
 
@@ -113,7 +112,6 @@ require("nvim-treesitter.configs").setup {
     enable = true,
     use_languagetree = true
   },
-  indent = { enable = true },
   textobjects = {
     select = {
       enable = true,
