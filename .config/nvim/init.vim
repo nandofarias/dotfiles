@@ -60,6 +60,11 @@ Plug 'preservim/vimux'
 " Rest
 Plug 'NTBBloodbath/rest.nvim'
 
+" Database
+Plug 'tpope/vim-dadbod'
+Plug 'kristijanhusak/vim-dadbod-ui'
+Plug 'kristijanhusak/vim-dadbod-completion'
+
 call plug#end()
 
 " Default autogroup
@@ -385,6 +390,12 @@ EOF
 
 " rest.nvim
 lua require("rest-nvim").setup()
+
+" vim-dadbod + completion + ui
+autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} })
+let g:db_ui_winwidth = 60
+let g:db_ui_win_position = 'right'
+let g:db_ui_force_echo_notifications = 1
 
 " Terminal mode remap
 tnoremap <Esc> <C-\><C-n>:q!<CR>
