@@ -229,14 +229,18 @@ let g:neoformat_enabled_typescript = ['prettier', 'prettier-eslint', 'tslint']
 let g:neoformat_enabled_javascript = ['prettier', 'prettier-eslint']
 
 " nvim-tree
+lua << EOF
+require'nvim-tree'.setup {
+  auto_close = true,
+}
+EOF
 nnoremap <C-n> :NvimTreeToggle<CR>
 nnoremap <S-n> :NvimTreeFindFile<CR>
 let g:nvim_tree_side = 'right'
 let g:nvim_tree_width = 50
-let g:nvim_tree_auto_close = 1
 let g:nvim_tree_lsp_diagnostics = 1
 " https://github.com/kyazdani42/nvim-tree.lua/issues/549
-set shell=/bin/bash
+set shell=/bin/zsh
 
 " bufferline
 lua << EOF
