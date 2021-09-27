@@ -196,6 +196,7 @@ lsp_installer.on_server_ready(function(server)
     vim.cmd [[ do User LspAttachBuffers ]]
 end)
 EOF
+let g:lsp_installer_allow_federated_servers = v:true
 
 " nvim-cmp + vsnip
 let g:vsnip_snippet_dir = '~/.config/nvim/snippets'
