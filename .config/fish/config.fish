@@ -82,7 +82,7 @@ alias v="nvim"
 alias t="tmux new -s (pwd | sed 's/.*\///g')"
 alias tls="tmux ls"
 alias ta="tmux attach -t"
-alias plug_sync="nvim +PlugInstall +PlugClean! +qa"
+alias plug_sync="nvim +PlugUpdate +PlugInstall +PlugClean! +qa"
 alias v_profile='nvim --startuptime timeCost.txt timeCost.txt; and rm timeCost.txt'
 
 # Starship
