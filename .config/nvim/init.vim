@@ -235,16 +235,18 @@ let g:neoformat_enabled_typescript = ['prettier', 'prettier-eslint', 'tslint']
 let g:neoformat_enabled_javascript = ['prettier', 'prettier-eslint']
 
 " nvim-tree
-let g:nvim_tree_side = 'right'
-let g:nvim_tree_width = 50
-let g:nvim_tree_lsp_diagnostics = 1
 lua << EOF
 require'nvim-tree'.setup {
   auto_close = true,
+  lsp_diagnostics = true,
+  view = {
+    width = 50,
+    side = 'right'
+  }
 }
 EOF
 nnoremap <C-n> :NvimTreeToggle<CR>
-nnoremap <S-n> :NvimTreeFindFile<CR>
+nnoremap <leader>n :NvimTreeFindFile<CR>
 " https://github.com/kyazdani42/nvim-tree.lua/issues/549
 set shell=/bin/zsh
 
@@ -252,7 +254,33 @@ set shell=/bin/zsh
 lua << EOF
 require("bufferline").setup{
   options = {
-    diagnostics = "nvim_lsp"
+    diagnostics = "nvim_lsp",
+    custom_areas = {
+      right = function()
+        local result = {}
+        local error = vim.lsp.diagnostic.get_count(0, [[Error]])
+        local warning = vim.lsp.diagnostic.get_count(0, [[Warning]])
+        local info = vim.lsp.diagnostic.get_count(0, [[Information]])
+        local hint = vim.lsp.diagnostic.get_count(0, [[Hint]])
+
+        if error ~= 0 then
+          table.insert(result, {text = "  " .. error, guifg = "#FF9580"})
+        end
+
+        if warning ~= 0 then
+          table.insert(result, {text = "  " .. warning, guifg = "#FFCA80"})
+        end
+
+        if hint ~= 0 then
+          table.insert(result, {text = "  " .. hint, guifg = "#8AFF80"})
+        end
+
+        if info ~= 0 then
+          table.insert(result, {text = "  " .. info, guifg = "#80FFEA"})
+        end
+        return result
+      end,
+     }
   }
 }
 EOF
@@ -429,7 +457,7 @@ nmap <silent><space> :nohlsearch<CR>
 nnoremap <silent><leader>q :bdelete<CR>
 
 " New buffer
-nnoremap <silent><leader>n :enew<CR>
+nnoremap <silent><leader>c :enew<CR>
 
 " Persistent undo
 set undofile
@@ -448,9 +476,6 @@ nnoremap <Leader>al :e ~/.config/alacritty/alacritty.yml <CR>
 onoremap ic i{
 onoremap ib i[
 onoremap ip i(
-
-" Open quickfix
-nnoremap <Leader>e :cw<CR>
 
 " Reload config
 nnoremap <silent><Leader>r :source ~/.config/nvim/init.vim <CR>
