@@ -2,10 +2,10 @@
 set -gx fish_greeting "Welcome to Summoner's Rift"
 
 # General
-set -x LC_ALL en_US.UTF-8
-set -x WORK $HOME/Workspace
+set -gx LC_ALL en_US.UTF-8
+set -gx WORK $HOME/Workspace
+set -gx EDITOR nvim
 set PATH $HOME/bin $HOME/sbin /usr/local/bin $HOME/.local/bin $PATH
-set -x EDITOR nvim
 ulimit -n 65536 # See: https://stackoverflow.com/a/45004802 
 
 # Vim mode
@@ -20,9 +20,9 @@ set PATH $ANDROID_HOME/tools/bin $ANDROID_HOME/tools $ANDROID_HOME/platform-tool
 
 # Go
 set PATH /usr/local/go/bin $PATH
-set -x -U GOPATH $HOME/go
+set -gx GOPATH $HOME/go
 set PATH $GOPATH/bin $PATH
-set -x GO111MODULE on
+set -gx GO111MODULE on
 
 # mkcert
 test -e mkcert; and set -gx NODE_EXTRA_CA_CERTS (mkcert -CAROOT)/rootCA.pem
@@ -46,20 +46,19 @@ set PATH $HOME/.fnm $PATH
 /usr/local/bin/fnm env | source
 
 # Elixir/Erlang
-set -x ERL_LIBS /usr/lib/elixir/lib
-set -x ERL_AFLAGS "-kernel shell_history enabled"
-set -x ELIXIR_EDITOR code
-set -x PLUG_EDITOR "vscode://file/__FILE__:__LINE__"
-set -x ERL_BUILD_DOCS yes
-set -x CFLAGS "-O2 -g -fno-stack-check -Wno-error=implicit-function-declaration"
-set -x ELIXIR_ERL_OPTIONS "+S 6:6"
+set -gx ERL_LIBS /usr/lib/elixir/lib
+set -gx ERL_AFLAGS "-kernel shell_history enabled"
+set -gx PLUG_EDITOR "vscode://file/__FILE__:__LINE__"
+set -gx ERL_BUILD_DOCS yes
+set -gx CFLAGS "-O2 -g -fno-stack-check -Wno-error=implicit-function-declaration"
+set -gx ELIXIR_ERL_OPTIONS "+S 6:6"
 set PATH $HOME/.elixir-ls/release $PATH
 
 # Dart
 set PATH /usr/lib/dart/bin $PATH
 
 # Import GPG keys
-set -x GPG_TTY (tty)
+set -gx GPG_TTY (tty)
 
 # iTerm
 test -e {$HOME}/.iterm2_shell_integration.fish; and source {$HOME}/.iterm2_shell_integration.fish
