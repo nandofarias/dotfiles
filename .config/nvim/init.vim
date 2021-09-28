@@ -36,8 +36,11 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'nvim-treesitter/playground'
 Plug 'p00f/nvim-ts-rainbow'
-Plug 'folke/twilight.nvim'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
+
+" Zen mode
+Plug 'folke/zen-mode.nvim'
+Plug 'folke/twilight.nvim'
 
 " Language server protocol
 Plug 'neovim/nvim-lspconfig'
@@ -397,9 +400,10 @@ require'nvim-treesitter.configs'.setup {
 }
 EOF
 
-" twilight.nvim
+" zen-mode.nvim + twilight.nvim
 lua require("twilight").setup {}
-nnoremap <Leader>z :Twilight<CR>
+lua require("zen-mode").setup {}
+nnoremap <Leader>z :ZenMode<CR>
 
 " nvim-ts-context-commentstring
 lua << EOF
