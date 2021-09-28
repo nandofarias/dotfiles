@@ -12,6 +12,7 @@ Plug 'norcalli/nvim-colorizer.lua'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'windwp/nvim-autopairs'
 Plug 'karb94/neoscroll.nvim'
+Plug 'famiu/bufdelete.nvim'
 
 " Better Git 
 Plug 'TimUntersberger/neogit'
@@ -458,7 +459,7 @@ tnoremap <Esc> <C-\><C-n>:q!<CR>
 nmap <silent><space> :nohlsearch<CR>
 
 " Close buffer
-nnoremap <silent><leader>q :bdelete<CR>
+nnoremap <silent><leader>q :Bdelete<CR>
 
 " New buffer
 nnoremap <silent><leader>c :enew<CR>
