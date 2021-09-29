@@ -103,7 +103,7 @@ set undodir=~/.vimundo/
 packadd! dracula_pro
 let g:dracula_colorterm = 0
 colorscheme dracula_pro_van_helsing
-" Fix colors mapping with nvim-treesitter, https://github.com/dracula/vim/blob/master/after/plugin/dracula.vim#L70
+" Fix colors mapping with nvim-treesitter, https://github.com/dracula/vim/blob/master/after/plugin/dracula.vim
 hi! link TSSymbol DraculaPurple
 hi! link TSVariable DraculaOrange
 hi! link TSParameter DraculaOrangeItalic
@@ -120,6 +120,7 @@ nnoremap <silent><leader>q :Bdelete <CR>
 nnoremap <silent><leader>c :enew <CR>
 inoremap <C-c> <esc>
 nnoremap <silent><Leader>r :source ~/.config/nvim/init.vim <CR>
+nnoremap <silent>gx :silent !open <C-r><C-f> <CR>
 
 " Open config
 nnoremap <Leader>nv :e ~/.config/nvim/init.vim <CR>
