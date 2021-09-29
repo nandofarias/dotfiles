@@ -96,6 +96,9 @@ set signcolumn=yes
 set completeopt=menu,menuone,noselect
 set hidden
 set fillchars=fold:\ ,vert:\│,eob:\ ,msgsep:‾ " hide ~ at the end of vuffer
+set undofile
+set undodir=~/.vimundo/
+
 " Dracula PRO
 packadd! dracula_pro
 let g:dracula_colorterm = 0
@@ -106,6 +109,25 @@ hi! link TSVariable DraculaOrange
 hi! link TSParameter DraculaOrangeItalic
 hi! link TSTagAttribute DraculaGreenItalic
 
+" Operators
+onoremap ic i{
+onoremap ib i[
+onoremap ip i(
+
+" Remapings
+nmap <silent><space> :nohlsearch <CR>
+nnoremap <silent><leader>q :Bdelete <CR>
+nnoremap <silent><leader>c :enew <CR>
+inoremap <C-c> <esc>
+nnoremap <silent><Leader>r :source ~/.config/nvim/init.vim <CR>
+
+" Open config
+nnoremap <Leader>nv :e ~/.config/nvim/init.vim <CR>
+nnoremap <Leader>tm :e ~/.config/tmux/tmux.conf <CR>
+nnoremap <Leader>fs :e ~/.config/fish/config.fish <CR>
+nnoremap <Leader>al :e ~/.config/alacritty/alacritty.yml <CR>
+
+" PLUGINS
 " nvim-autopairs
 lua require('nvim-autopairs').setup{}
 
@@ -451,36 +473,3 @@ autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ 
 let g:db_ui_winwidth = 60
 let g:db_ui_win_position = 'right'
 let g:db_ui_force_echo_notifications = 1
-
-" Terminal mode remap
-tnoremap <Esc> <C-\><C-n>:q!<CR>
-
-" Clear all things
-nmap <silent><space> :nohlsearch<CR>
-
-" Close buffer
-nnoremap <silent><leader>q :Bdelete<CR>
-
-" New buffer
-nnoremap <silent><leader>c :enew<CR>
-
-" Persistent undo
-set undofile
-set undodir=~/.vimundo/
-
-" Back to normal mode with Ctrl-c
-inoremap <C-c> <esc>
-
-" Open config
-nnoremap <Leader>nv :e ~/.config/nvim/init.vim <CR>
-nnoremap <Leader>tm :e ~/.config/tmux/tmux.conf <CR>
-nnoremap <Leader>fs :e ~/.config/fish/config.fish <CR>
-nnoremap <Leader>al :e ~/.config/alacritty/alacritty.yml <CR>
-
-" Operators
-onoremap ic i{
-onoremap ib i[
-onoremap ip i(
-
-" Reload config
-nnoremap <silent><Leader>r :source ~/.config/nvim/init.vim <CR>
