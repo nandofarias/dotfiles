@@ -1,4 +1,4 @@
-function colortest
+function colortest --description 'Test true colors'
     awk 'BEGIN{
         s="/\\\\/\\\\/\\\\/\\\\/\\\\"; s=s s s s s s s s;
         for (colnum = 0; colnum<77; colnum++) {

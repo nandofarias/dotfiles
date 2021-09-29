@@ -1,6 +1,9 @@
 # Fish
 set -gx fish_greeting "Welcome to Summoner's Rift"
-
+# Fix functions descriptions https://github.com/fish-shell/fish-shell/issues/328
+for i in (functions)
+    functions $i >/dev/null
+end
 # General
 set -gx LC_ALL en_US.UTF-8
 set -gx WORK $HOME/Workspace
@@ -69,17 +72,15 @@ alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 # asdf
 source ~/.asdf/asdf.fish
 
-# Aliases
-alias mps="mix phx.server"
-alias dc="docker-compose"
-alias bfg="java -jar $HOME/Workspace/bfg.jar"
-alias rest="cmatrix -C black"
-alias v="nvim"
-alias t="tmux new -s (pwd | sed 's/.*\///g')"
-alias tls="tmux ls"
-alias ta="tmux attach -t"
-alias plug_sync="nvim +PlugUpdate +PlugInstall +PlugClean! +qa"
-alias v_profile='nvim --startuptime timeCost.txt timeCost.txt; and rm timeCost.txt'
+# Abb
+abbr -ag mps "mix phx.server"
+abbr -ag dc docker-compose
+abbr -ag v nvim
+abbr -ag g git
+abbr -ag tls "tmux ls"
+abbr -ag screen_saver "cmatrix -C green"
+abbr -ag plug_sync "nvim +PlugUpdate +PlugInstall +PlugClean! +qa"
+abbr -ag vim_profile "nvim --startuptime timeCost.txt timeCost.txt; and rm timeCost.txt"
 
 # Starship
 starship init fish | source
