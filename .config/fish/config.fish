@@ -5,23 +5,23 @@ set -gx fish_greeting "Welcome to Summoner's Rift"
 set -gx LC_ALL en_US.UTF-8
 set -gx WORK $HOME/Workspace
 set -gx EDITOR nvim
-set PATH $HOME/bin $HOME/sbin /usr/local/bin $HOME/.local/bin $PATH
 ulimit -n 65536 # See: https://stackoverflow.com/a/45004802 
+fish_add_path -g $HOME/bin $HOME/.local/bin
 
 # Vim mode
 fish_hybrid_key_bindings
 
 # Fix curl
-fish_add_path /usr/local/opt/curl/bin
+fish_add_path -g /usr/local/opt/curl/bin
 
 # Android
 set -gx ANDROID_HOME $HOME/Library/Android/sdk
-set PATH $ANDROID_HOME/tools/bin $ANDROID_HOME/tools $ANDROID_HOME/platform-tools $ANDROID_HOME/emulator $PATH
+fish_add_path -g $ANDROID_HOME/tools/bin $ANDROID_HOME/tools $ANDROID_HOME/platform-tools $ANDROID_HOME/emulator
 
 # Go
-set PATH /usr/local/go/bin $PATH
+fish_add_path -g /usr/local/go/bin
 set -gx GOPATH $HOME/go
-set PATH $GOPATH/bin $PATH
+fish_add_path -g $GOPATH/bin
 set -gx GO111MODULE on
 
 # mkcert
@@ -29,20 +29,20 @@ test -e mkcert; and set -gx NODE_EXTRA_CA_CERTS (mkcert -CAROOT)/rootCA.pem
 
 # Ruby
 set -gx GEM_HOME $HOME/.gem
-set PATH $GEM_HOME/bin $PATH
+fish_add_path -g $GEM_HOME/bin
 
 # Rust
 set -gx CARGO_HOME $HOME/.cargo
-set PATH $CARGO_HOME/bin $PATH
+fish_add_path -g $CARGO_HOME/bin
 
 # Deno
-set PATH /Users/nandofarias/.deno/bin $PATH
+fish_add_path -g /Users/nandofarias/.deno/bin
 
 # Flutter
-set PATH $HOME/Workspace/flutter/bin $PATH
+fish_add_path -g $HOME/Workspace/flutter/bin
 
 # fnm
-set PATH $HOME/.fnm $PATH
+fish_add_path -g $HOME/.fnm
 /usr/local/bin/fnm env | source
 
 # Elixir/Erlang
@@ -52,10 +52,10 @@ set -gx PLUG_EDITOR "vscode://file/__FILE__:__LINE__"
 set -gx ERL_BUILD_DOCS yes
 set -gx CFLAGS "-O2 -g -fno-stack-check -Wno-error=implicit-function-declaration"
 set -gx ELIXIR_ERL_OPTIONS "+S 6:6"
-set PATH $HOME/.elixir-ls/release $PATH
+fish_add_path -g $HOME/.elixir-ls/release
 
 # Dart
-set PATH /usr/lib/dart/bin $PATH
+fish_add_path -g /usr/lib/dart/bin
 
 # Import GPG keys
 set -gx GPG_TTY (tty)
@@ -68,9 +68,6 @@ alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
 # asdf
 source ~/.asdf/asdf.fish
-
-set -g fish_user_paths /usr/local/sbin $fish_user_paths
-set -g fish_user_paths /usr/local/opt/libpq/bin $fish_user_paths
 
 # Aliases
 alias mps="mix phx.server"
@@ -96,14 +93,14 @@ end
 set MATCHWORKER_PREFER_PREBUILT 1
 # Okta
 if test -d ~/.okta
-    set PATH $HOME/.okta/bin $PATH
+    fish_add_path -g $HOME/.okta/bin
     source ~/.okta/fish_functions/okta-aws.fish
     source ~/.okta/fish_functions/okta-sls.fish
 end
 
 # Emacs
 set -x DOOMDIR $HOME/.doom.d
-set PATH $HOME/.emacs.d/bin $PATH
+fish_add_path -g $HOME/.emacs.d/bin
 
 # Zoxide
 zoxide init fish | source
