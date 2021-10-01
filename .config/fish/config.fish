@@ -108,3 +108,6 @@ zoxide init fish | source
 
 # McFly
 mcfly init fish | source
+set -gx MCFLY_KEY_SCHEME vim
+set -gx MCFLY_FUZZY true
+set -gx MCFLY_RESULTS 50
