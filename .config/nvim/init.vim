@@ -116,7 +116,6 @@ onoremap ip i(
 
 " Remapings
 nmap <silent><space> :nohlsearch <CR>
-nnoremap <silent><leader>q :Bdelete <CR>
 nnoremap <silent><leader>c :enew <CR>
 inoremap <C-c> <esc>
 nnoremap <silent><Leader>r :source ~/.config/nvim/init.vim <CR>
@@ -127,6 +126,12 @@ nnoremap <Leader>nv :e ~/.config/nvim/init.vim <CR>
 nnoremap <Leader>tm :e ~/.config/tmux/tmux.conf <CR>
 nnoremap <Leader>fs :e ~/.config/fish/config.fish <CR>
 nnoremap <Leader>al :e ~/.config/alacritty/alacritty.yml <CR>
+
+" Commands
+:command! Q q
+:command! W w
+:command! WQ wq
+:command! Wq wq
 
 " PLUGINS
 " nvim-autopairs
@@ -272,6 +277,7 @@ require'nvim-tree'.setup {
   }
 }
 EOF
+let g:nvim_tree_quit_on_open = 1
 nnoremap <C-n> :NvimTreeToggle<CR>
 nnoremap <leader>n :NvimTreeFindFile<CR>
 " https://github.com/kyazdani42/nvim-tree.lua/issues/549
@@ -474,3 +480,7 @@ autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ 
 let g:db_ui_winwidth = 60
 let g:db_ui_win_position = 'right'
 let g:db_ui_force_echo_notifications = 1
+
+" bufdelete.nvim
+nnoremap <silent><leader>q :Bdelete <CR>
+
