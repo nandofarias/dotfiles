@@ -98,6 +98,7 @@ set hidden
 set fillchars=fold:\ ,vert:\│,eob:\ ,msgsep:‾ " hide ~ at the end of vuffer
 set undofile
 set undodir=~/.vimundo/
+set spelllang=en
 
 " Dracula PRO
 packadd! dracula_pro
@@ -115,11 +116,12 @@ onoremap ib i[
 onoremap ip i(
 
 " Remapings
-nmap <silent><space> :nohlsearch <CR>
-nnoremap <silent><leader>c :enew <CR>
+nmap <silent> <space> :nohlsearch <CR>
+nnoremap <silent> <leader>c :enew <CR>
 inoremap <C-c> <esc>
-nnoremap <silent><Leader>r :source ~/.config/nvim/init.vim <CR>
-nnoremap <silent>gx :silent !open <C-r><C-f> <CR>
+nnoremap <silent> <Leader>r :source ~/.config/nvim/init.vim <CR>
+nnoremap <silent> gx :silent !open <C-r><C-f> <CR>
+nnoremap <silent> gs :set spell!<cr>
 
 " Open config
 nnoremap <Leader>nv :e ~/.config/nvim/init.vim <CR>
