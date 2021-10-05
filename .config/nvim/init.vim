@@ -190,7 +190,6 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 lua << EOF
 local lspconfig = require("lspconfig")
 local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()) -- For nvim-cmp
-
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
@@ -219,6 +218,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
 end
 
+-- nvim-lsp-installer
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
     local opts = {
@@ -230,7 +230,6 @@ lsp_installer.on_server_ready(function(server)
     vim.cmd [[ do User LspAttachBuffers ]]
 end)
 EOF
-let g:lsp_installer_allow_federated_servers = v:true
 
 " nvim-cmp + vsnip
 let g:vsnip_snippet_dir = '~/.config/nvim/snippets'
