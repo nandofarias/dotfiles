@@ -46,6 +46,8 @@
 
   unstage = restore --staged
 
+  cb = checkout -b
+
 [core]
 	excludesfile = /Users/nandofarias/.gitignore
 	autocrlf = input
