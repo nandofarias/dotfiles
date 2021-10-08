@@ -483,5 +483,5 @@ let g:db_ui_win_position = 'right'
 let g:db_ui_force_echo_notifications = 1
 
 " bufdelete.nvim
-nnoremap <silent><leader>q :Bdelete <CR>
+nnoremap <silent><leader>q :Bdelete \| :blast<CR>
 
