@@ -181,8 +181,8 @@ parser_configs.http = {
 EOF
 
 " nvim-telescope
-nnoremap <C-p> <cmd>Telescope find_files<cr>
-nnoremap <C-f> <cmd>Telescope live_grep<cr>
+nnoremap <C-p> <cmd>Telescope find_files prompt_prefix=🔍 theme=ivy<cr>
+nnoremap <C-f> <cmd>Telescope live_grep prompt_prefix=🔍 theme=dropdown<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
