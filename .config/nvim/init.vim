@@ -127,7 +127,7 @@ nnoremap <Leader>nv :e ~/.config/nvim/init.vim <CR>
 nnoremap <Leader>tm :e ~/.config/tmux/tmux.conf <CR>
 nnoremap <Leader>fs :e ~/.config/fish/config.fish <CR>
 nnoremap <Leader>al :e ~/.config/alacritty/alacritty.yml <CR>
-nnoremap <Leader>kt :e ~/.config/kitty/kitty.yml <CR>
+nnoremap <Leader>kt :e ~/.config/kitty/kitty.conf <CR>
 
 " Commands
 :command! Q q
