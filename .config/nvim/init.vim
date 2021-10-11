@@ -272,7 +272,9 @@ let g:neoformat_enabled_javascript = ['prettier', 'prettier-eslint']
 lua << EOF
 require'nvim-tree'.setup {
   auto_close = true,
-  lsp_diagnostics = true,
+  diagnostic = {
+    enable = true,
+  },
   view = {
     width = 50,
     side = 'right'
