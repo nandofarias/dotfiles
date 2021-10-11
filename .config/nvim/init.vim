@@ -117,7 +117,6 @@ onoremap ip i(
 
 " Remapings
 nmap <silent> <space> :nohlsearch <CR>
-nnoremap <silent> <leader>c :enew <CR>
 inoremap <C-c> <esc>
 nnoremap <silent> <Leader>r :source ~/.config/nvim/init.vim <CR>
 nnoremap <silent> gx :silent !open <C-r><C-f> <CR>
@@ -349,22 +348,24 @@ nnoremap <C-g> :Neogit<CR>
 " dashboard-nvim
 let g:dashboard_disable_statusline = 1
 let g:dashboard_default_executive = 'telescope'
-let g:dashboard_custom_shortcut={
-\ 'last_session'       : '\ s l',
-\ 'find_history'       : '\ f h',
-\ 'find_file'          : '\ f f',
-\ 'new_file'           : '\ c n',
-\ 'change_colorscheme' : '\ t c',
-\ 'find_word'          : '\ f a',
-\ 'book_marks'         : '\ f b',
+let g:dashboard_custom_section ={
+\   'a': {'description': ['  Find File                 leader f f'], 'command': 'Telescope find_files'},
+\   'b': {'description': ['  Find Word                 leader f g'], 'command': 'Telescope live_grep'},
+\   'c': {'description': ['  Recents                   leader f h'], 'command': 'Telescope oldfiles'},
+\   'd': {'description': ['  New File                  leader c n'], 'command': 'DashboardNewFile'},
+\   'e': {'description': ['  Bookmarks                 leader f b'], 'command': 'Telescope marks'},
+\   'f': {'description': ['  Update Plugins            leader u  '], 'command': 'PackerUpdate'},
+\   'g': {'description': ['  Settings                  leader n v'], 'command': 'edit $MYVIMRC'},
+\   'h': {'description': ['  Exit                      leader q q'], 'command': 'exit'}
 \ }
+
 let g:dashboard_custom_header = [
 \ '                        ______________                 ',
 \ '                       /             /|                ',
 \ '                      /             / |                ',
 \ '                     /____________ /  |                ',
 \ '                    | ___________ |   |                ',
-\ '                    ||█          ||   |                ',
+\ '                    ||█neovim .  ||   |                ',
 \ '                    ||           ||   |                ',
 \ '                    ||           ||   |                ',
 \ '                    ||___________||   |                ',
@@ -378,21 +379,15 @@ let g:dashboard_custom_header = [
 \ '               |   -----------     ::: |               ',
 \ '               `-----------------------`               ',
 \ '                                                       ',
-\ ' ███╗   ██╗ ███████╗ ██████╗  ██╗   ██╗ ██╗ ███╗   ███╗',
-\ ' ████╗  ██║ ██╔════╝██╔═══██╗ ██║   ██║ ██║ ████╗ ████║',
-\ ' ██╔██╗ ██║ █████╗  ██║   ██║ ██║   ██║ ██║ ██╔████╔██║',
-\ ' ██║╚██╗██║ ██╔══╝  ██║   ██║ ╚██╗ ██╔╝ ██║ ██║╚██╔╝██║',
-\ ' ██║ ╚████║ ███████╗╚██████╔╝  ╚████╔╝  ██║ ██║ ╚═╝ ██║',
-\ ' ╚═╝  ╚═══╝ ╚══════╝ ╚═════╝    ╚═══╝   ╚═╝ ╚═╝     ╚═╝',
 \]
 nmap <Leader>ss :<C-u>SessionSave<CR>
 nmap <Leader>sl :<C-u>SessionLoad<CR>
 nnoremap <silent> <Leader>fh :DashboardFindHistory<CR>
 nnoremap <silent> <Leader>ff :DashboardFindFile<CR>
-nnoremap <silent> <Leader>tc :DashboardChangeColorscheme<CR>
-nnoremap <silent> <Leader>fa :DashboardFindWord<CR>
+nnoremap <silent> <Leader>fg :DashboardFindWord<CR>
 nnoremap <silent> <Leader>fb :DashboardJumpMark<CR>
 nnoremap <silent> <Leader>cn :DashboardNewFile<CR>
+hi! link DashboardShortcut DraculaGreen
 
 " vim-test
 nmap <silent> tn :TestNearest<CR>
@@ -487,4 +482,7 @@ let g:db_ui_force_echo_notifications = 1
 
 " bufdelete.nvim
 nnoremap <silent><leader>q :Bdelete \| :blast<CR>
+
+" quit
+nnoremap <silent><leader>qq :exit <CR>
 
