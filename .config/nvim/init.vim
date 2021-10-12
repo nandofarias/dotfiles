@@ -243,8 +243,7 @@ imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-T
 smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 lua <<EOF
 local cmp = require'cmp'
-
-cmp.setup({
+cmp.setup {
   snippet = {
     expand = function(args)
       vim.fn["vsnip#anonymous"](args.body) 
@@ -262,8 +261,10 @@ cmp.setup({
     { name = 'vsnip' },
     { name = 'buffer' },
   }
-})
+}
 EOF
+hi! link CmpItemAbbr DraculaPurple
+hi! link CmpItemKind DraculaYellow
 
 " Neoformat
 " https://github.com/sbdchd/neoformat/issues/134
