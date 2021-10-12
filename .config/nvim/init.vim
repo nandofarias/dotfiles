@@ -13,6 +13,7 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'windwp/nvim-autopairs'
 Plug 'karb94/neoscroll.nvim'
 Plug 'famiu/bufdelete.nvim'
+Plug 'junegunn/vim-peekaboo'
 
 " Better Git 
 Plug 'TimUntersberger/neogit'
@@ -72,6 +73,9 @@ Plug 'NTBBloodbath/rest.nvim'
 Plug 'tpope/vim-dadbod'
 Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
+
+" Better quickfix
+Plug 'folke/trouble.nvim'
 
 call plug#end()
 
@@ -479,6 +483,15 @@ autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ 
 let g:db_ui_winwidth = 60
 let g:db_ui_win_position = 'right'
 let g:db_ui_force_echo_notifications = 1
+
+" trouble.nvim
+lua require("trouble").setup {}
+nnoremap <leader>xx <cmd>TroubleToggle<cr>
+nnoremap <leader>xw <cmd>TroubleToggle lsp_workspace_diagnostics<cr>
+nnoremap <leader>xd <cmd>TroubleToggle lsp_document_diagnostics<cr>
+nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
+nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
+nnoremap <leader>xr <cmd>TroubleToggle lsp_references<cr>
 
 " bufdelete.nvim
 nnoremap <silent><leader>q :Bdelete \| :blast<CR>
