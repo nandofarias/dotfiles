@@ -162,7 +162,8 @@ require("nvim-treesitter.configs").setup {
   },
   textobjects = {
     select = {
-      enable = true,
+      -- temporary disable because of a bug on elixir treesitter highlight
+      enable = false,
       lookahead = true,
       keymaps = {
         ["af"] = "@function.outer",
