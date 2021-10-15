@@ -496,7 +496,7 @@ nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
 nnoremap <leader>xr <cmd>TroubleToggle lsp_references<cr>
 
 " bufdelete.nvim
-nnoremap <silent><leader>q :Bdelete \| :blast<CR>
+nnoremap <silent><leader>q :Bdelete<CR>
 
 " quit
 nnoremap <silent><leader>qq :exit <CR>
