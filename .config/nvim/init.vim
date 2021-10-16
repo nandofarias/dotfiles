@@ -16,6 +16,9 @@ Plug 'famiu/bufdelete.nvim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'andweeb/presence.nvim'
 
+" Vim test
+Plug 'junegunn/vader.vim'
+
 " Better Git 
 Plug 'TimUntersberger/neogit'
 Plug 'sindrets/diffview.nvim'
