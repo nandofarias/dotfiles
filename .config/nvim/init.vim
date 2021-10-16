@@ -14,6 +14,7 @@ Plug 'windwp/nvim-autopairs'
 Plug 'karb94/neoscroll.nvim'
 Plug 'famiu/bufdelete.nvim'
 Plug 'junegunn/vim-peekaboo'
+Plug 'andweeb/presence.nvim'
 
 " Better Git 
 Plug 'TimUntersberger/neogit'
@@ -497,6 +498,9 @@ nnoremap <leader>xr <cmd>TroubleToggle lsp_references<cr>
 
 " bufdelete.nvim
 nnoremap <silent><leader>q :Bdelete<CR>
+
+" presence.nvim
+lua require("presence"):setup()
 
 " quit
 nnoremap <silent><leader>qq :exit <CR>
