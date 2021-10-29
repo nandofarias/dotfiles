@@ -62,6 +62,7 @@ Plug 'hrsh7th/vim-vsnip'
 " Language utilities
 Plug 'sbdchd/neoformat'
 Plug 'tpope/vim-projectionist'
+Plug 'github/copilot.vim'
 
 " Frontend
 Plug 'mattn/emmet-vim'
@@ -383,7 +384,7 @@ let g:dashboard_custom_section ={
 \   'c': {'description': ['  Recents                   leader f h'], 'command': 'Telescope oldfiles'},
 \   'd': {'description': ['  New File                  leader c n'], 'command': 'DashboardNewFile'},
 \   'e': {'description': ['  Bookmarks                 leader f b'], 'command': 'Telescope marks'},
-\   'f': {'description': ['  Update Plugins            leader u  '], 'command': 'PackerUpdate'},
+\   'f': {'description': ['  Update Plugins            leader u  '], 'command': 'Plug update'},
 \   'g': {'description': ['  Settings                  leader n v'], 'command': 'edit $MYVIMRC'},
 \   'h': {'description': ['  Exit                      leader q q'], 'command': 'exit'}
 \ }
@@ -519,7 +520,7 @@ nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
 nnoremap <leader>xr <cmd>TroubleToggle lsp_references<cr>
 
 " bufdelete.nvim
-nnoremap <silent><leader>q :Bdelete<CR>
+nnoremap <silent><leader>q :Bdelete \| <c-o><CR>
 
 " presence.nvim
 lua require("presence"):setup()
