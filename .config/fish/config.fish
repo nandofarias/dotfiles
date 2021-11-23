@@ -1,13 +1,13 @@
 # Fish
-set -gx fish_greeting "Welcome to Summoner's Rift"
+set -x fish_greeting "Welcome to Summoner's Rift"
 # Fix functions descriptions https://github.com/fish-shell/fish-shell/issues/328
 for i in (functions)
     functions $i >/dev/null
 end
 # General
-set -gx LC_ALL en_US.UTF-8
-set -gx WORK $HOME/Workspace
-set -gx EDITOR nvim
+set -x LC_ALL en_US.UTF-8
+set -x WORK $HOME/Workspace
+set -x EDITOR nvim
 ulimit -n 65536 # See: https://stackoverflow.com/a/45004802 
 fish_add_path -g $HOME/bin $HOME/.local/bin
 
@@ -18,24 +18,24 @@ fish_hybrid_key_bindings
 fish_add_path -g /usr/local/opt/curl/bin
 
 # Android
-set -gx ANDROID_HOME $HOME/Library/Android/sdk
+set -x ANDROID_HOME $HOME/Library/Android/sdk
 fish_add_path -g $ANDROID_HOME/tools/bin $ANDROID_HOME/tools $ANDROID_HOME/platform-tools $ANDROID_HOME/emulator
 
 # Go
 fish_add_path -g /usr/local/go/bin
-set -gx GOPATH $HOME/go
+set -x GOPATH $HOME/go
 fish_add_path -g $GOPATH/bin
-set -gx GO111MODULE on
+set -x GO111MODULE on
 
 # mkcert
-test -e mkcert; and set -gx NODE_EXTRA_CA_CERTS (mkcert -CAROOT)/rootCA.pem
+test -e mkcert; and set -x NODE_EXTRA_CA_CERTS (mkcert -CAROOT)/rootCA.pem
 
 # Ruby
-set -gx GEM_HOME $HOME/.gem
+set -x GEM_HOME $HOME/.gem
 fish_add_path -g $GEM_HOME/bin
 
 # Rust
-set -gx CARGO_HOME $HOME/.cargo
+set -x CARGO_HOME $HOME/.cargo
 fish_add_path -g $CARGO_HOME/bin
 
 # Deno
@@ -49,19 +49,19 @@ fish_add_path -g $HOME/.fnm
 /usr/local/bin/fnm env | source
 
 # Elixir/Erlang
-set -gx ERL_LIBS /usr/lib/elixir/lib
-set -gx ERL_AFLAGS "-kernel shell_history enabled"
-set -gx PLUG_EDITOR "vscode://file/__FILE__:__LINE__"
-set -gx ERL_BUILD_DOCS yes
-set -gx CFLAGS "-O2 -g -fno-stack-check -Wno-error=implicit-function-declaration"
-set -gx ELIXIR_ERL_OPTIONS "+S 6:6"
+set -x ERL_LIBS /usr/lib/elixir/lib
+set -x ERL_AFLAGS "-kernel shell_history enabled"
+set -x PLUG_EDITOR "vscode://file/__FILE__:__LINE__"
+set -x ERL_BUILD_DOCS yes
+set -x CFLAGS "-O2 -g -fno-stack-check -Wno-error=implicit-function-declaration"
+set -x ELIXIR_ERL_OPTIONS "+S 6:6"
 fish_add_path -g $HOME/.elixir-ls/release
 
 # Dart
 fish_add_path -g /usr/lib/dart/bin
 
 # Import GPG keys
-set -gx GPG_TTY (tty)
+set -x GPG_TTY (tty)
 
 # iTerm
 test -e {$HOME}/.iterm2_shell_integration.fish; and source {$HOME}/.iterm2_shell_integration.fish
@@ -108,6 +108,6 @@ zoxide init fish | source
 
 # McFly
 mcfly init fish | source
-set -gx MCFLY_KEY_SCHEME vim
-set -gx MCFLY_FUZZY true
-set -gx MCFLY_RESULTS 50
+set -x MCFLY_KEY_SCHEME vim
+set -x MCFLY_FUZZY true
+set -x MCFLY_RESULTS 50
