@@ -5,6 +5,7 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 Plug 'nvim-lua/plenary.nvim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-abolish'
 Plug 'dylanaraps/root.vim'
 Plug 'andymass/vim-matchup'
 Plug 'szw/vim-maximizer'
@@ -108,6 +109,8 @@ set fillchars=fold:\ ,vert:\│,eob:\ ,msgsep:‾ " hide ~ at the end of vuffer
 set undofile
 set undodir=~/.vimundo/
 set spelllang=en
+" GUI settings
+set guifont=FiraCode\ Nerd\ Font:h14
 
 " Dracula PRO
 packadd! dracula_pro
