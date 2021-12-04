@@ -6,3 +6,12 @@ success_symbol = "[➜](bold green)"
 
 [package]
 disabled = true
+
+[python]
+disabled = true
+
+[aws]
+disabled = true
+
+[terraform]
+disabled = true
