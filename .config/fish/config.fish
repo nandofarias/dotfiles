@@ -111,3 +111,7 @@ mcfly init fish | source
 set -x MCFLY_KEY_SCHEME vim
 set -x MCFLY_FUZZY true
 set -x MCFLY_RESULTS 50
+
+if [ -z "$TMUX" ]
+    tmux attach 2>/dev/null; or exec tmux new-session; and exit
+end
