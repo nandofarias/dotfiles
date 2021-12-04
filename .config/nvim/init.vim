@@ -130,9 +130,10 @@ onoremap ip i(
 " Remapings
 nmap <silent> <space> :nohlsearch <CR>
 inoremap <C-c> <esc>
-nnoremap <silent> <Leader>r :source ~/.config/nvim/init.vim <CR>
+nnoremap <silent> <leader>r :source ~/.config/nvim/init.vim <CR>
 nnoremap <silent> gx :silent !open <C-r><C-f> <CR>
-nnoremap <silent> gs :set spell!<cr>
+nnoremap <silent> gs :set spell! <CR>
+nnoremap <silent> <leader>qq :exit <CR>
 
 " Open config
 nnoremap <Leader>nv :e ~/.config/nvim/init.vim <CR>
@@ -528,6 +529,7 @@ nnoremap <silent><leader>q :Bdelete \| <c-o><CR>
 " presence.nvim
 lua require("presence"):setup()
 
-" quit
-nnoremap <silent><leader>qq :exit <CR>
+" copilot
+imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+let g:copilot_no_tab_map = v:true
 
