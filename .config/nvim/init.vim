@@ -217,9 +217,6 @@ EOF
 " nvim-telescope
 lua << EOF
 require('telescope').setup {
-  defaults = {
-    grep_previewer = require'telescope.previewers'.cat.new, -- temp fix for: https://github.com/nvim-treesitter/nvim-treesitter/issues/1957
-  },
   pickers = {
     find_files = {
       theme = "ivy",
@@ -228,9 +225,6 @@ require('telescope').setup {
     },
     live_grep = {
       prompt_prefix = " ",
-      preview = {
-        treesitter = false,
-      }
     },
   },
 }
