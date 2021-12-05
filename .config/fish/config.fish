@@ -6,7 +6,7 @@ set -x LC_ALL en_US.UTF-8
 set -x WORK $HOME/Workspace
 set -x EDITOR nvim
 ulimit -n 65536 # See: https://stackoverflow.com/a/45004802 
-fish_add_path -g $HOME/bin $HOME/.local/bin
+fish_add_path -g $HOME/.bin $HOME/.local/bin
 
 # Fix curl
 fish_add_path -g /usr/local/opt/curl/bin

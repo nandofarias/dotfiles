@@ -23,7 +23,8 @@ disabled = true
 disabled = true
 
 [custom.elixir]
-command = "echo 💧 v(asdf_current elixir)"
+command = "echo 💧v$(asdf_current elixir)"
 files = ["mix.exs"]
 style = "bold purple"
 format = "via [$output]($style) "
+shell = ["bash", "--noprofile", "--norc"]
