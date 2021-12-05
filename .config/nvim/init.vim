@@ -37,6 +37,7 @@ Plug 'akinsho/bufferline.nvim'
 " Fuzzy finder
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 " Language support - treesitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -56,6 +57,7 @@ Plug 'williamboman/nvim-lsp-installer'
 " Autocomplete
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
+
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
@@ -214,8 +216,29 @@ parser_configs.http = {
 EOF
 
 " nvim-telescope
-nnoremap <C-p> <cmd>Telescope find_files prompt_prefix=🔍 theme=ivy<cr>
-nnoremap <C-f> <cmd>Telescope live_grep prompt_prefix=🔍 theme=dropdown<cr>
+lua << EOF
+require('telescope').setup {
+  defaults = {
+    grep_previewer = require'telescope.previewers'.cat.new,
+  },
+  pickers = {
+    find_files = {
+      theme = "ivy",
+      prompt_prefix = " ",
+      previewer = false,
+    },
+    live_grep = {
+      prompt_prefix = " ",
+      preview = {
+        treesitter = false,
+      }
+    },
+  },
+}
+require('telescope').load_extension('fzf')
+EOF
+nnoremap <C-p> <cmd>Telescope find_files<cr>
+nnoremap <C-f> <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
@@ -388,7 +411,7 @@ let g:dashboard_custom_section ={
 \   'c': {'description': ['  Recents                   leader f h'], 'command': 'Telescope oldfiles'},
 \   'd': {'description': ['  New File                  leader c n'], 'command': 'DashboardNewFile'},
 \   'e': {'description': ['  Bookmarks                 leader f b'], 'command': 'Telescope marks'},
-\   'f': {'description': ['  Update Plugins            leader u  '], 'command': 'Plug update'},
+\   'f': {'description': ['  Update Plugins            leader u  '], 'command': 'PlugUpdate'},
 \   'g': {'description': ['  Settings                  leader n v'], 'command': 'edit $MYVIMRC'},
 \   'h': {'description': ['  Exit                      leader q q'], 'command': 'exit'}
 \ }
