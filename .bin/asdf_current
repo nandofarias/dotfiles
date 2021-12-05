@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+asdf_current() {
+    lang=$1
+    current=$(pwd)
+    root=$(dirname $HOME)
+
+    env_lang_version=ASDF_$(echo $lang | tr '[:lower:]' '[:upper:]')_VERSION set env_version $$env_lang_version
+
+    if test -n "$env_version"; then
+        echo $env_version
+        return 0
+    fi
+
+    while test "$current" != "$root"; do
+        if test -e $current/.tool-versions; then
+            file=$current/.tool-versions
+        fi
+        current=$(builtin cd $current/..; pwd)
+    done
+
+    while IFS= read -r ver; do
+        if [[ "$ver" =~ "$lang" ]] ; then
+            echo $ver | cut -d " " -f 2
+            return 0
+        fi
+    done < "$file"
+}
+
+asdf_current "$@"
