@@ -1,18 +1,12 @@
 # Fish
 set -x fish_greeting "Welcome to Summoner's Rift"
-# Fix functions descriptions https://github.com/fish-shell/fish-shell/issues/328
-for i in (functions)
-    functions $i >/dev/null
-end
+
 # General
 set -x LC_ALL en_US.UTF-8
 set -x WORK $HOME/Workspace
 set -x EDITOR nvim
 ulimit -n 65536 # See: https://stackoverflow.com/a/45004802 
 fish_add_path -g $HOME/bin $HOME/.local/bin
-
-# Vim mode
-fish_hybrid_key_bindings
 
 # Fix curl
 fish_add_path -g /usr/local/opt/curl/bin
