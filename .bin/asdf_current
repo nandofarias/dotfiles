@@ -14,6 +14,7 @@ asdf_current() {
     while test "$current" != "$root"; do
         if test -e $current/.tool-versions; then
             file=$current/.tool-versions
+            break
         fi
         current=$(builtin cd $current/..; pwd)
     done
