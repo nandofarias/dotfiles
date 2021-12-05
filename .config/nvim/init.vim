@@ -63,7 +63,6 @@ Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
 
 " Language utilities
-Plug 'sbdchd/neoformat'
 Plug 'tpope/vim-projectionist'
 Plug 'github/copilot.vim'
 
@@ -242,7 +241,7 @@ nnoremap <C-f> <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
-" lsp
+" lsp-config
 lua << EOF
 local lspconfig = require("lspconfig")
 local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()) -- For nvim-cmp
@@ -282,10 +281,21 @@ lsp_installer.on_server_ready(function(server)
       on_attach = on_attach
     }
 
+    if server.name == "elixirls" then
+      opts.settings = {
+        elixirLS = {
+          fetchDeps = true,
+          dialyzerFormat = "dialyxir_short"
+        }
+      }
+    end
+
     server:setup(opts)
     vim.cmd [[ do User LspAttachBuffers ]]
 end)
 EOF
+" format on save
+autocmd BufWritePre * lua vim.lsp.buf.formatting_sync(nil, 1000) 
 
 " nvim-cmp + vsnip
 let g:vsnip_snippet_dir = '~/.config/nvim/snippets'
@@ -317,12 +327,6 @@ cmp.setup {
 EOF
 hi! link CmpItemAbbr DraculaPurple
 hi! link CmpItemKind DraculaYellow
-
-" Neoformat
-" https://github.com/sbdchd/neoformat/issues/134
-au default BufWritePre * try | undojoin | Neoformat | catch /^Vim\%((\a\+)\)\=:E790/ | finally | silent Neoformat | endtry
-let g:neoformat_enabled_typescript = ['prettier', 'prettier-eslint', 'tslint']
-let g:neoformat_enabled_javascript = ['prettier', 'prettier-eslint']
 
 " nvim-tree
 lua << EOF
