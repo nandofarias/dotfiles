@@ -13,5 +13,17 @@ disabled = true
 [aws]
 disabled = true
 
+[gcloud]
+disabled = true
+
 [terraform]
 disabled = true
+
+[elixir]
+disabled = true
+
+[custom.elixir]
+command = "echo 💧 v(asdf_current elixir)"
+files = ["mix.exs"]
+style = "bold purple"
+format = "via [$output]($style) "
