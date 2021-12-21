@@ -50,6 +50,7 @@ set -x ERL_BUILD_DOCS yes
 set -x CFLAGS "-O2 -g -fno-stack-check -Wno-error=implicit-function-declaration"
 set -x ELIXIR_ERL_OPTIONS "+S 6:6"
 fish_add_path -g $HOME/.elixir-ls/release
+fish_add_path -g $HOME/.cache/rebar3/bin
 
 # Dart
 fish_add_path -g /usr/lib/dart/bin
