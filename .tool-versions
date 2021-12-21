@@ -1,8 +1,5 @@
 elixir 1.13-otp-24
 erlang 24.0.5
 gleam 0.17.0
-ruby 2.7.2
 bazel 3.1.0
-python 3.6.7
-nodejs 14.15.4
 yarn 1.22.5
