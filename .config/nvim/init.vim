@@ -24,6 +24,7 @@ Plug 'junegunn/vader.vim'
 Plug 'TimUntersberger/neogit'
 Plug 'sindrets/diffview.nvim'
 Plug 'lewis6991/gitsigns.nvim'
+Plug 'ruifm/gitlinker.nvim'
 
 " Statusline
 Plug 'vim-airline/vim-airline'
@@ -260,9 +261,9 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
   buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
   buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
 end
@@ -346,37 +347,11 @@ lua << EOF
 require("bufferline").setup{
   options = {
     diagnostics = "nvim_lsp",
-    custom_areas = {
-      right = function()
-        local result = {}
-        local error = vim.lsp.diagnostic.get_count(0, [[Error]])
-        local warning = vim.lsp.diagnostic.get_count(0, [[Warning]])
-        local info = vim.lsp.diagnostic.get_count(0, [[Information]])
-        local hint = vim.lsp.diagnostic.get_count(0, [[Hint]])
-
-        if error ~= 0 then
-          table.insert(result, {text = "  " .. error, guifg = "#FF9580"})
-        end
-
-        if warning ~= 0 then
-          table.insert(result, {text = "  " .. warning, guifg = "#FFCA80"})
-        end
-
-        if hint ~= 0 then
-          table.insert(result, {text = "  " .. hint, guifg = "#8AFF80"})
-        end
-
-        if info ~= 0 then
-          table.insert(result, {text = "  " .. info, guifg = "#80FFEA"})
-        end
-        return result
-      end,
-     }
   }
 }
 EOF
-nnoremap <silent>]b :BufferLineCycleNext<CR>
-nnoremap <silent>[b :BufferLineCyclePrev<CR>
+nnoremap <silent><Tab> :BufferLineCycleNext<CR>
+nnoremap <silent><S-Tab> :BufferLineCyclePrev<CR>
 nnoremap <silent><leader>1 <Cmd>BufferLineGoToBuffer 1<CR>
 nnoremap <silent><leader>2 <Cmd>BufferLineGoToBuffer 2<CR>
 nnoremap <silent><leader>3 <Cmd>BufferLineGoToBuffer 3<CR>
@@ -544,8 +519,7 @@ nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
 nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
 nnoremap <leader>xr <cmd>TroubleToggle lsp_references<cr>
 
-" bufdelete.nvim
-nnoremap <silent><leader>q :Bdelete \| <c-o><CR>
+nnoremap <silent>qq :Bdelete<cr>
 
 " presence.nvim
 lua require("presence"):setup()
@@ -553,4 +527,18 @@ lua require("presence"):setup()
 " copilot
 imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
 let g:copilot_no_tab_map = v:true
+let g:copilot_filetypes = {
+                              \ 'xml': v:false,
+                              \ "help": v:false,
+                              \ 'terminal': v:false,
+                              \ 'dashboard': v:false,
+                              \ 'packer': v:false,
+                              \ 'lspinfo': v:false,
+                              \ 'TelescopePrompt': v:false,
+                              \ 'TelescopeResults': v:false,
+                              \ 'NvimTree': v:false,
+                              \ }
+
+" gitlinker
+lua require"gitlinker".setup()
 
