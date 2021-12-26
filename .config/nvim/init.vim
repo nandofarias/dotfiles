@@ -14,8 +14,11 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'windwp/nvim-autopairs'
 Plug 'karb94/neoscroll.nvim'
 Plug 'famiu/bufdelete.nvim'
-Plug 'junegunn/vim-peekaboo'
+Plug 'tversteeg/registers.nvim'
 Plug 'andweeb/presence.nvim'
+Plug 'RRethy/vim-illuminate'
+Plug 'bkad/CamelCaseMotion'
+Plug 'christoomey/vim-tmux-navigator'
 
 " Vim test
 Plug 'junegunn/vader.vim'
@@ -25,6 +28,7 @@ Plug 'TimUntersberger/neogit'
 Plug 'sindrets/diffview.nvim'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'ruifm/gitlinker.nvim'
+Plug 'nandofarias/octo.nvim', { 'dir': '~/Workspace/github.com/nandofarias/octo.nvim' }
 
 " Statusline
 Plug 'vim-airline/vim-airline'
@@ -35,10 +39,12 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'akinsho/bufferline.nvim'
 
-" Fuzzy finder
+" Telescope
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'mrjones2014/dash.nvim', { 'do': 'make install' }
+Plug 'ahmedkhalf/project.nvim'
 
 " Language support - treesitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -241,6 +247,9 @@ lua << EOF
 local lspconfig = require("lspconfig")
 local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()) -- For nvim-cmp
 local on_attach = function(client, bufnr)
+  -- vim-illuminate
+  require 'illuminate'.on_attach(client)
+
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
@@ -281,6 +290,16 @@ lsp_installer.on_server_ready(function(server)
         elixirLS = {
           fetchDeps = true,
           dialyzerFormat = "dialyxir_short"
+        }
+      }
+    end
+
+    if server.name == "sumneko_lua" then
+      opts.settings = {
+        Lua = {
+          diagnostics = {
+            globals = { 'vim' }
+          }
         }
       }
     end
@@ -326,6 +345,11 @@ hi! link CmpItemKind DraculaYellow
 " nvim-tree
 lua << EOF
 require'nvim-tree'.setup {
+  update_cwd = true,
+  update_focused_file = {
+    enable = true,
+    update_cwd = true
+  },
   auto_close = true,
   diagnostic = {
     enable = true,
@@ -491,7 +515,6 @@ require("indent_blankline").setup {
     "help",
     "terminal",
     "dashboard",
-    "packer",
     "lspinfo",
     "TelescopePrompt",
     "TelescopeResults",
@@ -500,6 +523,9 @@ require("indent_blankline").setup {
   buftype_exclude = { "terminal" },
 }
 EOF
+
+" vim-illuminate
+let g:Illuminate_ftblacklist = ['help', 'terminal', 'dashboard', 'lspinfo', 'TelescopePrompt', 'TelescopeResults', 'NvimTree']
 
 " rest.nvim
 lua require("rest-nvim").setup()
@@ -542,3 +568,19 @@ let g:copilot_filetypes = {
 " gitlinker
 lua require"gitlinker".setup()
 
+" CamelCaseMotion
+let g:camelcasemotion_key = '<space>'
+
+" project.nvim
+nnoremap <leader>p <cmd>Telescope projects<cr>
+lua << EOF
+  require("project_nvim").setup {}
+  require('telescope').load_extension('projects')
+EOF
+
+" octo.nvim
+lua << EOF
+require"octo".setup({
+  default_remote = {"origin"};
+})
+EOF
