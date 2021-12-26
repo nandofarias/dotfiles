@@ -60,11 +60,6 @@ key_bindings:
   - { key: D, mods: Command|Shift, chars: "\x02\x73" }
   - { key: T, mods: Command, chars: "\x02\x63" }
   - { key: W, mods: Command, chars: "\x02\x78" }
-  # Move between panes
-  - { key: H, mods: Command, chars: "\x02\x68" }
-  - { key: J, mods: Command, chars: "\x02\x6a" }
-  - { key: K, mods: Command, chars: "\x02\x6b" }
-  - { key: L, mods: Command, chars: "\x02\x6c" }
   # Move between windows
   - { key: LBracket, mods: Shift|Command, chars: "\x02\x70" }
   - { key: RBracket, mods: Shift|Command, chars: "\x02\x6e" }
