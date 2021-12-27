@@ -37,6 +37,15 @@
     ],
     "description": "Creates a test block for unit tests"
   },
+  "test_state": {
+    "prefix": "ts",
+    "body": [
+      "test \"$1\", state do",
+      "  $2",
+      "end"
+    ],
+    "description": "Creates a test block with state"
+  },
   "test_conn_block": {
     "prefix": "tconn",
     "body": [
