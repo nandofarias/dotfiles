@@ -28,7 +28,7 @@ Plug 'TimUntersberger/neogit'
 Plug 'sindrets/diffview.nvim'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'ruifm/gitlinker.nvim'
-Plug 'nandofarias/octo.nvim', { 'dir': '~/Workspace/github.com/nandofarias/octo.nvim' }
+Plug 'pwntester/octo.nvim'
 
 " Statusline
 Plug 'vim-airline/vim-airline'
