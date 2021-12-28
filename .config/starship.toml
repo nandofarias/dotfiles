@@ -27,6 +27,9 @@ disabled = true
 [elixir]
 disabled = true
 
+[git_status]
+disabled = true
+
 [custom.elixir]
 symbol = " "
 command = "echo v$(asdf_current elixir)"
