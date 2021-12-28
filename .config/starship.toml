@@ -3,6 +3,11 @@ command_timeout = 5000
 
 [character] 
 success_symbol = "[➜](bold green)"
+error_symbol = "[✗](bold red)"
+vicmd_symbol = "[V](bold green)"
+
+[line_break]
+disabled = true
 
 [package]
 disabled = true
@@ -23,8 +28,9 @@ disabled = true
 disabled = true
 
 [custom.elixir]
-command = "echo 💧v$(asdf_current elixir)"
+symbol = " "
+command = "echo v$(asdf_current elixir)"
 files = ["mix.exs"]
-style = "bold purple"
-format = "via [$output]($style) "
+style = "bold cyan"
+format = "[$symbol](purple)[$output]($style) "
 shell = ["bash", "--noprofile", "--norc"]
