@@ -67,3 +67,5 @@ key_bindings:
   - { key: Grave, mods: Control, chars: "\x02\x7a" }
   # Tmux copy mode
   - { key: LBracket, mods: Control, chars: "\x02\x5b" }
+  # Clear terminal
+  - { key: K, mods: Command, chars: "\x63\x6C\x65\x61\x72\x0A" }
