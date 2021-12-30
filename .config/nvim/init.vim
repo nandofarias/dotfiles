@@ -583,4 +583,6 @@ lua << EOF
 require"octo".setup({
   default_remote = {"origin"};
 })
+local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+parser_config.markdown.used_by = "octo"
 EOF
