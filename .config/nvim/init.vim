@@ -6,7 +6,6 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-abolish'
-Plug 'dylanaraps/root.vim'
 Plug 'andymass/vim-matchup'
 Plug 'szw/vim-maximizer'
 Plug 'norcalli/nvim-colorizer.lua'
@@ -362,6 +361,7 @@ require'nvim-tree'.setup {
   }
 }
 EOF
+let g:nvim_tree_respect_buf_cwd = 1
 let g:nvim_tree_quit_on_open = 1
 nnoremap <C-n> :NvimTreeToggle<CR>
 nnoremap <leader>n :NvimTreeFindFile<CR>
@@ -388,8 +388,13 @@ nnoremap <silent><leader>7 <Cmd>BufferLineGoToBuffer 7<CR>
 nnoremap <silent><leader>8 <Cmd>BufferLineGoToBuffer 8<CR>
 nnoremap <silent><leader>9 <Cmd>BufferLineGoToBuffer 9<CR>
 
-" root.nvim
-let g:root#patterns = ['.git', 'mix.exs', '_build', 'deps', 'node_modules', 'README.md']
+" project.nvim
+lua << EOF
+require("project_nvim").setup{
+  detection_methods = { "pattern", "lsp" },
+  patterns = { ".git", "mix.exs", "_build", "deps", "node_modules", "Makefile", "package.json", "README.md", "Cargo.toml" },
+}
+EOF
 
 " neogit
 lua << EOF
