@@ -137,7 +137,6 @@ onoremap ip i(
 
 " Remapings
 nmap <silent> <space> :nohlsearch <CR>
-inoremap <C-c> <esc>
 nnoremap <silent> <leader>r :source ~/.config/nvim/init.vim <CR>
 nnoremap <silent> gx :silent !open <C-r><C-f> <CR>
 nnoremap <silent> gs :set spell! <CR>
