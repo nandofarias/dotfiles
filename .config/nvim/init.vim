@@ -32,7 +32,7 @@ Plug 'ruifm/gitlinker.nvim'
 Plug 'pwntester/octo.nvim'
 
 " Statusline
-Plug 'vim-airline/vim-airline'
+Plug 'nvim-lualine/lualine.nvim'
 
 " File explorer
 Plug 'glepnir/dashboard-nvim'
@@ -166,8 +166,16 @@ lua require('nvim-autopairs').setup{}
 " neoscroll.nvim
 lua require('neoscroll').setup()
 
-" vim-airline
-let g:airline_theme = 'dracula_pro'
+" lualine.nvim
+lua << EOF
+local dracula_pro = require'statusline.themes.dracula_pro'
+require('lualine').setup {
+  options = {
+    theme = dracula_pro,
+    disabled_filetypes = { "dashboard" },
+  },
+}
+EOF
 
 " nvim-colorizer
 lua require'colorizer'.setup()
@@ -410,7 +418,6 @@ EOF
 nnoremap <C-g> :Neogit<CR>
 
 " dashboard-nvim
-let g:dashboard_disable_statusline = 1
 let g:dashboard_default_executive = 'telescope'
 let g:dashboard_custom_section ={
 \   'a': {'description': ['  Find File                 leader f f'], 'command': 'Telescope find_files'},
