@@ -51,6 +51,7 @@ Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'nvim-treesitter/playground'
 Plug 'p00f/nvim-ts-rainbow'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
+Plug 'RRethy/nvim-treesitter-textsubjects'
 
 " Zen mode
 Plug 'folke/zen-mode.nvim'
@@ -210,6 +211,12 @@ require("nvim-treesitter.configs").setup {
         ["[]"] = "@class.outer",
       },
     },
+  },
+  textsubjects = {
+    enable = true,
+    keymaps = {
+      ['.'] = 'textsubjects-smart',
+    }
   },
 }
 
@@ -551,16 +558,16 @@ lua require("presence"):setup()
 imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
 let g:copilot_no_tab_map = v:true
 let g:copilot_filetypes = {
-                              \ 'xml': v:false,
-                              \ "help": v:false,
-                              \ 'terminal': v:false,
-                              \ 'dashboard': v:false,
-                              \ 'packer': v:false,
-                              \ 'lspinfo': v:false,
-                              \ 'TelescopePrompt': v:false,
-                              \ 'TelescopeResults': v:false,
-                              \ 'NvimTree': v:false,
-                              \ }
+  \ 'xml': v:false,
+  \ "help": v:false,
+  \ 'terminal': v:false,
+  \ 'dashboard': v:false,
+  \ 'packer': v:false,
+  \ 'lspinfo': v:false,
+  \ 'TelescopePrompt': v:false,
+  \ 'TelescopeResults': v:false,
+  \ 'NvimTree': v:false,
+  \ }
 
 " gitlinker
 lua require"gitlinker".setup()
