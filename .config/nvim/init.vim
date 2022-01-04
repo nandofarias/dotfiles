@@ -125,6 +125,7 @@ let g:dracula_colorterm = 0
 colorscheme dracula_pro_van_helsing
 " Fix colors mapping with nvim-treesitter, https://github.com/dracula/vim/blob/master/after/plugin/dracula.vim
 hi! link TSSymbol DraculaPurple
+hi! link Constant DraculaPurple
 hi! link TSVariable DraculaOrange
 hi! link TSParameter DraculaOrangeItalic
 hi! link TSTagAttribute DraculaGreenItalic
@@ -346,11 +347,7 @@ hi! link CmpItemKind DraculaYellow
 " nvim-tree
 lua << EOF
 require'nvim-tree'.setup {
-  update_cwd = true,
-  update_focused_file = {
-    enable = true,
-    update_cwd = true
-  },
+  -- },
   auto_close = true,
   diagnostic = {
     enable = true,
@@ -387,14 +384,6 @@ nnoremap <silent><leader>6 <Cmd>BufferLineGoToBuffer 6<CR>
 nnoremap <silent><leader>7 <Cmd>BufferLineGoToBuffer 7<CR>
 nnoremap <silent><leader>8 <Cmd>BufferLineGoToBuffer 8<CR>
 nnoremap <silent><leader>9 <Cmd>BufferLineGoToBuffer 9<CR>
-
-" project.nvim
-lua << EOF
-require("project_nvim").setup{
-  detection_methods = { "pattern", "lsp" },
-  patterns = { ".git", "mix.exs", "_build", "deps", "node_modules", "Makefile", "package.json", "README.md", "Cargo.toml" },
-}
-EOF
 
 " neogit
 lua << EOF
@@ -581,7 +570,9 @@ let g:camelcasemotion_key = '<space>'
 " project.nvim
 nnoremap <leader>p <cmd>Telescope projects<cr>
 lua << EOF
-  require("project_nvim").setup {}
+  require("project_nvim").setup {
+    patterns = { ".git", "mix.exs", "_build", "deps", "node_modules", "Makefile", "package.json", "README.md", "Cargo.toml" },
+  }
   require('telescope').load_extension('projects')
 EOF
 
