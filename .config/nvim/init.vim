@@ -92,6 +92,7 @@ Plug 'kristijanhusak/vim-dadbod-completion'
 
 " Better quickfix
 Plug 'folke/trouble.nvim'
+Plug 'kevinhwang91/nvim-bqf'
 
 call plug#end()
 
@@ -584,7 +585,8 @@ let g:camelcasemotion_key = '<space>'
 nnoremap <leader>p <cmd>Telescope projects<cr>
 lua << EOF
   require("project_nvim").setup {
-    patterns = { ".git", "mix.exs", "_build", "deps", "node_modules", "Makefile", "package.json", "README.md", "Cargo.toml" },
+    detection_methods = { "pattern" },
+    patterns = { ".git", "_build", "deps", "node_modules", "Makefile", "package.json", "Cargo.toml" },
   }
   require('telescope').load_extension('projects')
 EOF
