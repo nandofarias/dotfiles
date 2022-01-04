@@ -19,6 +19,7 @@ Plug 'andweeb/presence.nvim'
 Plug 'RRethy/vim-illuminate'
 Plug 'bkad/CamelCaseMotion'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'chentau/marks.nvim'
 
 " Vim test
 Plug 'junegunn/vader.vim'
@@ -599,3 +600,6 @@ EOF
 
 " dash.nvim
 nnoremap <leader>? :Dash<cr>
+
+" marks.nvim
+lua require'marks'.setup {}
