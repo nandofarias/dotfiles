@@ -61,12 +61,12 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 
 " Autocomplete
+Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
-
-Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/cmp-path'
 
 " Language utilities
 Plug 'tpope/vim-projectionist'
@@ -320,7 +320,7 @@ smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab
 imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 lua <<EOF
-local cmp = require'cmp'
+local cmp = require'cmp';
 cmp.setup {
   snippet = {
     expand = function(args)
@@ -338,6 +338,7 @@ cmp.setup {
     { name = 'nvim_lsp' },
     { name = 'vsnip' },
     { name = 'buffer' },
+    { name = 'path' },
   }
 }
 EOF
