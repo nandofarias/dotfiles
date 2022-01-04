@@ -20,6 +20,7 @@ Plug 'RRethy/vim-illuminate'
 Plug 'bkad/CamelCaseMotion'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'chentau/marks.nvim'
+Plug 'dstein64/vim-startuptime'
 
 " Vim test
 Plug 'junegunn/vader.vim'
@@ -54,6 +55,9 @@ Plug 'nvim-treesitter/playground'
 Plug 'p00f/nvim-ts-rainbow'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 Plug 'RRethy/nvim-treesitter-textsubjects'
+
+" Earthly, will be removed when tree-sitter is available
+Plug 'earthly/earthly.vim', { 'branch': 'main' }
 
 " Zen mode
 Plug 'folke/zen-mode.nvim'
