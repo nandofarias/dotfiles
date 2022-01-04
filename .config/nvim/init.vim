@@ -11,6 +11,7 @@ Plug 'szw/vim-maximizer'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'windwp/nvim-autopairs'
+Plug 'windwp/nvim-ts-autotag'
 Plug 'karb94/neoscroll.nvim'
 Plug 'famiu/bufdelete.nvim'
 Plug 'tversteeg/registers.nvim'
@@ -217,6 +218,9 @@ require("nvim-treesitter.configs").setup {
     keymaps = {
       ['.'] = 'textsubjects-smart',
     }
+  },
+  autotag = {
+    enable = true,
   },
 }
 
