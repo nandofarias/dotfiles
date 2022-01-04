@@ -592,3 +592,6 @@ require"octo".setup({
 local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 parser_config.markdown.used_by = "octo"
 EOF
+
+" dash.nvim
+nnoremap <leader>? :Dash<cr>
