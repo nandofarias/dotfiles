@@ -586,7 +586,7 @@ nnoremap <leader>p <cmd>Telescope projects<cr>
 lua << EOF
   require("project_nvim").setup {
     detection_methods = { "pattern" },
-    patterns = { ".git", "_build", "deps", "node_modules", "Makefile", "package.json", "Cargo.toml" },
+    patterns = { ".git", "_build", "deps", "node_modules", "Makefile", "package.json", "Cargo.toml", "settings.gradle", "pom.xml" },
   }
   require('telescope').load_extension('projects')
 EOF

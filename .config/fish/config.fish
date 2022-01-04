@@ -66,6 +66,7 @@ alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
 # asdf
 source ~/.asdf/asdf.fish
+source ~/.asdf/plugins/java/set-java-home.fish
 
 # Abb
 abbr -ag mps "mix phx.server"
