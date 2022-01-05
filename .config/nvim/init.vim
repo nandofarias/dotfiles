@@ -74,6 +74,7 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-nvim-lua'
 
 " Language utilities
 Plug 'tpope/vim-projectionist'
@@ -356,11 +357,12 @@ cmp.setup {
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.close(),
+    ['<C-y>'] = cmp.mapping.close(),
     ['<Tab>'] = cmp.mapping.confirm({ select = true }),
   },
   sources = {
     { name = 'nvim_lsp' },
+    { name = 'nvim_lua' },
     { name = 'vsnip' },
     { name = 'buffer' },
     { name = 'path' },
