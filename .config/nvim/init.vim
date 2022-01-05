@@ -364,8 +364,12 @@ cmp.setup {
     { name = 'nvim_lsp' },
     { name = 'nvim_lua' },
     { name = 'vsnip' },
-    { name = 'buffer' },
     { name = 'path' },
+    { name = 'buffer',
+      get_bufnrs = function()
+        return vim.api.nvim_list_bufs()
+      end 
+    },
   }
 }
 EOF
