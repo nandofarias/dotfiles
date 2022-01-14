@@ -50,7 +50,6 @@ set -x PLUG_EDITOR $ELIXIR_EDITOR
 set -x ECTO_EDITOR $ELIXIR_EDITOR
 set -x ERL_BUILD_DOCS yes
 set -x CFLAGS "-O2 -g -fno-stack-check -Wno-error=implicit-function-declaration"
-set -x ELIXIR_ERL_OPTIONS "+S 6:6"
 set -x KERL_BUILD_DOCS yes
 set -x KERL_INSTALL_MANPAGES yes
 set -x KERL_INSTALL_HTMLDOCS yes
