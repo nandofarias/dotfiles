@@ -45,10 +45,15 @@ fish_add_path -g $HOME/.fnm
 # Elixir/Erlang
 set -x ERL_LIBS /usr/lib/elixir/lib
 set -x ERL_AFLAGS "-kernel shell_history enabled"
-set -x PLUG_EDITOR "vscode://file/__FILE__:__LINE__"
+set -x ELIXIR_EDITOR "nvim +__LINE__ __FILE__"
+set -x PLUG_EDITOR $ELIXIR_EDITOR
+set -x ECTO_EDITOR $ELIXIR_EDITOR
 set -x ERL_BUILD_DOCS yes
 set -x CFLAGS "-O2 -g -fno-stack-check -Wno-error=implicit-function-declaration"
 set -x ELIXIR_ERL_OPTIONS "+S 6:6"
+set -x KERL_BUILD_DOCS yes
+set -x KERL_INSTALL_MANPAGES yes
+set -x KERL_INSTALL_HTMLDOCS yes
 fish_add_path -g $HOME/.elixir-ls/release
 fish_add_path -g $HOME/.cache/rebar3/bin
 
