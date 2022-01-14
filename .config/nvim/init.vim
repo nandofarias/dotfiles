@@ -21,6 +21,7 @@ Plug 'bkad/CamelCaseMotion'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'chentau/marks.nvim'
 Plug 'dstein64/vim-startuptime'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 
 " Vim test
 Plug 'junegunn/vader.vim'
@@ -107,7 +108,7 @@ au!
 augroup END
 
 " Appearence
-set number
+:set number relativenumber
 set showcmd cmdheight=1
 set termguicolors background=dark t_Co=256
 set tabstop=2
@@ -150,6 +151,7 @@ nnoremap <silent> <leader>r :source ~/.config/nvim/init.vim <CR>
 nnoremap <silent> gx :silent !open <C-r><C-f> <CR>
 nnoremap <silent> gs :set spell! <CR>
 nnoremap <silent> <leader>qq :exit <CR>
+nnoremap <silent>qq :bdelete<cr>
 
 " Open config
 nnoremap <Leader>nv :e ~/.config/nvim/init.vim <CR>
@@ -289,7 +291,6 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
   buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
@@ -573,8 +574,6 @@ nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
 nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
 nnoremap <leader>xr <cmd>TroubleToggle lsp_references<cr>
 
-nnoremap <silent>qq :Bdelete<cr>
-
 " presence.nvim
 lua require("presence"):setup()
 
@@ -623,3 +622,6 @@ nnoremap <leader>? :Dash!<cr>
 
 " marks.nvim
 lua require'marks'.setup {}
+
+" markdown-preview
+let g:mkdp_browser = 'safari'
