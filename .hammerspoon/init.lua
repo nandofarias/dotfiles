@@ -12,7 +12,7 @@ hs.hotkey.bind({"command"}, ".", function()
   if app ~= nil and app:isFrontmost() then
     app:hide()
   else
-    local app = hs.application.launchOrFocus("/Applications/Kitty.app")
+    app = hs.application.launchOrFocus("/Applications/Kitty.app")
     local win = hs.window.focusedWindow()
     local screen = win:screen()
 
