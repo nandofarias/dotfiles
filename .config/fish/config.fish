@@ -1,10 +1,10 @@
 # Fish
-set -x fish_greeting "Welcome to Summoner's Rift"
+set -gx fish_greeting "Welcome to Summoner's Rift"
 
 # General
-set -x LC_ALL en_US.UTF-8
-set -x WORK $HOME/Workspace
-set -x EDITOR nvim
+set -gx LC_ALL en_US.UTF-8
+set -gx WORK $HOME/Workspace
+set -gx EDITOR nvim
 ulimit -n 65536 # See: https://stackoverflow.com/a/45004802 
 fish_add_path -g $HOME/.bin $HOME/.local/bin
 
@@ -12,24 +12,24 @@ fish_add_path -g $HOME/.bin $HOME/.local/bin
 fish_add_path -g /usr/local/opt/curl/bin
 
 # Android
-set -x ANDROID_HOME $HOME/Library/Android/sdk
+set -gx ANDROID_HOME $HOME/Library/Android/sdk
 fish_add_path -g $ANDROID_HOME/tools/bin $ANDROID_HOME/tools $ANDROID_HOME/platform-tools $ANDROID_HOME/emulator
 
 # Go
 fish_add_path -g /usr/local/go/bin
-set -x GOPATH $HOME/go
+set -gx GOPATH $HOME/go
 fish_add_path -g $GOPATH/bin
-set -x GO111MODULE on
+set -gx GO111MODULE on
 
 # mkcert
-test -e mkcert; and set -x NODE_EXTRA_CA_CERTS (mkcert -CAROOT)/rootCA.pem
+test -e mkcert; and set -gx NODE_EXTRA_CA_CERTS (mkcert -CAROOT)/rootCA.pem
 
 # Ruby
-set -x GEM_HOME $HOME/.gem
+set -gx GEM_HOME $HOME/.gem
 fish_add_path -g $GEM_HOME/bin
 
 # Rust
-set -x CARGO_HOME $HOME/.cargo
+set -gx CARGO_HOME $HOME/.cargo
 fish_add_path -g $CARGO_HOME/bin
 
 # Deno
@@ -43,16 +43,16 @@ fish_add_path -g $HOME/.fnm
 /usr/local/bin/fnm env | source
 
 # Elixir/Erlang
-set -x ERL_LIBS /usr/lib/elixir/lib
-set -x ERL_AFLAGS "-kernel shell_history enabled"
-set -x ELIXIR_EDITOR "nvim +__LINE__ __FILE__"
-set -x PLUG_EDITOR $ELIXIR_EDITOR
-set -x ECTO_EDITOR $ELIXIR_EDITOR
-set -x ERL_BUILD_DOCS yes
-set -x CFLAGS "-O2 -g -fno-stack-check -Wno-error=implicit-function-declaration"
-set -x KERL_BUILD_DOCS yes
-set -x KERL_INSTALL_MANPAGES yes
-set -x KERL_INSTALL_HTMLDOCS yes
+set -gx ERL_LIBS /usr/lib/elixir/lib
+set -gx ERL_AFLAGS "-kernel shell_history enabled"
+set -gx ELIXIR_EDITOR "nvim +__LINE__ __FILE__"
+set -gx PLUG_EDITOR $ELIXIR_EDITOR
+set -gx ECTO_EDITOR $ELIXIR_EDITOR
+set -gx ERL_BUILD_DOCS yes
+set -gx CFLAGS "-O2 -g -fno-stack-check -Wno-error=implicit-function-declaration"
+set -gx KERL_BUILD_DOCS yes
+set -gx KERL_INSTALL_MANPAGES yes
+set -gx KERL_INSTALL_HTMLDOCS yes
 fish_add_path -g $HOME/.elixir-ls/release
 fish_add_path -g $HOME/.cache/rebar3/bin
 
@@ -60,7 +60,7 @@ fish_add_path -g $HOME/.cache/rebar3/bin
 fish_add_path -g /usr/lib/dart/bin
 
 # Import GPG keys
-set -x GPG_TTY (tty)
+set -gx GPG_TTY (tty)
 
 # iTerm
 test -e {$HOME}/.iterm2_shell_integration.fish; and source {$HOME}/.iterm2_shell_integration.fish
@@ -101,7 +101,7 @@ if test -d ~/.okta
 end
 
 # Emacs
-set -x DOOMDIR $HOME/.doom.d
+set -gx DOOMDIR $HOME/.doom.d
 fish_add_path -g $HOME/.emacs.d/bin
 
 # Zoxide
@@ -109,10 +109,11 @@ zoxide init fish | source
 
 # McFly
 mcfly init fish | source
-set -x MCFLY_KEY_SCHEME vim
-set -x MCFLY_FUZZY true
-set -x MCFLY_RESULTS 50
+set -gx MCFLY_KEY_SCHEME vim
+set -gx MCFLY_FUZZY true
+set -gx MCFLY_RESULTS 50
 
-if [ -z "$TMUX" ]
-    tmux attach 2>/dev/null; or exec tmux new-session; and exit
-end
+# Disable to work on vscode
+# if [ -z "$TMUX" ]
+#     tmux attach 2>/dev/null; or exec tmux new-session; and exit
+# end
