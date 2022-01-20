@@ -328,9 +328,16 @@ lsp_installer.on_server_ready(function(server)
       opts.settings = {
         Lua = {
           diagnostics = {
-            globals = { 'vim' }
-          }
-        }
+            globals = { 'vim', 'hs' }
+          },
+          workspace = {
+            library = {
+                [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+                [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+                ['/Users/nandofarias/.hammerspoon/Spoons/EmmyLua.spoon/annotations'] = true,
+            },
+          },
+        },
       }
     end
 

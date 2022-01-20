@@ -74,6 +74,7 @@ source ~/.asdf/plugins/java/set-java-home.fish
 
 # Abb
 abbr -ag mps "mix phx.server"
+abbr -ag mcs "watchexec -e ex mix compile"
 abbr -ag dc docker-compose
 abbr -ag v nvim
 abbr -ag g git
