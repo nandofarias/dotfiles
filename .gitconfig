@@ -46,6 +46,7 @@
 
   unstage = restore --staged
 
+  s = switch
   cb = checkout -b
 	amend-to = "!f() { SHA=`git rev-parse \"$1\"`; git stash -k && git commit --fixup \"$SHA\" && GIT_SEQUENCE_EDITOR=true git rebase --interactive --autosquash \"$SHA^\" && git stash pop; }; f"
 
