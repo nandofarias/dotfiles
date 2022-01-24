@@ -632,3 +632,7 @@ lua require'marks'.setup {}
 
 " markdown-preview
 let g:mkdp_browser = 'safari'
+
+" emmet-vim
+let g:user_emmet_install_global = 0
+autocmd FileType html,css,jsx,heex,html.eex EmmetInstall
