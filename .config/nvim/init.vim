@@ -56,6 +56,8 @@ Plug 'nvim-treesitter/playground'
 Plug 'p00f/nvim-ts-rainbow'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 Plug 'RRethy/nvim-treesitter-textsubjects'
+Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
 
 " Earthly, will be removed when tree-sitter is available
 Plug 'earthly/earthly.vim', { 'branch': 'main' }
@@ -275,6 +277,14 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 " lsp-config
 lua << EOF
 local lspconfig = require("lspconfig")
+-- For null-ls
+local null_ls = require("null-ls")
+local buf_map = function(bufnr, mode, lhs, rhs, opts)
+    vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts or {
+        silent = true,
+    })
+end
+
 local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()) -- For nvim-cmp
 local on_attach = function(client, bufnr)
   -- vim-illuminate
@@ -297,13 +307,16 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
   buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
   buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
   buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
   buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+
+  if client.resolved_capabilities.document_formatting then
+    vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
+  end
 end
 
 -- nvim-lsp-installer
@@ -341,9 +354,33 @@ lsp_installer.on_server_ready(function(server)
       }
     end
 
+    if server.name == "tsserver" then
+      opts.on_attach = function(client, bufnr)
+        client.resolved_capabilities.document_formatting = false
+        client.resolved_capabilities.document_range_formatting = false
+        local ts_utils = require("nvim-lsp-ts-utils")
+        ts_utils.setup({})
+        ts_utils.setup_client(client)
+        buf_map(bufnr, "n", "gs", ":TSLspOrganize<CR>")
+        buf_map(bufnr, "n", "gi", ":TSLspRenameFile<CR>")
+        buf_map(bufnr, "n", "go", ":TSLspImportAll<CR>")
+        on_attach(client, bufnr)
+      end
+    end
+
     server:setup(opts)
     vim.cmd [[ do User LspAttachBuffers ]]
 end)
+
+-- null-ls
+null_ls.setup({
+    sources = {
+        null_ls.builtins.diagnostics.eslint,
+        null_ls.builtins.code_actions.eslint,
+        null_ls.builtins.formatting.prettier,
+    },
+    on_attach = on_attach,
+})
 EOF
 " format on save
 autocmd BufWritePre * lua vim.lsp.buf.formatting_sync(nil, 1000) 
@@ -388,7 +425,9 @@ hi! link CmpItemKind DraculaYellow
 " nvim-tree
 lua << EOF
 require'nvim-tree'.setup {
-  -- },
+  git = {
+    ignore = false,
+  },
   auto_close = true,
   diagnostic = {
     enable = true,
