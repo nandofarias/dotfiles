@@ -114,6 +114,9 @@ set -gx MCFLY_KEY_SCHEME vim
 set -gx MCFLY_FUZZY true
 set -gx MCFLY_RESULTS 50
 
+# Source functions https://github.com/fish-shell/fish-shell/issues/5034
+source ~/.config/fish/functions/tmux.fish
+
 # Disable to work on vscode
 # if [ -z "$TMUX" ]
 #     tmux attach 2>/dev/null; or exec tmux new-session; and exit
