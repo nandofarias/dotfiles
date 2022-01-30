@@ -117,6 +117,9 @@ set -gx MCFLY_RESULTS 50
 # Source functions https://github.com/fish-shell/fish-shell/issues/5034
 source ~/.config/fish/functions/tmux.fish
 
+# radicle.xyz
+fish_add_path -g $HOME/.radicle/bin
+
 # Disable to work on vscode
 # if [ -z "$TMUX" ]
 #     tmux attach 2>/dev/null; or exec tmux new-session; and exit
