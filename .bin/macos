@@ -1,0 +1,45 @@
+#!/usr/bin/env sh
+
+echo "Writing default OS/X settings..."
+
+# Show Finder status bar
+defaults write com.apple.finder ShowStatusBar -bool true
+# Prevent iTunes from popping up on device connect
+defaults write com.apple.iTunesHelper ignore-devices 1
+# Set a faster keyboard repeat rate and initial delays
+defaults write NSGlobalDomain KeyRepeat -int 1
+defaults write NSGlobalDomain InitialKeyRepeat -int 12
+# Disable press-and-hold for keys in favor of key repeat
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+# Disable auto-correct
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+# Show all filename extensions in Finder
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+# Show hidden files
+defaults write NSGlobalDomain AppleShowAllFiles -bool true
+# Expand save and print panels by default
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+# Disable subpixel font rendering
+defaults write NSGlobalDomain AppleFontSmoothing -int 2
+# Write screenshots to sane location
+mkdir -p ~/Pictures/Screenshots
+defaults write com.apple.screencapture location ~/Pictures/Screenshots
+# Automatically hide and show the Dock
+defaults write com.apple.dock autohide -bool true
+# Show remaining battery time; hide percentage
+defaults write com.apple.menuextra.battery ShowPercent -string "NO"
+defaults write com.apple.menuextra.battery ShowTime -string "YES"
+# Make the dock tiny
+defaults write com.apple.dock largesize -float 3
+# Avoid creating .DS_Store files on network volumes
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+# Disable the warning when changing a file extension
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+# Enable Safari’s debug menu
+defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
+# Show the ~/Library folder
+chflags nohidden ~/Library
+
+echo "\n\ndone!\nYou must logout for your new MacOS settings to take effect\n"
+osascript -e 'tell application "System Events" to log out'
