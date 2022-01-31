@@ -120,6 +120,9 @@ source ~/.config/fish/functions/tmux.fish
 # radicle.xyz
 fish_add_path -g $HOME/.radicle/bin
 
+# Python 3.9
+fish_add_path -g $HOME/Library/Python/3.9/bin
+
 # Disable to work on vscode
 # if [ -z "$TMUX" ]
 #     tmux attach 2>/dev/null; or exec tmux new-session; and exit
