@@ -47,7 +47,7 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'mrjones2014/dash.nvim', { 'do': 'make install' }
-Plug 'ahmedkhalf/project.nvim'
+Plug 'cljoly/telescope-repo.nvim'
 
 " Language support - treesitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -329,7 +329,6 @@ lsp_installer.on_server_ready(function(server)
     }
 
     if server.name == "elixirls" then
-      opts.root_dir = lspconfig.util.root_pattern(".git") or vim.loop.os_homedir()
       opts.settings = {
         elixirLS = {
           fetchDeps = true,
@@ -616,8 +615,8 @@ let g:db_ui_force_echo_notifications = 1
 " trouble.nvim
 lua require("trouble").setup {}
 nnoremap <leader>xx <cmd>TroubleToggle<cr>
-nnoremap <leader>xw <cmd>TroubleToggle lsp_workspace_diagnostics<cr>
-nnoremap <leader>xd <cmd>TroubleToggle lsp_document_diagnostics<cr>
+nnoremap <leader>xw <cmd>TroubleToggle workspace_diagnostics<cr>
+nnoremap <leader>xd <cmd>TroubleToggle document_diagnostics<cr>
 nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
 nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
 nnoremap <leader>xr <cmd>TroubleToggle lsp_references<cr>
@@ -646,15 +645,6 @@ lua require"gitlinker".setup()
 " CamelCaseMotion
 let g:camelcasemotion_key = '<space>'
 
-" project.nvim
-nnoremap <leader>p <cmd>Telescope projects<cr>
-lua << EOF
-  require("project_nvim").setup {
-    detection_methods = { "pattern" },
-    patterns = { ".git", "_build", "deps", "node_modules", "Makefile", "package.json", "Cargo.toml", "settings.gradle", "pom.xml" },
-  }
-  require('telescope').load_extension('projects')
-EOF
 
 " octo.nvim
 lua << EOF
@@ -677,3 +667,8 @@ let g:mkdp_browser = 'safari'
 " emmet-vim
 let g:user_emmet_install_global = 0
 autocmd FileType html,css,jsx,heex,html.eex EmmetInstall
+
+" telescope-repo.nvim
+lua require'telescope'.load_extension'repo'
+nnoremap <leader>p <cmd>Telescope repo list<cr>
+
