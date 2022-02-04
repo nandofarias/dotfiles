@@ -38,10 +38,6 @@ fish_add_path -g /Users/nandofarias/.deno/bin
 # Flutter
 fish_add_path -g $HOME/Workspace/flutter/bin
 
-# fnm
-fish_add_path -g $HOME/.fnm
-/usr/local/bin/fnm env | source
-
 # Elixir/Erlang
 set -gx ERL_LIBS /usr/lib/elixir/lib
 set -gx ERL_AFLAGS "-kernel shell_history enabled"
