@@ -78,6 +78,7 @@ Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-nvim-lua'
+Plug 'andersevenrud/cmp-tmux'
 
 " Language utilities
 Plug 'tpope/vim-projectionist'
@@ -379,7 +380,7 @@ null_ls.setup({
         null_ls.builtins.code_actions.eslint,
         null_ls.builtins.formatting.prettier,
         null_ls.builtins.code_actions.gitsigns,
-        null_ls.builtins.diagnostics.yamllint,
+        null_ls.builtins.diagnostics.credo,
     },
     on_attach = on_attach,
 })
@@ -413,10 +414,13 @@ cmp.setup {
     { name = 'nvim_lua' },
     { name = 'vsnip' },
     { name = 'path' },
-    { name = 'buffer',
-      get_bufnrs = function()
-        return vim.api.nvim_list_bufs()
-      end 
+    { name = 'tmux' },
+    { name = 'buffer', 
+      option = {
+        get_bufnrs = function()
+          return vim.api.nvim_list_bufs()
+        end 
+      }
     },
   }
 }
