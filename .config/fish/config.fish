@@ -53,6 +53,20 @@ set -gx CFLAGS "-O2 -g -fno-stack-check -Wno-error=implicit-function-declaration
 set -gx KERL_BUILD_DOCS yes
 set -gx KERL_INSTALL_MANPAGES yes
 set -gx KERL_INSTALL_HTMLDOCS yes
+set -gx KERL_CONFIGURE_OPTIONS "\
+      --disable-debug \
+      --disable-silent-rules \
+      --enable-dynamic-ssl-lib \
+      --enable-hipe \
+      --enable-shared-zlib \
+      --enable-smp-support \
+      --enable-threads \
+      --enable-wx \
+      --with-ssl=(brew --prefix openssl@1.1) \
+      --without-javac
+      --enable-darwin-64bit \
+      --enable-kernel-poll \
+      --with-dynamic-trace=dtrace"
 fish_add_path -g $HOME/.elixir-ls/release
 fish_add_path -g $HOME/.cache/rebar3/bin
 
