@@ -346,6 +346,7 @@ lsp_installer.on_server_ready(function(server)
     }
 
     if server.name == "elixirls" then
+      opts.root_dir = lspconfig.util.root_pattern(".git") or vim.loop.os_homedir()
       opts.settings = {
         elixirLS = {
           fetchDeps = true,
