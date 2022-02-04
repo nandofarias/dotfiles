@@ -294,6 +294,7 @@ local on_attach = function(client, bufnr)
 
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+  local cmd = vim.api.nvim_command
 
   buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -314,10 +315,25 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
   buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-  buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
 
   if client.resolved_capabilities.document_formatting then
-    vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
+    buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+    cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
+  end
+
+  if client.resolved_capabilities.code_action then
+    buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  end
+
+  if client.resolved_capabilities.code_lens then
+    buf_set_keymap('n', '<space>cr', '<cmd>lua vim.lsp.codelens.run()<CR>', opts)
+    buf_set_keymap('n', '<space>cl', '<cmd>lua vim.lsp.codelens.refresh()<CR>', opts)
+    cmd [[augroup LspCodelensAutoGroup]]
+    cmd [[au!]]
+    cmd [[au BufEnter <buffer> lua vim.lsp.codelens.refresh()]]
+    cmd [[au CursorHold <buffer> lua vim.lsp.codelens.refresh()]]
+    cmd [[au InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
+    cmd [[augroup end]]
   end
 end
 
@@ -381,6 +397,8 @@ null_ls.setup({
         null_ls.builtins.formatting.prettier,
         null_ls.builtins.code_actions.gitsigns,
         null_ls.builtins.diagnostics.credo,
+        null_ls.builtins.formatting.erlfmt,
+        null_ls.builtins.formatting.fish_indent
     },
     on_attach = on_attach,
 })
@@ -534,12 +552,45 @@ let test#strategy = 'vimux'
 let g:test#preserve_screen = 0
 
 " gitsigns.nvim
+highlight link GitSignsCurrentLineBlame DraculaComment
 lua << EOF
 require('gitsigns').setup {
   current_line_blame = true,
   current_line_blame_opts = {
     delay = 500,
   },
+  current_line_blame_opts = {
+    ignore_whitespace = true,
+  },
+  on_attach = function(bufnr)
+    local gs = package.loaded.gitsigns
+
+    local function map(mode, l, r, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, l, r, opts)
+    end
+
+    -- Navigation
+    map('n', ']c', "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", {expr=true})
+    map('n', '[c', "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", {expr=true})
+
+    -- Actions
+    map({'n', 'v'}, '<leader>hs', ':Gitsigns stage_hunk<CR>')
+    map({'n', 'v'}, '<leader>hr', ':Gitsigns reset_hunk<CR>')
+    map('n', '<leader>hS', gs.stage_buffer)
+    map('n', '<leader>hu', gs.undo_stage_hunk)
+    map('n', '<leader>hR', gs.reset_buffer)
+    map('n', '<leader>hp', gs.preview_hunk)
+    map('n', '<leader>hb', function() gs.blame_line{full=true} end)
+    map('n', '<leader>tb', gs.toggle_current_line_blame)
+    map('n', '<leader>hd', gs.diffthis)
+    map('n', '<leader>hD', function() gs.diffthis('~') end)
+    map('n', '<leader>td', gs.toggle_deleted)
+
+    -- Text object
+    map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+  end
 }
 EOF
 
