@@ -3,3 +3,4 @@
 .DS_Store
 .cfg
 .iex.exs
+.node-version
