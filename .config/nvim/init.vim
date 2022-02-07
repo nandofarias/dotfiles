@@ -58,6 +58,7 @@ Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 Plug 'RRethy/nvim-treesitter-textsubjects'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
+Plug 'ray-x/lsp_signature.nvim'
 
 " Earthly, will be removed when tree-sitter is available
 Plug 'earthly/earthly.vim', { 'branch': 'main' }
@@ -709,7 +710,7 @@ require"octo".setup({
   default_remote = {"origin"};
 })
 local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-parser_config.markdown.used_by = "octo"
+parser_config.markdown.filetype_to_parsername = "octo"
 EOF
 
 " dash.nvim
@@ -729,3 +730,12 @@ autocmd FileType html,css,jsx,heex,html.eex EmmetInstall
 lua require'telescope'.load_extension'repo'
 nnoremap <leader>p <cmd>Telescope repo list<cr>
 
+" lsp_signature.nvim
+lua << EOF
+require'lsp_signature'.setup({
+  bind = true, -- This is mandatory, otherwise border config won't get registered.
+  handler_opts = {
+    border = "rounded"
+  }
+})
+EOF
