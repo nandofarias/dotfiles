@@ -171,6 +171,16 @@ nnoremap <Leader>kt :e ~/.config/kitty/kitty.conf <CR>
 :command! WQ wq
 :command! Wq wq
 
+" Functions
+function! NumberToggle()
+  if(&rnu == 1)
+    set nornu
+  else
+    set rnu
+  endif
+endfunc
+nnoremap <Leader>l :call NumberToggle()<cr>
+
 " PLUGINS
 " nvim-autopairs
 lua require('nvim-autopairs').setup{}
@@ -319,7 +329,7 @@ local on_attach = function(client, bufnr)
 
   if client.resolved_capabilities.document_formatting then
     buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
-    cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
+    cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 2000)]]
   end
 
   if client.resolved_capabilities.code_action then
@@ -351,7 +361,7 @@ lsp_installer.on_server_ready(function(server)
       opts.settings = {
         elixirLS = {
           fetchDeps = true,
-          dialyzerFormat = "dialyxir_short"
+          dialyzerFormat = "dialyxir_short",
         }
       }
     end
@@ -398,7 +408,11 @@ null_ls.setup({
         null_ls.builtins.code_actions.eslint,
         null_ls.builtins.formatting.prettier,
         null_ls.builtins.code_actions.gitsigns,
-        null_ls.builtins.diagnostics.credo,
+        null_ls.builtins.diagnostics.credo.with({
+          condition = function(utils)
+            return utils.root_has_file(".credo.exs") 
+          end
+        }),
         null_ls.builtins.formatting.erlfmt,
         null_ls.builtins.formatting.fish_indent
     },
