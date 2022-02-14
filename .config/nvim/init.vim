@@ -47,7 +47,6 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'mrjones2014/dash.nvim', { 'do': 'make install' }
-Plug 'cljoly/telescope-repo.nvim'
 
 " Language support - treesitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -739,10 +738,6 @@ let g:mkdp_browser = 'safari'
 " emmet-vim
 let g:user_emmet_install_global = 0
 autocmd FileType html,css,jsx,heex,html.eex EmmetInstall
-
-" telescope-repo.nvim
-lua require'telescope'.load_extension'repo'
-nnoremap <leader>p <cmd>Telescope repo list<cr>
 
 " lsp_signature.nvim
 lua << EOF
