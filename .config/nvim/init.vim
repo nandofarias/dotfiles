@@ -22,6 +22,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'chentau/marks.nvim'
 Plug 'dstein64/vim-startuptime'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
+Plug 'lewis6991/spaceless.nvim'
 
 " Vim test
 Plug 'junegunn/vader.vim'
@@ -748,3 +749,6 @@ require'lsp_signature'.setup({
   }
 })
 EOF
+
+" spaceless.nvim
+lua require'spaceless'.setup()
