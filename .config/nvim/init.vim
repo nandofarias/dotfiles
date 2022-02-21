@@ -156,7 +156,7 @@ nnoremap <silent> gx :silent !open <C-r><C-f> <CR>
 nnoremap <silent> gs :set spell! <CR>
 nnoremap <silent> <leader>qq :exit <CR>
 nnoremap <silent> <leader>cc :cclose <CR>
-nnoremap <silent>qq :bdelete<cr>
+nnoremap <silent> qq :Bdelete<CR>
 
 " Open config
 nnoremap <Leader>nv :e ~/.config/nvim/init.vim <CR>
