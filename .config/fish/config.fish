@@ -88,6 +88,7 @@ abbr -ag mcs "watchexec -e ex mix compile"
 abbr -ag dc docker-compose
 abbr -ag v nvim
 abbr -ag g git
+abbr -ag gc "git checkout"
 abbr -ag tls "tmux ls"
 abbr -ag screen_saver "cmatrix -C green"
 abbr -ag plug_sync "nvim +PlugUpdate +PlugInstall +PlugClean! +qa"
