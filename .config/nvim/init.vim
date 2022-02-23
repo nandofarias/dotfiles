@@ -104,6 +104,10 @@ Plug 'kristijanhusak/vim-dadbod-completion'
 Plug 'folke/trouble.nvim'
 Plug 'kevinhwang91/nvim-bqf'
 
+" UI
+Plug 'MunifTanjim/nui.nvim'
+Plug 'CosmicNvim/cosmic-ui'
+
 call plug#end()
 
 " Default autogroup
@@ -333,7 +337,9 @@ local on_attach = function(client, bufnr)
   end
 
   if client.resolved_capabilities.code_action then
-    buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+    -- buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+    buf_set_keymap('n', '<space>ca', '<cmd>lua require("cosmic-ui").code_actions()<cr>', opts)
+    buf_set_keymap('v', '<space>ca', '<cmd>lua require("cosmic-ui").range_code_actions()<cr>', opts)
   end
 
   if client.resolved_capabilities.code_lens then
@@ -752,3 +758,7 @@ EOF
 
 " spaceless.nvim
 lua require'spaceless'.setup()
+
+" cosmic-ui
+lua require'cosmic-ui'.setup()
+nnoremap <silent> gn <cmd>lua require("cosmic-ui").rename()<cr>
