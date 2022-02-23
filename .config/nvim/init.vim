@@ -23,6 +23,7 @@ Plug 'chentau/marks.nvim'
 Plug 'dstein64/vim-startuptime'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 Plug 'lewis6991/spaceless.nvim'
+Plug 'stsewd/gx-extended.vim'
 
 " Vim test
 Plug 'junegunn/vader.vim'
@@ -156,7 +157,6 @@ onoremap ip i(
 " Remapings
 nmap <silent> <space> :nohlsearch <CR>
 nnoremap <silent> <leader>r :source ~/.config/nvim/init.vim <CR>
-nnoremap <silent> gx :silent !open <C-r><C-f> <CR>
 nnoremap <silent> gs :set spell! <CR>
 nnoremap <silent> <leader>qq :exit <CR>
 nnoremap <silent> <leader>cc :cclose <CR>
@@ -168,6 +168,7 @@ nnoremap <Leader>tm :e ~/.config/tmux/tmux.conf <CR>
 nnoremap <Leader>fs :e ~/.config/fish/config.fish <CR>
 nnoremap <Leader>al :e ~/.config/alacritty/alacritty.yml <CR>
 nnoremap <Leader>kt :e ~/.config/kitty/kitty.conf <CR>
+nnoremap <Leader>wz :e ~/.config/wezterm/wezterm.lua <CR>
 
 " Commands
 :command! Q q
@@ -337,9 +338,9 @@ local on_attach = function(client, bufnr)
   end
 
   if client.resolved_capabilities.code_action then
-    -- buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-    buf_set_keymap('n', '<space>ca', '<cmd>lua require("cosmic-ui").code_actions()<cr>', opts)
-    buf_set_keymap('v', '<space>ca', '<cmd>lua require("cosmic-ui").range_code_actions()<cr>', opts)
+    -- buf_set_keymap('n', '<space>cc', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+    buf_set_keymap('n', '<space>ga', '<cmd>lua require("cosmic-ui").code_actions()<cr>', opts)
+    buf_set_keymap('v', '<space>ga', '<cmd>lua require("cosmic-ui").range_code_actions()<cr>', opts)
   end
 
   if client.resolved_capabilities.code_lens then
@@ -732,6 +733,7 @@ require"octo".setup({
 local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 parser_config.markdown.filetype_to_parsername = "octo"
 EOF
+nnoremap <leader>o :Octo pr list<CR>
 
 " dash.nvim
 nnoremap <leader>? :Dash!<cr>
