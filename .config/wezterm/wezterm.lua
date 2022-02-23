@@ -1,8 +1,8 @@
 local wezterm = require 'wezterm';
 
 return {
-  font = wezterm.font("FiraCode Nerd Font"),
-  font_size = 14,
+  font = wezterm.font("DM Mono"),
+  font_size = 15,
   line_height = 1.2,
 
   window_decorations = "RESIZE",
