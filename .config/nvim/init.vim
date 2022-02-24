@@ -288,6 +288,11 @@ EOF
 " nvim-telescope
 lua << EOF
 require('telescope').setup {
+  defaults = {
+    layout_config = {
+      center = { width = 0.8 },
+    },
+  },
   pickers = {
     find_files = {
       theme = "ivy",
