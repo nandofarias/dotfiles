@@ -117,7 +117,7 @@ au!
 augroup END
 
 " Appearence
-:set number relativenumber
+set number relativenumber
 set showcmd cmdheight=1
 set termguicolors background=dark t_Co=256
 set tabstop=2
@@ -200,6 +200,20 @@ require('lualine').setup {
   options = {
     theme = dracula_pro,
     disabled_filetypes = { "dashboard" },
+    component_separators = '|',
+    section_separators = { left = '', right = '' },
+  },
+  sections = {
+    lualine_a = {
+      { 'mode', separator = { left = '' }, right_padding = 2 },
+    },
+    lualine_b = { 'branch', 'diff', 'diagnostics' },
+    lualine_c = { 'filename' },
+    lualine_x = {},
+    lualine_y = { 'filetype', 'progress' },
+    lualine_z = {
+      { 'location', separator = { right = '' }, left_padding = 2 },
+    },
   },
 }
 EOF
