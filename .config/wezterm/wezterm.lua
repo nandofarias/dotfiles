@@ -1,13 +1,13 @@
 local wezterm = require 'wezterm';
 
 return {
-  font = wezterm.font("DM Mono"),
+  font = wezterm.font("FiraCode Nerd Font"),
   font_size = 15,
   line_height = 1.2,
 
   window_decorations = "RESIZE",
   window_close_confirmation = "NeverPrompt",
-  window_background_opacity = 0.8,
+  window_background_opacity = 1.0,
 
   color_scheme = "Dracula PRO (Van Helsing)",
   color_schemes = {
