@@ -24,6 +24,7 @@ Plug 'dstein64/vim-startuptime'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 Plug 'lewis6991/spaceless.nvim'
 Plug 'stsewd/gx-extended.vim'
+Plug 'lewis6991/impatient.nvim'
 
 " Vim test
 Plug 'junegunn/vader.vim'
@@ -784,3 +785,6 @@ lua require'spaceless'.setup()
 " cosmic-ui
 lua require'cosmic-ui'.setup()
 nnoremap <silent> gn <cmd>lua require("cosmic-ui").rename()<cr>
+
+" impatient.nvim
+lua require('impatient')
