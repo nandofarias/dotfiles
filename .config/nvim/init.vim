@@ -43,7 +43,7 @@ Plug 'nvim-lualine/lualine.nvim'
 Plug 'glepnir/dashboard-nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
-Plug 'akinsho/bufferline.nvim'
+Plug 'noib3/nvim-cokeline'
 
 " Telescope
 Plug 'nvim-lua/popup.nvim'
@@ -58,9 +58,6 @@ Plug 'nvim-treesitter/playground'
 Plug 'p00f/nvim-ts-rainbow'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 Plug 'RRethy/nvim-treesitter-textsubjects'
-Plug 'jose-elias-alvarez/null-ls.nvim'
-Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
-Plug 'ray-x/lsp_signature.nvim'
 
 " Earthly, will be removed when tree-sitter is available
 Plug 'earthly/earthly.vim', { 'branch': 'main' }
@@ -72,6 +69,9 @@ Plug 'folke/twilight.nvim'
 " Language server protocol
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
+Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
+Plug 'ray-x/lsp_signature.nvim'
 
 " Autocomplete
 Plug 'hrsh7th/nvim-cmp'
@@ -503,35 +503,142 @@ require'nvim-tree'.setup {
   view = {
     width = 60,
     side = 'left'
+  },
+  actions = {
+    change_dir = {
+      enable = false,
+      global = false,
+    },
+    open_file = {
+      quit_on_open = true,
+    }
   }
 }
 EOF
 let g:nvim_tree_respect_buf_cwd = 1
-let g:nvim_tree_quit_on_open = 1
 nnoremap <C-n> :NvimTreeToggle<CR>
 nnoremap <leader>n :NvimTreeFindFile<CR>
 " https://github.com/kyazdani42/nvim-tree.lua/issues/549
 set shell=/bin/zsh
 
-" bufferline
+" cokeline
+hi TabLineFill gui=none guifg=none guibg=none
 lua << EOF
-require("bufferline").setup{
-  options = {
-    diagnostics = "nvim_lsp",
-  }
-}
+local get_hex = require('cokeline/utils').get_hex
+local blue = vim.g.terminal_color_4
+
+local errors_fg = get_hex('DiagnosticError', 'fg')
+local warnings_fg = get_hex('DiagnosticWarn', 'fg')
+
+require('cokeline').setup({
+  buffers = {
+    new_buffers_position = 'next',
+  },
+  default_hl = {
+    focused = {
+      fg = get_hex('Normal', 'fg'),
+      bg = get_hex('ColorColumn', 'bg'),
+    },
+    unfocused = {
+      fg = get_hex('Comment', 'fg'),
+      bg = get_hex('ColorColumn', 'bg'),
+    },
+  },
+  rendering = {
+    left_sidebar = {
+      filetype = 'NvimTree',
+      components = {
+        {
+          text = '  NvimTree',
+          hl = {
+            fg = blue,
+            bg = get_hex('NvimTreeNormal', 'bg'),
+            style = 'bold'
+          }
+        },
+      }
+    },
+  },
+  components = {
+    {
+      text = ' ',
+      hl = {
+        bg = get_hex('Normal', 'bg'),
+      },
+    },
+    {
+      text = '',
+      hl = {
+        fg = get_hex('ColorColumn', 'bg'),
+        bg = get_hex('Normal', 'bg'),
+      },
+    },
+    {
+      text = function(buffer)
+        return buffer.devicon.icon
+      end,
+      hl = {
+        fg = function(buffer)
+          return buffer.devicon.color
+        end,
+      },
+    },
+    {
+      text = ' ',
+    },
+    {
+      text = function(buffer) return buffer.filename end,
+      hl = {
+        style = function(buffer)
+          return buffer.is_focused and 'bold' or nil
+        end,
+      }
+    },
+    {
+      text = function(buffer)
+        return
+          (buffer.diagnostics.errors ~= 0 and '  ' .. buffer.diagnostics.errors)
+          or (buffer.diagnostics.warnings ~= 0 and '  ' .. buffer.diagnostics.warnings)
+          or ''
+      end,
+      hl = {
+        fg = function(buffer)
+          return
+            (buffer.diagnostics.errors ~= 0 and errors_fg)
+            or (buffer.diagnostics.warnings ~= 0 and warnings_fg)
+            or nil
+        end,
+      },
+      truncation = { priority = 1 },
+    },
+    {
+      text = ' ',
+    },
+    {
+      text = '',
+      delete_buffer_on_left_click = true,
+    },
+    {
+      text = '',
+      hl = {
+        fg = get_hex('ColorColumn', 'bg'),
+        bg = get_hex('Normal', 'bg'),
+      },
+    },
+  },
+})
 EOF
-nnoremap <silent><Tab> :BufferLineCycleNext<CR>
-nnoremap <silent><S-Tab> :BufferLineCyclePrev<CR>
-nnoremap <silent><leader>1 <Cmd>BufferLineGoToBuffer 1<CR>
-nnoremap <silent><leader>2 <Cmd>BufferLineGoToBuffer 2<CR>
-nnoremap <silent><leader>3 <Cmd>BufferLineGoToBuffer 3<CR>
-nnoremap <silent><leader>4 <Cmd>BufferLineGoToBuffer 4<CR>
-nnoremap <silent><leader>5 <Cmd>BufferLineGoToBuffer 5<CR>
-nnoremap <silent><leader>6 <Cmd>BufferLineGoToBuffer 6<CR>
-nnoremap <silent><leader>7 <Cmd>BufferLineGoToBuffer 7<CR>
-nnoremap <silent><leader>8 <Cmd>BufferLineGoToBuffer 8<CR>
-nnoremap <silent><leader>9 <Cmd>BufferLineGoToBuffer 9<CR>
+nnoremap <silent><Tab> <Plug>(cokeline-focus-next)<CR>
+nnoremap <silent><S-Tab> <Plug>(cokeline-focus-prev)<CR>
+nnoremap <silent><leader>1 <Plug>(cokeline-focus-1)<CR>
+nnoremap <silent><leader>2 <Plug>(cokeline-focus-2)<CR>
+nnoremap <silent><leader>3 <Plug>(cokeline-focus-3)<CR>
+nnoremap <silent><leader>4 <Plug>(cokeline-focus-4)<CR>
+nnoremap <silent><leader>5 <Plug>(cokeline-focus-5)<CR>
+nnoremap <silent><leader>6 <Plug>(cokeline-focus-6)<CR>
+nnoremap <silent><leader>7 <Plug>(cokeline-focus-7)<CR>
+nnoremap <silent><leader>8 <Plug>(cokeline-focus-8)<CR>
+nnoremap <silent><leader>9 <Plug>(cokeline-focus-9)<CR>
 
 " neogit
 lua << EOF
@@ -744,7 +851,6 @@ lua require"gitlinker".setup()
 
 " CamelCaseMotion
 let g:camelcasemotion_key = '<space>'
-
 
 " octo.nvim
 lua << EOF
