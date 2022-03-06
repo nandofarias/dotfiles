@@ -111,14 +111,15 @@ main()
   tmux set-option -g message-style "bg=${gray},fg=${white}"
 
   # status bar
-  tmux set-option -g status-style "bg=${gray},fg=${white}"
+  tmux set-option -g status-style bg=default
 
   # Status left
+  tmux set-option -g status-left "#[bg=default,fg=${green}]"
   if $show_powerline; then
-    tmux set-option -g status-left "#[bg=${green},fg=${dark_gray}]#{?client_prefix,#[bg=${yellow}],} ${left_icon} #[fg=${green},bg=${gray}]#{?client_prefix,#[fg=${yellow}],}${left_sep}"
+    tmux set-option -ga status-left "#[bg=${green},fg=${green}]#{?client_prefix,#[bg=${yellow}],} ${left_icon} #[fg=${green},bg=${gray}]#{?client_prefix,#[fg=${yellow}],}${left_sep}"
     powerbg=${gray}
   else
-    tmux set-option -g status-left "#[bg=${green},fg=${dark_gray}]#{?client_prefix,#[bg=${yellow}],} ${left_icon}"
+    tmux set-option -ga status-left "#[bg=${green},fg=${dark_gray}]#{?client_prefix,#[bg=${yellow}],} ${left_icon}"
   fi
 
   # Status right
@@ -174,15 +175,16 @@ main()
     fi
 
     if [ $plugin = "time" ]; then
+      tmux set-option -g status-right-length 250
       IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-time-colors" "dark_purple white")
       if $show_day_month && $show_military ; then # military time and dd/mm
-        script="%a %d/%m %R ${timezone} "
+        script="%a %d/%m %R ${timezone}"
       elif $show_military; then # only military time
-        script="%a %m/%d %R ${timezone} "
+        script="%a %m/%d %R ${timezone}"
       elif $show_day_month; then # only dd/mm
-        script="%a %d/%m %I:%M %p ${timezone} "
+        script="%a %d/%m %I:%M %p ${timezone}"
       else
-        script="%a %m/%d %I:%M %p ${timezone} "
+        script="%a %m/%d %I:%M %p ${timezone}"
       fi
     fi
 
@@ -193,6 +195,7 @@ main()
       tmux set-option -ga status-right "#[fg=${!colors[1]},bg=${!colors[0]}] $script "
     fi
   done
+  tmux set-option -ga status-right "#[fg=${dark_purple},bg=default]"
 
   # Window option
   if $show_powerline; then
@@ -201,7 +204,7 @@ main()
     tmux set-window-option -g window-status-current-format "#[fg=${white},bg=${dark_purple}] #I #W${current_flags} "
   fi
 
-  tmux set-window-option -g window-status-format "#[fg=${white}]#[bg=${gray}] #I #W${flags}"
+  tmux set-window-option -g window-status-format "#[fg=${white}]#[bg=default] #I #W${flags} "
   tmux set-window-option -g window-status-activity-style "bold"
   tmux set-window-option -g window-status-bell-style "bold"
 }
