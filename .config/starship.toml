@@ -6,6 +6,22 @@ success_symbol = "[➜](bold green)"
 error_symbol = "[✗](bold red)"
 vicmd_symbol = "[V](bold green)"
 
+[cmd_duration]
+style = "bold yellow"
+
+[directory]
+style = "bold green"
+
+[git_branch]
+style = "bold pink"
+
+[hostname]
+style = "bold red"
+
+[username]
+format = "[$user]($style) on "
+style_user = "bold purple"
+
 [line_break]
 disabled = true
 
