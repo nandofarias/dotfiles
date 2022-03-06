@@ -83,14 +83,20 @@ source ~/.asdf/asdf.fish
 source ~/.asdf/plugins/java/set-java-home.fish
 
 # Abb
-abbr -ag mps "mix phx.server"
+abbr -ag mps "iex -S mix phx.server"
+abbr -ag iem "iex -S mix"
 abbr -ag mcs "watchexec -e ex mix compile"
+
 abbr -ag dc docker-compose
-abbr -ag v nvim
+
 abbr -ag g git
 abbr -ag gc "git checkout"
+
 abbr -ag tls "tmux ls"
-abbr -ag screen_saver "cmatrix -C green"
+
+abbr -ag ss "cmatrix -C green"
+
+abbr -ag v nvim
 abbr -ag plug_sync "nvim +PlugUpdate +PlugInstall +PlugClean! +qa"
 abbr -ag vim_profile "nvim --startuptime timeCost.txt timeCost.txt; and rm timeCost.txt"
 abbr -ag lsp_logs "tail -f $HOME/.cache/nvim/lsp.log"
