@@ -170,6 +170,7 @@ nnoremap <Leader>fs :e ~/.config/fish/config.fish <CR>
 nnoremap <Leader>al :e ~/.config/alacritty/alacritty.yml <CR>
 nnoremap <Leader>kt :e ~/.config/kitty/kitty.conf <CR>
 nnoremap <Leader>wz :e ~/.config/wezterm/wezterm.lua <CR>
+nnoremap <Leader>br :e ~/.config/brew/Brewfile <CR>
 
 " Commands
 :command! Q q
