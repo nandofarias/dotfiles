@@ -196,6 +196,7 @@ lua require('nvim-autopairs').setup{}
 lua require('neoscroll').setup()
 
 " lualine.nvim
+hi StatusLine gui=none guibg=none guifg=none
 lua << EOF
 local dracula_pro = require'statusline.themes.dracula_pro'
 require('lualine').setup {
