@@ -658,12 +658,10 @@ let g:dashboard_custom_section ={
 \   'b': {'description': ['  Find Word                 leader f g'], 'command': 'Telescope live_grep'},
 \   'c': {'description': ['  Recents                   leader f h'], 'command': 'Telescope oldfiles'},
 \   'd': {'description': ['  New File                  leader c n'], 'command': 'DashboardNewFile'},
-\   'e': {'description': ['  Bookmarks                 leader f b'], 'command': 'Telescope marks'},
 \   'f': {'description': ['  Update Plugins            leader u  '], 'command': 'PlugUpdate'},
 \   'g': {'description': ['  Settings                  leader n v'], 'command': 'edit $MYVIMRC'},
 \   'h': {'description': ['  Exit                      leader q q'], 'command': 'exit'}
 \ }
-
 let g:dashboard_custom_header = [
 \ '                        ______________                 ',
 \ '                       /             /|                ',
