@@ -161,7 +161,7 @@ nnoremap <silent> <leader>r :source ~/.config/nvim/init.vim <CR>
 nnoremap <silent> gs :set spell! <CR>
 nnoremap <silent> <leader>qq :exit <CR>
 nnoremap <silent> <leader>cc :cclose <CR>
-nnoremap <silent> qq :Bdelete<CR>
+nnoremap <silent> qq :Bdelete <CR> <Plug>(cokeline-focus-prev)<CR>
 
 " Open config
 nnoremap <Leader>nv :e ~/.config/nvim/init.vim <CR>
@@ -527,6 +527,7 @@ hi TabLineFill gui=none guifg=none guibg=none
 lua << EOF
 local get_hex = require('cokeline/utils').get_hex
 local blue = vim.g.terminal_color_4
+local green = vim.g.terminal_color_2
 
 local errors_fg = get_hex('DiagnosticError', 'fg')
 local warnings_fg = get_hex('DiagnosticWarn', 'fg')
@@ -603,8 +604,14 @@ require('cokeline').setup({
       text = ' ',
     },
     {
-      text = '',
+      text = function(buffer)
+        return buffer.is_modified and '●' or ''
+      end,
+      fg = function(buffer)
+        return buffer.is_modified and green or nil
+      end,
       delete_buffer_on_left_click = true,
+      truncation = { priority = 1 },
     },
     {
       text = '',
