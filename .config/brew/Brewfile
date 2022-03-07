@@ -22,6 +22,7 @@ tap "remotemobprogramming/brew"
 tap "schniz/tap"
 tap "syncdk/aws-session-manager-plugin"
 tap "wez/wezterm"
+tap "withgraphite/tap"
 brew "python@3.10"
 brew "asciinema"
 brew "autoconf"
@@ -187,6 +188,7 @@ mas "OverPicture", id: 1188020834
 mas "Pages", id: 409201541
 mas "Save to Matter", id: 1548677272
 mas "Slack", id: 803453959
+mas "Tailscale", id: 1475387142
 mas "The Unarchiver", id: 425424353
 mas "Todoist", id: 585829637
 mas "Vimari", id: 1480933944
