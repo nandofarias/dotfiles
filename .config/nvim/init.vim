@@ -25,6 +25,7 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 Plug 'lewis6991/spaceless.nvim'
 Plug 'stsewd/gx-extended.vim'
 Plug 'lewis6991/impatient.nvim'
+Plug 'olimorris/persisted.nvim'
 
 " Vim test
 Plug 'junegunn/vader.vim'
@@ -675,8 +676,6 @@ let g:dashboard_custom_header = [
 \ '               `-----------------------`               ',
 \ '                                                       ',
 \]
-nmap <Leader>ss :<C-u>SessionSave<CR>
-nmap <Leader>sl :<C-u>SessionLoad<CR>
 nnoremap <silent> <Leader>fh :DashboardFindHistory<CR>
 nnoremap <silent> <Leader>ff :DashboardFindFile<CR>
 nnoremap <silent> <Leader>fg :DashboardFindWord<CR>
@@ -885,3 +884,11 @@ nnoremap <silent> gn <cmd>lua require("cosmic-ui").rename()<cr>
 
 " impatient.nvim
 lua require('impatient')
+
+" persisted.nvim
+nnoremap <Leader>sl <cmd>lua require("persisted").load()<CR>
+lua << EOF
+require("persisted").setup {
+  use_git_branch = true,
+}
+EOF
