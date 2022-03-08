@@ -203,7 +203,12 @@ local dracula_pro = require'statusline.themes.dracula_pro'
 require('lualine').setup {
   options = {
     theme = dracula_pro,
-    disabled_filetypes = { "dashboard", "NvimTree" },
+    disabled_filetypes = {
+      "dashboard",
+      "NvimTree",
+      "TelescopePrompt",
+      "TelescopeResults",
+    },
     component_separators = '|',
     section_separators = { left = '', right = '' },
   },
