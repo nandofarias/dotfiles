@@ -43,7 +43,6 @@ set -gx ERL_LIBS /usr/lib/elixir/lib
 set -gx ERL_AFLAGS "-kernel shell_history enabled"
 set -gx ELIXIR_EDITOR "nvim +__LINE__ __FILE__"
 set -gx PLUG_EDITOR $ELIXIR_EDITOR
-set -gx ECTO_EDITOR $ELIXIR_EDITOR
 set -gx ERL_BUILD_DOCS yes
 set -gx CFLAGS "-O2 -g -fno-stack-check -Wno-error=implicit-function-declaration"
 set -gx KERL_BUILD_DOCS yes
