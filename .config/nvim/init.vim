@@ -118,7 +118,7 @@ augroup default
 au!
 augroup END
 
-" Appearence
+" Default settings
 set number relativenumber
 set showcmd cmdheight=1
 set termguicolors background=dark t_Co=256
@@ -133,10 +133,16 @@ set wrap
 set signcolumn=yes
 set completeopt=menu,menuone,noselect
 set hidden
-set fillchars=fold:\ ,vert:\│,eob:\ ,msgsep:‾ " hide ~ at the end of vuffer
+set fillchars=fold:\ ,vert:\│,eob:\ ,msgsep:‾ " hide ~ at the end of buffer
 set undofile
 set undodir=~/.vimundo/
 set spelllang=en
+set showmatch
+set matchtime=1
+set updatetime=50
+set timeoutlen=400
+set ttimeoutlen=0
+
 " GUI settings
 set guifont=FiraCode\ Nerd\ Font:h14
 
