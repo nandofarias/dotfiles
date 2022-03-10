@@ -22,37 +22,21 @@
   },
   "describe_block": {
     "prefix": "desc",
-    "body": [
-      "describe \"$1\" do",
-      "  $2",
-      "end"
-    ]
+    "body": ["describe \"$1\" do", "  $2", "end"]
   },
   "test_block": {
     "prefix": "t",
-    "body": [
-      "test \"$1\" do",
-      "  $2",
-      "end"
-    ],
+    "body": ["test \"$1\" do", "  $2", "end"],
     "description": "Creates a test block for unit tests"
   },
   "test_state": {
     "prefix": "ts",
-    "body": [
-      "test \"$1\", state do",
-      "  $2",
-      "end"
-    ],
+    "body": ["test \"$1\", state do", "  $2", "end"],
     "description": "Creates a test block with state"
   },
   "test_conn_block": {
     "prefix": "tconn",
-    "body": [
-      "test \"$1\", %{conn: conn} do",
-      "  $2",
-      "end"
-    ],
+    "body": ["test \"$1\", %{conn: conn} do", "  $2", "end"],
     "description": "Creates a test block for conn cases"
   },
   "inspect": {
@@ -77,13 +61,7 @@
   },
   "FIXME: if_else_block": {
     "prefix": "ifel",
-    "body": [
-      "if $1 do",
-      "  $2",
-      "else",
-      "  $3",
-      "end"
-    ],
+    "body": ["if $1 do", "  $2", "else", "  $3", "end"],
     "description": "Inserts a new if and else block"
   },
   "capture_fn": {
@@ -93,20 +71,12 @@
   },
   "doc_block": {
     "prefix": "doc",
-    "body": [
-      "@doc \"\"\"",
-      "$1",
-      "\"\"\""
-    ],
+    "body": ["@doc \"\"\"", "$1", "\"\"\""],
     "description": "Inserts a function documentation block"
   },
   "moduledoc_block": {
     "prefix": "mdoc",
-    "body": [
-      "@moduledoc \"\"\"",
-      "$1",
-      "\"\"\""
-    ],
+    "body": ["@moduledoc \"\"\"", "$1", "\"\"\""],
     "description": "Inserts a module documentation block"
   },
   "string_interpolation": {
@@ -136,11 +106,12 @@
   },
   "override_do_end_block": {
     "prefix": "do",
-    "body": [
-      "do",
-      "  $1",
-      "end"
-    ],
+    "body": ["do", "  $1", "end"],
     "description": "Overrides lsp do end completion with proper indentation"
+  },
+  "graphql_field": {
+    "prefix": "gf",
+    "body": ["field :$1, type: $2 do", "  $3", "  resolve &4", "end"],
+    "description": "Inserts a new graphql field"
   }
 }
