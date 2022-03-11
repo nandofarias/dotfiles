@@ -36,6 +36,7 @@ Plug 'sindrets/diffview.nvim'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'ruifm/gitlinker.nvim'
 Plug 'pwntester/octo.nvim'
+Plug 'ThePrimeagen/git-worktree.nvim'
 
 " Statusline
 Plug 'nvim-lualine/lualine.nvim'
@@ -902,4 +903,19 @@ lua << EOF
 require("persisted").setup {
   use_git_branch = true,
 }
+EOF
+
+" git-worktree.nvim
+nnoremap gw <cmd>lua require('telescope').extensions.git_worktree.git_worktrees()<CR>
+nnoremap gc <cmd>lua require('telescope').extensions.git_worktree.create_git_worktree()<CR>
+lua << EOF
+require("telescope").load_extension("git_worktree")
+
+local Worktree = require("git-worktree")
+
+Worktree.on_tree_change(function(op)
+  if op == Worktree.Operations.Switch then
+    vim.cmd("Dashboard")
+  end
+end)
 EOF
