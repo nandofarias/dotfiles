@@ -74,6 +74,7 @@ Plug 'williamboman/nvim-lsp-installer'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
 Plug 'ray-x/lsp_signature.nvim'
+Plug 'simrat39/symbols-outline.nvim'
 
 " Autocomplete
 Plug 'hrsh7th/nvim-cmp'
@@ -111,6 +112,7 @@ Plug 'kevinhwang91/nvim-bqf'
 " UI
 Plug 'MunifTanjim/nui.nvim'
 Plug 'CosmicNvim/cosmic-ui'
+Plug 'rcarriga/nvim-notify'
 
 call plug#end()
 
@@ -865,7 +867,7 @@ EOF
 nnoremap <leader>o :Octo pr list<CR>
 
 " dash.nvim
-nnoremap <leader>? :Dash!<cr>
+nnoremap <leader>d :Dash!<cr>
 
 " marks.nvim
 lua require'marks'.setup {}
@@ -919,3 +921,15 @@ Worktree.on_tree_change(function(op)
   end
 end)
 EOF
+
+" nvim-notify
+lua << EOF
+require("telescope").load_extension("notify")
+require("notify").setup({
+  background_colour = "#202020",
+})
+vim.notify = require("notify")
+EOF
+
+" symbols-outline
+nnoremap <leader>s :SymbolsOutline<CR>
