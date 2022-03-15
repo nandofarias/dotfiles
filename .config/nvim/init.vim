@@ -76,6 +76,7 @@ Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
 Plug 'ray-x/lsp_signature.nvim'
 Plug 'simrat39/symbols-outline.nvim'
+Plug 'tami5/lspsaga.nvim'
 
 " Autocomplete
 Plug 'hrsh7th/nvim-cmp'
@@ -112,7 +113,6 @@ Plug 'kevinhwang91/nvim-bqf'
 
 " UI
 Plug 'MunifTanjim/nui.nvim'
-Plug 'CosmicNvim/cosmic-ui'
 Plug 'rcarriga/nvim-notify'
 
 call plug#end()
@@ -355,21 +355,30 @@ local on_attach = function(client, bufnr)
 
   local opts = { noremap=true, silent=true }
 
-  -- needs review
   buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
   buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
   buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-  buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
   buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  -- buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  -- buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  -- buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+  -- buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+  -- buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+
+  -- lsp-saga
+  buf_set_keymap("n", "gh", "<cmd>Lspsaga preview_definition<cr>", opts)
+  buf_set_keymap("n", "<space>rn", "<cmd>Lspsaga rename<cr>", opts)
+  buf_set_keymap("n", "K",  "<cmd>Lspsaga hover_doc<cr>", opts)
+  buf_set_keymap("n", "<space>e", "<cmd>Lspsaga show_line_diagnostics<cr>", opts)
+  buf_set_keymap("n", "[d", "<cmd>Lspsaga diagnostic_jump_next<cr>", opts)
+  buf_set_keymap("n", "]d", "<cmd>Lspsaga diagnostic_jump_prev<cr>", opts)
+  buf_set_keymap("n", "<C-u>", "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1, '<c-u>')<cr>", {})
+  buf_set_keymap("n", "<C-d>", "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1, '<c-d>')<cr>", {})
 
   if client.resolved_capabilities.document_formatting then
     buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
@@ -378,8 +387,8 @@ local on_attach = function(client, bufnr)
 
   if client.resolved_capabilities.code_action then
     -- buf_set_keymap('n', '<space>cc', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-    buf_set_keymap('n', '<space>ga', '<cmd>lua require("cosmic-ui").code_actions()<cr>', opts)
-    buf_set_keymap('v', '<space>ga', '<cmd>lua require("cosmic-ui").range_code_actions()<cr>', opts)
+    buf_set_keymap("n", "ga", "<cmd>Lspsaga code_action<cr>", opts)
+    buf_set_keymap("x", "ga", ":<c-u>Lspsaga range_code_action<cr>", opts)
   end
 
   if client.resolved_capabilities.code_lens then
@@ -892,10 +901,6 @@ EOF
 
 " spaceless.nvim
 lua require'spaceless'.setup()
-
-" cosmic-ui
-lua require'cosmic-ui'.setup()
-nnoremap <silent> gn <cmd>lua require("cosmic-ui").rename()<cr>
 
 " impatient.nvim
 lua require('impatient')
