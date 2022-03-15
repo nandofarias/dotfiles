@@ -821,9 +821,6 @@ require("indent_blankline").setup {
 }
 EOF
 
-" vim-illuminate
-let g:Illuminate_ftblacklist = ['help', 'terminal', 'dashboard', 'lspinfo', 'TelescopePrompt', 'TelescopeResults', 'NvimTree']
-
 " rest.nvim
 lua require("rest-nvim").setup()
 
