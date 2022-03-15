@@ -26,6 +26,7 @@ Plug 'lewis6991/spaceless.nvim'
 Plug 'stsewd/gx-extended.vim'
 Plug 'lewis6991/impatient.nvim'
 Plug 'olimorris/persisted.nvim'
+Plug 'code-biscuits/nvim-biscuits'
 
 " Vim test
 Plug 'junegunn/vader.vim'
@@ -604,7 +605,7 @@ require('cokeline').setup({
       text = function(buffer)
         return
           (buffer.diagnostics.errors ~= 0 and '  ' .. buffer.diagnostics.errors)
-          or (buffer.diagnostics.warnings ~= 0 and '  ' .. buffer.diagnostics.warnings)
+          or (buffer.diagnostics.warnings ~= 0 and ' ⚠ ' .. buffer.diagnostics.warnings)
           or ''
       end,
       fg = function(buffer)
@@ -933,3 +934,6 @@ EOF
 
 " symbols-outline
 nnoremap <leader>s :SymbolsOutline<CR>
+
+" nvim-biscuits
+lua require('nvim-biscuits').setup({})
