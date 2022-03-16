@@ -96,7 +96,7 @@ abbr -ag tls "tmux ls"
 abbr -ag ss "cmatrix -C green"
 
 abbr -ag v nvim
-abbr -ag plug_sync "nvim +PlugUpdate +PlugInstall +PlugClean! +qa"
+abbr -ag plug_sync "nvim +PlugClean! +PlugUpdate +PlugInstall"
 abbr -ag vim_profile "nvim --startuptime timeCost.txt timeCost.txt; and rm timeCost.txt"
 abbr -ag lsp_logs "tail -f $HOME/.cache/nvim/lsp.log"
 
