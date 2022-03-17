@@ -5,6 +5,7 @@ set -gx fish_greeting "Welcome to Summoner's Rift"
 set -gx LC_ALL en_US.UTF-8
 set -gx WORK $HOME/Workspace
 set -gx EDITOR nvim
+alias neovim=nvim
 ulimit -n 65536 # See: https://stackoverflow.com/a/45004802 
 fish_add_path -g $HOME/.bin $HOME/.local/bin
 
