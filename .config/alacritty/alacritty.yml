@@ -2,17 +2,12 @@ live_config_reload: true
 
 font:
   normal:
-    family: FiraCode Nerd Font
-    style: Regular
-  italic:
-    family: Menlo
-    style: Italic
+    family: MonoLisa Nerd Font
 
-  size: 14.0
+  size: 16.0
 
   offset:
-    x: 0
-    y: 7
+    y: 5
 
 window:
   padding:
@@ -20,9 +15,9 @@ window:
     y: 10
   dynamic_padding: false
   decorations: buttonless
-  startup_mode: Maximized 
+  startup_mode: Maximized
 
-background_opacity: 1.0
+background_opacity: 0.9
 
 colors:
   primary:
@@ -67,5 +62,10 @@ key_bindings:
   - { key: Grave, mods: Control, chars: "\x02\x7a" }
   # Tmux copy mode
   - { key: LBracket, mods: Control, chars: "\x02\x5b" }
+  # Resize panes
+  - { key: H, mods: Shift|Command, chars: "\x02\x3c" }
+  - { key: J, mods: Shift|Command, chars: "\x02\x2d" }
+  - { key: K, mods: Shift|Command, chars: "\x02\x2b" }
+  - { key: L, mods: Shift|Command, chars: "\x02\x3e" }
   # Clear terminal
   - { key: K, mods: Command, chars: "\x63\x6C\x65\x61\x72\x0A" }
