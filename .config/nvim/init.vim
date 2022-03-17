@@ -146,6 +146,7 @@ set matchtime=1
 set updatetime=50
 set timeoutlen=400
 set ttimeoutlen=0
+set laststatus=3
 
 " GUI settings
 set guifont=FiraCode\ Nerd\ Font:h14
@@ -415,7 +416,10 @@ lsp_installer.on_server_ready(function(server)
       opts.settings = {
         elixirLS = {
           fetchDeps = true,
+          dialyzerEnabled = true,
           dialyzerFormat = "dialyxir_short",
+          enableTestLenses = true,
+          suggestSpecs = true,
         }
       }
     end
