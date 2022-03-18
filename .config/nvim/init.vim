@@ -82,6 +82,7 @@ Plug 'kosayoda/nvim-lightbulb'
 Plug 'folke/lsp-colors.nvim'
 Plug 'onsails/lspkind-nvim'
 Plug 'j-hui/fidget.nvim'
+Plug 'rmagatti/goto-preview'
 
 " Autocomplete
 Plug 'hrsh7th/nvim-cmp'
@@ -377,7 +378,6 @@ local on_attach = function(client, bufnr)
   -- buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 
   -- lsp-saga
-  buf_set_keymap("n", "gh", "<cmd>Lspsaga preview_definition<cr>", opts)
   buf_set_keymap("n", "<space>rn", "<cmd>Lspsaga rename<cr>", opts)
   buf_set_keymap("n", "K",  "<cmd>Lspsaga hover_doc<cr>", opts)
   buf_set_keymap("n", "<space>e", "<cmd>Lspsaga show_line_diagnostics<cr>", opts)
@@ -966,3 +966,10 @@ autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
 
 " fidget.nvim
 lua require"fidget".setup{}
+
+" goto-preview
+lua require('goto-preview').setup {}
+nnoremap gpd <cmd>lua require('goto-preview').goto_preview_definition()<CR>
+nnoremap gpi <cmd>lua require('goto-preview').goto_preview_implementation()<CR>
+nnoremap q <cmd>lua require('goto-preview').close_all_win()<CR>
+nnoremap gpr <cmd>lua require('goto-preview').goto_preview_references()<CR>
