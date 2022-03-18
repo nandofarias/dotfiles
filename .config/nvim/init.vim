@@ -401,6 +401,7 @@ local on_attach = function(client, bufnr)
     cmd [[au CursorHold <buffer> lua vim.lsp.codelens.refresh()]]
     cmd [[au InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
     cmd [[augroup end]]
+    cmd [[hi link LspCodeLens DraculaYellow]]
   end
 end
 
