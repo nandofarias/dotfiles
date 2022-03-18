@@ -6,9 +6,6 @@ font:
 
   size: 16.0
 
-  offset:
-    y: 5
-
 window:
   padding:
     x: 10
