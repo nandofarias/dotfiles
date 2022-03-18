@@ -78,6 +78,7 @@ Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
 Plug 'ray-x/lsp_signature.nvim'
 Plug 'simrat39/symbols-outline.nvim'
 Plug 'tami5/lspsaga.nvim'
+Plug 'kosayoda/nvim-lightbulb'
 
 " Autocomplete
 Plug 'hrsh7th/nvim-cmp'
@@ -467,7 +468,6 @@ null_ls.setup({
         null_ls.builtins.diagnostics.eslint,
         null_ls.builtins.code_actions.eslint,
         null_ls.builtins.formatting.prettier,
-        null_ls.builtins.code_actions.gitsigns,
         null_ls.builtins.diagnostics.credo.with({
           condition = function(utils)
             return utils.root_has_file(".credo.exs") 
@@ -945,3 +945,6 @@ nnoremap <leader>s :SymbolsOutline<CR>
 
 " nvim-biscuits
 lua require('nvim-biscuits').setup({})
+
+"nvim-lightbulb
+autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
