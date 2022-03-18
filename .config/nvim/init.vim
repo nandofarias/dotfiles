@@ -79,6 +79,9 @@ Plug 'ray-x/lsp_signature.nvim'
 Plug 'simrat39/symbols-outline.nvim'
 Plug 'tami5/lspsaga.nvim'
 Plug 'kosayoda/nvim-lightbulb'
+Plug 'folke/lsp-colors.nvim'
+Plug 'onsails/lspkind-nvim'
+Plug 'j-hui/fidget.nvim'
 
 " Autocomplete
 Plug 'hrsh7th/nvim-cmp'
@@ -151,7 +154,7 @@ set ttimeoutlen=0
 set laststatus=3
 
 " GUI settings
-set guifont=FiraCode\ Nerd\ Font:h14
+set guifont=MonoLisa\ Nerd\ Font:h16
 
 " Dracula PRO
 packadd! dracula_pro
@@ -490,7 +493,19 @@ imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-T
 smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 lua <<EOF
 local cmp = require'cmp';
+local lspkind = require('lspkind');
+
 cmp.setup {
+  formatting = {
+    format = lspkind.cmp_format({
+      mode = 'symbol',
+      maxwidth = 50,
+
+      before = function (entry, vim_item)
+        return vim_item
+      end
+    })
+  },
   snippet = {
     expand = function(args)
       vim.fn["vsnip#anonymous"](args.body) 
@@ -948,3 +963,6 @@ lua require('nvim-biscuits').setup({})
 
 "nvim-lightbulb
 autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
+
+" fidget.nvim
+lua require"fidget".setup{}
