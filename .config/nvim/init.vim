@@ -424,7 +424,6 @@ lsp_installer.on_server_ready(function(server)
           fetchDeps = true,
           dialyzerEnabled = true,
           dialyzerFormat = "dialyxir_short",
-          enableTestLenses = true,
           suggestSpecs = true,
         }
       }
