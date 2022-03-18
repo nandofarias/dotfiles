@@ -27,6 +27,7 @@ Plug 'stsewd/gx-extended.vim'
 Plug 'lewis6991/impatient.nvim'
 Plug 'olimorris/persisted.nvim'
 Plug 'code-biscuits/nvim-biscuits'
+Plug 'rhysd/clever-f.vim'
 
 " Vim test
 Plug 'junegunn/vader.vim'
