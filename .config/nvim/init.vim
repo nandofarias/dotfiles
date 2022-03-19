@@ -179,7 +179,7 @@ nnoremap <silent> <leader>r :source ~/.config/nvim/init.vim <CR>
 nnoremap <silent> gs :set spell! <CR>
 nnoremap <silent> <leader>qq :exit <CR>
 nnoremap <silent> <leader>cc :cclose <CR>
-nnoremap <silent> qq :Bdelete <CR> <Plug>(cokeline-focus-prev)<CR>
+nnoremap <silent> <space>qq :Bdelete <CR> <Plug>(cokeline-focus-prev)<CR>
 
 " Open config
 nnoremap <Leader>nv :e ~/.config/nvim/init.vim <CR>
@@ -971,5 +971,5 @@ lua require"fidget".setup{}
 lua require('goto-preview').setup {}
 nnoremap gpd <cmd>lua require('goto-preview').goto_preview_definition()<CR>
 nnoremap gpi <cmd>lua require('goto-preview').goto_preview_implementation()<CR>
-nnoremap q <cmd>lua require('goto-preview').close_all_win()<CR>
+nnoremap gpq <cmd>lua require('goto-preview').close_all_win()<CR>
 nnoremap gpr <cmd>lua require('goto-preview').goto_preview_references()<CR>
