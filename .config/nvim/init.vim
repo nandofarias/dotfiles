@@ -956,7 +956,7 @@ vim.notify = require("notify")
 EOF
 
 " symbols-outline
-nnoremap <leader>s :SymbolsOutline<CR>
+nnoremap <silent><leader>s :SymbolsOutline<CR>
 
 " nvim-biscuits
 lua require('nvim-biscuits').setup({})
