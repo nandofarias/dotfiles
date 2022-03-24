@@ -181,6 +181,14 @@ nnoremap <silent> <leader>qq :exit <CR>
 nnoremap <silent> <leader>cc :cclose <CR>
 nnoremap <silent> <space>qq :Bdelete <CR> <Plug>(cokeline-focus-prev)<CR>
 
+" Move lines
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
+
 " Open config
 nnoremap <Leader>nv :e ~/.config/nvim/init.vim <CR>
 nnoremap <Leader>tm :e ~/.config/tmux/tmux.conf <CR>
