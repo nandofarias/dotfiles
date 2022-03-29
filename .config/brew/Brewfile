@@ -78,7 +78,6 @@ brew "mkcert"
 brew "mosh"
 brew "multimarkdown"
 brew "neofetch"
-brew "neovim", args: ["HEAD"]
 brew "ninja"
 brew "nss"
 brew "openldap"
