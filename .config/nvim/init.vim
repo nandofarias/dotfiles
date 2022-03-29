@@ -554,7 +554,6 @@ require'nvim-tree'.setup {
   git = {
     ignore = false,
   },
-  auto_close = true,
   diagnostic = {
     enable = true,
   },
