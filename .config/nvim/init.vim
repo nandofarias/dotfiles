@@ -30,6 +30,8 @@ Plug 'rhysd/clever-f.vim'
 Plug 'folke/todo-comments.nvim'
 Plug 'numToStr/Comment.nvim'
 Plug 'kevinhwang91/nvim-hlslens'
+Plug 'luukvbaal/stabilize.nvim'
+Plug 'bennypowers/nvim-regexplainer'
 
 " Vim test
 Plug 'junegunn/vader.vim'
@@ -1014,4 +1016,17 @@ vim.api.nvim_set_keymap('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], 
 vim.api.nvim_set_keymap('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], kopts)
 vim.api.nvim_set_keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], kopts)
 vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+EOF
+
+" stabilize.nvim
+lua require('stabilize').setup()
+
+" nvim-regexplainer
+lua << EOF
+require'regexplainer'.setup {
+  auto = true,
+  mappings = {
+    toggle = 'gR',
+  },
+}
 EOF
