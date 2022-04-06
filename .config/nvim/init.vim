@@ -33,6 +33,9 @@ Plug 'kevinhwang91/nvim-hlslens'
 Plug 'luukvbaal/stabilize.nvim'
 Plug 'bennypowers/nvim-regexplainer'
 
+" Pair programming
+Plug 'jbyuki/instant.nvim'
+
 " Vim test
 Plug 'junegunn/vader.vim'
 
@@ -1030,3 +1033,6 @@ require'regexplainer'.setup {
   },
 }
 EOF
+
+" instant.nvim
+let g:instant_username = "nandofarias"
