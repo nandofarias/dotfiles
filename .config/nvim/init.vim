@@ -4,7 +4,6 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 " Utilities
 Plug 'nvim-lua/plenary.nvim'
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-abolish'
 Plug 'andymass/vim-matchup'
 Plug 'szw/vim-maximizer'
@@ -17,7 +16,7 @@ Plug 'famiu/bufdelete.nvim'
 Plug 'tversteeg/registers.nvim'
 Plug 'andweeb/presence.nvim'
 Plug 'RRethy/vim-illuminate'
-Plug 'bkad/CamelCaseMotion'
+Plug 'chaoren/vim-wordmotion'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'chentau/marks.nvim'
 Plug 'dstein64/vim-startuptime'
@@ -28,6 +27,8 @@ Plug 'lewis6991/impatient.nvim'
 Plug 'olimorris/persisted.nvim'
 Plug 'code-biscuits/nvim-biscuits'
 Plug 'rhysd/clever-f.vim'
+Plug 'folke/todo-comments.nvim'
+Plug 'numToStr/Comment.nvim'
 
 " Vim test
 Plug 'junegunn/vader.vim'
@@ -120,6 +121,14 @@ Plug 'kevinhwang91/nvim-bqf'
 " UI
 Plug 'MunifTanjim/nui.nvim'
 Plug 'rcarriga/nvim-notify'
+
+" Better wildmenu
+function! UpdateRemotePlugins(...)
+  " Needed to refresh runtime files
+  let &rtp=&rtp
+  UpdateRemotePlugins
+endfunction
+Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
 
 call plug#end()
 
@@ -891,9 +900,6 @@ let g:copilot_filetypes = {
 " gitlinker
 lua require"gitlinker".setup()
 
-" CamelCaseMotion
-let g:camelcasemotion_key = '<space>'
-
 " octo.nvim
 lua << EOF
 require"octo".setup({
@@ -983,3 +989,12 @@ nnoremap gpd <cmd>lua require('goto-preview').goto_preview_definition()<CR>
 nnoremap gpi <cmd>lua require('goto-preview').goto_preview_implementation()<CR>
 nnoremap gpq <cmd>lua require('goto-preview').close_all_win()<CR>
 nnoremap gpr <cmd>lua require('goto-preview').goto_preview_references()<CR>
+
+" todo-comments
+lua require('todo-comments').setup {}
+
+" comment.nvim
+lua require('Comment').setup()
+
+" wilder.nvim
+call wilder#setup({'modes': [':', '/', '?']})
