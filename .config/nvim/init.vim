@@ -141,6 +141,7 @@ call plug#end()
 " Default autogroup
 augroup default
 au!
+autocmd VimResized * wincmd =
 augroup END
 
 " Default settings
