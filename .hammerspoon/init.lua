@@ -15,3 +15,5 @@ local config_watcher = hs.pathwatcher.new('~/.hammerspoon/', reload_config)
 config_watcher:start()
 
 require('keymaps')
+require('vim-mode')
+

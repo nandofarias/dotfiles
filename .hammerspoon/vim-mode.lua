@@ -1,0 +1,18 @@
+local VimMode = hs.loadSpoon("VimMode")
+local vim = VimMode:new()
+
+vim
+  :disableForApp('Code')
+  :disableForApp('iTerm2')
+  :disableForApp('Terminal')
+  :disableForApp('kitty')
+  :disableForApp('Alacritty')
+
+vim:shouldDimScreenInNormalMode(false)
+
+vim:shouldShowAlertInNormalMode(true)
+
+vim:setAlertFont("Courier New")
+
+vim:enterWithSequence('jk')
+-- vim:bindHotKeys({ enter = {{'ctrl'}, ';'} })
