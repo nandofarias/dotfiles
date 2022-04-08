@@ -97,6 +97,7 @@ abbr -ag tls "tmux ls"
 abbr -ag ss "cmatrix -C green"
 
 abbr -ag v nvim
+abbr -ag vim nvim
 abbr -ag update-nvim 'asdf uninstall neovim nightly && asdf install neovim nightly'
 abbr -ag plug-sync "nvim +PlugClean! +PlugUpdate +PlugInstall"
 abbr -ag vim-profile "nvim --startuptime timeCost.txt timeCost.txt; and rm timeCost.txt"
