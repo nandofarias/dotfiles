@@ -14,6 +14,9 @@ end
 local config_watcher = hs.pathwatcher.new('~/.hammerspoon/', reload_config)
 config_watcher:start()
 
+-- load SpoonInstall
+hs.loadSpoon('SpoonInstall')
+
+-- import modules
 require('keymaps')
 require('vim-mode')
-

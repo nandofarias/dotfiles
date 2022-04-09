@@ -169,6 +169,7 @@ set updatetime=50
 set timeoutlen=400
 set ttimeoutlen=0
 set laststatus=3
+set nomodeline
 
 " GUI settings
 set guifont=MonoLisa\ Nerd\ Font:h16
