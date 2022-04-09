@@ -1,4 +1,4 @@
-local VimMode = hs.loadSpoon("VimMode")
+local VimMode = hs.loadSpoon('VimMode')
 local vim = VimMode:new()
 
 vim
@@ -12,7 +12,7 @@ vim:shouldDimScreenInNormalMode(false)
 
 vim:shouldShowAlertInNormalMode(true)
 
-vim:setAlertFont("Courier New")
+vim:setAlertFont("MonoLisa")
 
 vim:enterWithSequence('jk')
 -- vim:bindHotKeys({ enter = {{'ctrl'}, ';'} })
