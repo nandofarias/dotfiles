@@ -46,7 +46,7 @@
   },
   "pipe_inspect": {
     "prefix": "pins",
-    "body": "|> IO.inspect(label: $1)",
+    "body": "|> IO.inspect(label: \"$1\")",
     "description": "|> IO.inspect"
   },
   "def_inline": {
