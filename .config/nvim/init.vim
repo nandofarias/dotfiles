@@ -992,7 +992,13 @@ autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
 lua require"fidget".setup{}
 
 " goto-preview
-lua require('goto-preview').setup {}
+lua << EOF
+require('goto-preview').setup {
+  post_open_hook = function()
+    vim.cmd[[nnoremap <buffer> <esc> :q<CR>]]
+  end
+}
+EOF
 nnoremap gpd <cmd>lua require('goto-preview').goto_preview_definition()<CR>
 nnoremap gpi <cmd>lua require('goto-preview').goto_preview_implementation()<CR>
 nnoremap gpq <cmd>lua require('goto-preview').close_all_win()<CR>
