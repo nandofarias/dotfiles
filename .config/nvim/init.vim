@@ -739,6 +739,8 @@ require("neogit").setup{
 EOF
 nnoremap <C-g> :Neogit<CR>
 
+lua require("diffview").setup {}
+
 " dashboard-nvim
 let g:dashboard_default_executive = 'telescope'
 let g:dashboard_custom_section ={
