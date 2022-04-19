@@ -179,12 +179,35 @@ packadd! dracula_pro
 let g:dracula_colorterm = 0
 colorscheme dracula_pro_van_helsing
 " Fix colors mapping with nvim-treesitter, https://github.com/dracula/vim/blob/master/after/plugin/dracula.vim
+" # Misc
+hi! link TSPunctSpecial Special
+" # Constants
+hi! link TSConstMacro Macro
+hi! link TSStringEscape Character
 hi! link TSSymbol DraculaPurple
-hi! link Constant DraculaPurple
-hi! link TSVariable DraculaOrange
+hi! link TSAnnotation DraculaYellow
+hi! link TSAttribute DraculaGreenItalic
+" # Functions
+hi! link TSFuncBuiltin DraculaCyan
+hi! link TSFuncMacro Function
 hi! link TSParameter DraculaOrangeItalic
+hi! link TSParameterReference DraculaOrange
+hi! link TSField DraculaOrange
+hi! link TSConstructor DraculaCyan
+" # Keywords
+hi! link TSLabel DraculaPurpleItalic
+" # Variable
+hi! link TSVariableBuiltin DraculaPurpleItalic
+" # Text
+hi! link TSStrong DraculaFgBold
+hi! link TSEmphasis DraculaFg
+hi! link TSUnderline Underlined
+hi! link TSTitle DraculaYellow
+hi! link TSLiteral DraculaYellow
+hi! link TSURI DraculaYellow
+" HTML and JSX tag attributes. By default, this group is linked to TSProperty,
+" which in turn links to Identifer (white).
 hi! link TSTagAttribute DraculaGreenItalic
-
 " Operators
 onoremap ic i{
 onoremap ib i[
