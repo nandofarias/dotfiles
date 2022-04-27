@@ -48,7 +48,9 @@
 
   s = switch
   cb = checkout -b
-	amend-to = "!f() { SHA=`git rev-parse \"$1\"`; git stash -k && git commit --fixup \"$SHA\" && GIT_SEQUENCE_EDITOR=true git rebase --interactive --autosquash \"$SHA^\" && git stash pop; }; f"
+	amend-to = "!f() { SHA=$1; git commit --fixup \"$SHA\" && git rebase --interactive --autosquash \"$SHA^\"; }; f"
+
+  dft = difftool
 
 [core]
 	excludesfile = /Users/nandofarias/.gitignore
@@ -64,7 +66,19 @@
 [commit]
 	template = ~/.commit-conventions
 	gpgsign = true
+
 [gpg]
 	program = gpg
+
 [diff]
+  tool = difftastic
 	external = difft
+
+[difftool]
+  prompt = false
+
+[difftool "difftastic"]
+  cmd = difft "$LOCAL" "$REMOTE"
+
+[pager]
+  difftool = true
