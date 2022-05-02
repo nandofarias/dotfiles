@@ -43,18 +43,18 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<C-u>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1, '<c-u>')<cr>", {})
   buf_set_keymap('n', '<C-d>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1, '<c-d>')<cr>", {})
 
-  if client.resolved_capabilities.document_formatting then
+  if client.server_capabilities.document_formatting then
     buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
     cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 2000)]]
   end
 
-  if client.resolved_capabilities.code_action then
+  if client.server_capabilities.code_action then
     -- buf_set_keymap('n', '<space>cc', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
     buf_set_keymap('n', 'ga', '<cmd>Lspsaga code_action<cr>', opts)
     buf_set_keymap('x', 'ga', ':<c-u>Lspsaga range_code_action<cr>', opts)
   end
 
-  if client.resolved_capabilities.code_lens then
+  if client.server_capabilities.code_lens then
     buf_set_keymap('n', '<space>cr', '<cmd>lua vim.lsp.codelens.run()<CR>', opts)
     buf_set_keymap('n', '<space>cl', '<cmd>lua vim.lsp.codelens.refresh()<CR>', opts)
     cmd [[augroup LspCodelensAutoGroup]]
@@ -105,8 +105,8 @@ lsp_installer.on_server_ready(function(server)
 
   if server.name == 'tsserver' then
     opts.on_attach = function(client, bufnr)
-      client.resolved_capabilities.document_formatting = false
-      client.resolved_capabilities.document_range_formatting = false
+      client.server_capabilities.document_formatting = false
+      client.server_capabilities.document_range_formatting = false
       local ts_utils = require('nvim-lsp-ts-utils')
       ts_utils.setup({})
       ts_utils.setup_client(client)
@@ -122,4 +122,4 @@ lsp_installer.on_server_ready(function(server)
 end)
 
 local group = vim.api.nvim_create_augroup('formatOnSave', { clear = true })
-vim.api.nvim_create_autocmd('BufWritePre', { command = 'lua vim.lsp.buf.formatting_sync(nil, 1000)', group = group })
+vim.api.nvim_create_autocmd('BufWritePre', { command = 'lua vim.lsp.buf.format({ timeout_ms = 2000 })', group = group })
