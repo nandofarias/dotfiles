@@ -6,7 +6,7 @@ vimp.onoremap('ip', 'i(')
 
 -- General
 vimp.nmap({ 'silent' }, '<space>no', ':nohlsearch <CR>')
-vimp.nnoremap({ 'silent' }, '<leader>r', ':source ~/.config/nvim/init.lua <CR>')
+vimp.nnoremap({ 'silent' }, '<leader>r', ':source $MYVIMRC <CR>')
 vimp.nnoremap({ 'silent' }, 'gs', ':set spell! <CR>')
 vimp.nnoremap({ 'silent' }, '<leader>qq', ':exit <CR>')
 vimp.nnoremap({ 'silent' }, '<leader>cc', ':cclose <CR>')
@@ -21,7 +21,7 @@ vimp.vnoremap('<A-j>', ":m '>+1<CR>gv=gv")
 vimp.vnoremap('<A-k>', ":m '<-2<CR>gv=gv")
 
 -- Open config
-vimp.nnoremap('<Leader>vi', ':e ~/.config/nvim/init.vim <CR>')
+vimp.nnoremap('<Leader>vi', ':e $MYVIMRC <CR>')
 vimp.nnoremap('<Leader>tm', ':e ~/.config/tmux/tmux.conf <CR>')
 vimp.nnoremap('<Leader>fs', ':e ~/.config/fish/config.fish <CR>')
 vimp.nnoremap('<Leader>al', ':e ~/.config/alacritty/alacritty.yml <CR>')
