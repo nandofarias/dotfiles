@@ -47,7 +47,10 @@
   unstage = restore --staged
 
   s = switch
+
   cb = checkout -b
+  ca = commit --amend
+
 	amend-to = "!f() { SHA=$1; git commit --fixup \"$SHA\" && git rebase --interactive --autosquash \"$SHA^\"; }; f"
 
   dft = difftool
