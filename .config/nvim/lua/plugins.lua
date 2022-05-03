@@ -41,10 +41,10 @@ packer.init {
 -- Install your plugins here
 return require('packer').startup(function(use)
   -- Lua helper
-  use 'svermeulen/vimpeccable'
   use 'wbthomason/packer.nvim'
   use 'nvim-lua/popup.nvim'
   use 'nvim-lua/plenary.nvim'
+  use 'svermeulen/vimpeccable'
 
   -- Utilities
   use 'tpope/vim-surround'
@@ -83,6 +83,7 @@ return require('packer').startup(function(use)
   use 'lewis6991/gitsigns.nvim'
   use 'ruifm/gitlinker.nvim'
   use 'pwntester/octo.nvim'
+  use 'kdheepak/lazygit.nvim'
 
   -- Statusline
   use 'nvim-lualine/lualine.nvim'
