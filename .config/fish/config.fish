@@ -58,10 +58,12 @@ set -gx KERL_CONFIGURE_OPTIONS "\
       --enable-smp-support \
       --enable-threads \
       --enable-wx \
+      --enable-webview \
       --with-ssl=(brew --prefix openssl@1.1) \
       --without-javac
       --enable-darwin-64bit \
       --enable-kernel-poll \
+      --enable-gettimeofday-as-os-system-time \
       --with-dynamic-trace=dtrace"
 fish_add_path -g $HOME/.elixir-ls/release
 fish_add_path -g $HOME/.cache/rebar3/bin
