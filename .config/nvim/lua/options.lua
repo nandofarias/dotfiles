@@ -1,3 +1,4 @@
+vim.cmd [[syntax off]]
 vim.opt.termguicolors = true
 vim.opt.bg = 'dark'
 vim.opt.showcmd = true
