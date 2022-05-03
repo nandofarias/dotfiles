@@ -106,6 +106,7 @@ return require('packer').startup(function(use)
   use 'p00f/nvim-ts-rainbow'
   use 'JoosepAlviste/nvim-ts-context-commentstring'
   use 'RRethy/nvim-treesitter-textsubjects'
+  use 'lewis6991/spellsitter.nvim'
 
   -- Earthly, will be removed when tree-sitter is available
   use { 'earthly/earthly.vim', branch = 'main' }
