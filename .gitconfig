@@ -53,8 +53,6 @@
 
 	amend-to = "!f() { SHA=$1; git commit --fixup \"$SHA\" && git rebase --interactive --autosquash \"$SHA^\"; }; f"
 
-  dft = difftool
-
 [core]
 	excludesfile = /Users/nandofarias/.gitignore
 	autocrlf = input
@@ -73,15 +71,3 @@
 [gpg]
 	program = gpg
 
-[diff]
-  tool = difftastic
-	external = difft
-
-[difftool]
-  prompt = false
-
-[difftool "difftastic"]
-  cmd = difft "$LOCAL" "$REMOTE"
-
-[pager]
-  difftool = true
