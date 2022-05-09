@@ -12,4 +12,4 @@ vim.g.copilot_filetypes = {
   TelescopeResults = false,
 }
 
-vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+vim.cmd [[imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")]]
