@@ -76,6 +76,7 @@ return require('packer').startup(function(use)
   use 'kevinhwang91/nvim-hlslens'
   use 'luukvbaal/stabilize.nvim'
   use { 'bennypowers/nvim-regexplainer', requires = { 'MunifTanjim/nui.nvim' } }
+  use 'benizi/vim-automkdir'
 
   -- Better Git
   use 'TimUntersberger/neogit'
