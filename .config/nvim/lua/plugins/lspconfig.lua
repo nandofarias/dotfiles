@@ -1,3 +1,5 @@
+local lspconfig = require('lspconfig')
+
 local buf_map = function(bufnr, mode, lhs, rhs, opts)
   vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts or {
     silent = true,
@@ -69,7 +71,9 @@ end
 
 -- nvim-lsp-installer
 local lsp_installer = require('nvim-lsp-installer')
-lsp_installer.on_server_ready(function(server)
+lsp_installer.setup {}
+
+for _, server in ipairs(lsp_installer.get_installed_servers()) do
   local opts = {
     capabilities = capabilities,
     on_attach = on_attach
@@ -117,9 +121,9 @@ lsp_installer.on_server_ready(function(server)
     end
   end
 
-  server:setup(opts)
+  lspconfig[server.name].setup(opts)
   vim.cmd [[ do User LspAttachBuffers ]]
-end)
+end
 
 local group = vim.api.nvim_create_augroup('formatOnSave', { clear = true })
 vim.api.nvim_create_autocmd('BufWritePre', { command = 'lua vim.lsp.buf.format({ timeout_ms = 2000 })', group = group })
