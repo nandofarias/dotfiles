@@ -13,5 +13,5 @@ neogit.setup {
   }
 }
 vimp.nnoremap('<C-g>', function()
-  neogit.open({ kind = 'split_above' })
+  neogit.open()
 end)
