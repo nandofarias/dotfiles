@@ -29,3 +29,8 @@ vimp.nnoremap('<Leader>al', ':e ~/.config/alacritty/alacritty.yml <CR>')
 vimp.nnoremap('<Leader>kt', ':e ~/.config/kitty/kitty.conf <CR>')
 vimp.nnoremap('<Leader>wz', ':e ~/.config/wezterm/wezterm.lua <CR>')
 vimp.nnoremap('<Leader>br', ':e ~/.config/brew/Brewfile <CR>')
+
+local group = vim.api.nvim_create_augroup('closeWithEsc', { clear = true })
+vim.api.nvim_create_autocmd('FileType', { pattern = { 'qf' }, group = group, callback = function()
+  vimp.nmap({ 'silent', 'buffer' }, '<esc>', ':q <CR>')
+end })
