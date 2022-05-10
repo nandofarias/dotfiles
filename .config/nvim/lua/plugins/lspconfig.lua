@@ -51,7 +51,7 @@ local on_attach = function(client, bufnr)
   end
 
   if client.server_capabilities.code_action then
-    -- buf_set_keymap('n', '<space>cc', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+    buf_set_keymap('n', '<space>cc', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
     buf_set_keymap('n', 'ga', '<cmd>Lspsaga code_action<cr>', opts)
     buf_set_keymap('x', 'ga', ':<c-u>Lspsaga range_code_action<cr>', opts)
   end
