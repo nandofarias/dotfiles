@@ -161,7 +161,7 @@ return require('packer').startup(function(use)
 
   -- Better quickfix
   use 'folke/trouble.nvim'
-  use 'kevinhwang91/nvim-bqf'
+  use { 'kevinhwang91/nvim-bqf', ft = 'qf' }
 
   -- UI
   use 'rcarriga/nvim-notify'
