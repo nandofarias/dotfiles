@@ -45,20 +45,18 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<C-u>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1, '<c-u>')<cr>", {})
   buf_set_keymap('n', '<C-d>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1, '<c-d>')<cr>", {})
 
+  buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
   if client.server_capabilities.document_formatting then
-    buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
     cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 2000)]]
   end
 
-  if client.server_capabilities.code_action then
-    buf_set_keymap('n', '<space>cc', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-    buf_set_keymap('n', 'ga', '<cmd>Lspsaga code_action<cr>', opts)
-    buf_set_keymap('x', 'ga', ':<c-u>Lspsaga range_code_action<cr>', opts)
-  end
+  buf_set_keymap('n', '<space>cc', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', 'ca', '<cmd>Lspsaga code_action<cr>', opts)
+  buf_set_keymap('x', 'ca', ':<c-u>Lspsaga range_code_action<cr>', opts)
 
+  buf_set_keymap('n', '<space>cr', '<cmd>lua vim.lsp.codelens.run()<CR>', opts)
+  buf_set_keymap('n', '<space>cl', '<cmd>lua vim.lsp.codelens.refresh()<CR>', opts)
   if client.server_capabilities.code_lens then
-    buf_set_keymap('n', '<space>cr', '<cmd>lua vim.lsp.codelens.run()<CR>', opts)
-    buf_set_keymap('n', '<space>cl', '<cmd>lua vim.lsp.codelens.refresh()<CR>', opts)
     cmd [[augroup LspCodelensAutoGroup]]
     cmd [[au!]]
     cmd [[au BufEnter <buffer> lua vim.lsp.codelens.refresh()]]
