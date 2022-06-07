@@ -16,6 +16,7 @@ style = "bold green"
 style = "bold blue"
 
 [hostname]
+disabled = true
 style = "bold red"
 
 [username]
