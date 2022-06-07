@@ -62,7 +62,7 @@ return require('packer').startup(function(use)
   use 'RRethy/vim-illuminate'
   use 'chaoren/vim-wordmotion'
   use 'christoomey/vim-tmux-navigator'
-  use 'chentau/marks.nvim'
+  use 'chentoast/marks.nvim'
   use 'dstein64/vim-startuptime'
   use { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview' }
   use 'lewis6991/spaceless.nvim'
