@@ -1,4 +1,4 @@
+require('dash').setup({})
+
 local vimp = require('vimp')
-vimp.nnoremap('<leader>d', function ()
-  require('dash').search(true)
-end)
+vimp.nnoremap('<leader>d', ':DashWord! <CR>')
