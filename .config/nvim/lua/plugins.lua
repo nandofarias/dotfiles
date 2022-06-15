@@ -142,7 +142,7 @@ return require('packer').startup(function(use)
 
   -- Language utilities
   use 'tpope/vim-projectionist'
-  use 'github/copilot.vim'
+  -- use 'github/copilot.vim' -- super slow
 
   -- Frontend
   use 'mattn/emmet-vim'

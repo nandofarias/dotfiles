@@ -10,6 +10,7 @@ vim.g.copilot_filetypes = {
   lspinfo = false,
   TelescopePrompt = false,
   TelescopeResults = false,
+  typescriptreact = false
 }
 
 vim.cmd [[imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")]]
