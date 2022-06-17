@@ -103,7 +103,7 @@ abbr -ag vim nvim
 abbr -ag update-nvim 'asdf uninstall neovim nightly && asdf install neovim nightly'
 abbr -ag plug-sync "nvim +PlugClean! +PlugUpdate +PlugInstall"
 abbr -ag vim-profile "nvim --startuptime timeCost.txt timeCost.txt; and rm timeCost.txt"
-abbr -ag lsp-logs "tail -f $HOME/.cache/nvim/lsp.log"
+abbr -ag lsp-logs "tail -f $HOME/.local/state/nvim/lsp.log"
 
 # Starship
 starship init fish | source
