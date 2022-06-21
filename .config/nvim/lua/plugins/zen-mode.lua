@@ -1,12 +1,17 @@
 local vimp = require('vimp')
 local zen = require('zen-mode')
 
-zen.setup {}
+zen.setup({
+  plugins = {
+    twilight = { enabled = false },
+    tmux = { enabled = true },
+  },
+})
 
 vimp.nnoremap('<Leader>z', function()
   zen.toggle({
     window = {
-      width = .85 -- width will be 85% of the editor width
+      width = .6
     }
   })
 end)
