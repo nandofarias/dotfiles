@@ -165,6 +165,7 @@ return require('packer').startup(function(use)
 
   -- UI
   use 'rcarriga/nvim-notify'
+  use 'sunjon/shade.nvim'
 
   -- Better wildmenu
   use 'gelguy/wilder.nvim'
