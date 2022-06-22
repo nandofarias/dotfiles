@@ -1,8 +1,8 @@
 local db = require('dashboard')
 db.custom_center = {
-  { icon = '   ', desc = 'Find File                      ', shortcut = 'leader f f', action = 'Telescope find_files' },
+  { icon = '   ', desc = 'Find File                      ', shortcut = 'ctrl   p  ', action = 'Telescope find_files' },
   { icon = '   ', desc = 'Find Word                      ', shortcut = 'leader f g', action = 'Telescope live_grep' },
-  { icon = '   ', desc = 'Recents                        ', shortcut = 'leader f h', action = 'Telescope oldfiles' },
+  { icon = '   ', desc = 'Sessions                       ', shortcut = 'leader s t', action = 'Telescope persisted' },
   { icon = '   ', desc = 'New File                       ', shortcut = 'leader c n', action = 'DashboardNewFile' },
   { icon = '   ', desc = 'Update Plugins                 ', shortcut = 'leader u  ', action = 'PackerSync' },
   { icon = '   ', desc = 'Settings                       ', shortcut = 'leader n v', action = 'edit $MYVIMRC' },
