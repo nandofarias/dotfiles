@@ -37,6 +37,7 @@ cmp.setup {
     { name = 'vsnip' },
     { name = 'path' },
     { name = 'tmux' },
+    { name = 'cmp_tabnine' },
     { name = 'buffer',
       option = {
         get_bufnrs = function()
