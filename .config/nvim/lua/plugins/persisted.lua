@@ -21,7 +21,7 @@ require("persisted").setup {
       pcall(vim.cmd, "bufdo Bwipeout")
     end,
     after_source = function(session)
-      pcall(vim.cmd, "git checkout " .. session.branch)
+      pcall(vim.cmd, "git switch " .. session.branch)
     end,
   },
 }
