@@ -5,8 +5,7 @@ set -gx fish_greeting "Welcome to Summoner's Rift"
 set -gx LC_ALL en_US.UTF-8
 set -gx WORK $HOME/Workspace
 set -gx EDITOR nvim
-alias neovim=nvim
-ulimit -n 65536 # See: https://stackoverflow.com/a/45004802 
+ulimit -n 65536 # See: https://stackoverflow.com/a/45004802
 fish_add_path -g $HOME/.bin $HOME/.local/bin
 
 # Fix curl
@@ -76,9 +75,6 @@ set -gx GPG_TTY (tty)
 
 # iTerm
 test -e {$HOME}/.iterm2_shell_integration.fish; and source {$HOME}/.iterm2_shell_integration.fish
-
-# Versioning
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
 # asdf
 source ~/.asdf/asdf.fish
