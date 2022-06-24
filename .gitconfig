@@ -41,14 +41,17 @@
   int = "!f() { git cap \"🎉 initial commit: $@\"; }; f"
   wip = "!f() { git cap \"⚠️  WIP: $@\"; }; f"
 
+	l = log
 	ls = log -p -S
 	lg = log -p -G
 
   unstage = restore --staged
+  f = fetch
 
   s = switch
+  sc = switch -c
 
-  cb = checkout -b
+  cc = commit
   ca = commit --amend
 
 	amend-to = "!f() { SHA=$1; git commit --fixup \"$SHA\" && git rebase --interactive --autosquash \"$SHA^\"; }; f"
