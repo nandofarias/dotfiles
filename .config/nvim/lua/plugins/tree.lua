@@ -24,7 +24,7 @@ require('nvim-tree').setup {
   }
 }
 vim.g.nvim_tree_respect_buf_cwd = 1
-vimp.nnoremap('<C-n>', ':NvimTreeToggle<CR>')
-vimp.nnoremap('<leader>n', ':NvimTreeFindFile<CR>')
+vimp.nnoremap('<leader>fa', ':NvimTreeToggle<CR>')
+vimp.nnoremap('<leader>fg', ':NvimTreeFindFile<CR>')
 -- https://github.com/kyazdani42/nvim-tree.lua/issues/549
 vim.g.shell = '/bin/zsh'

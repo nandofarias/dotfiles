@@ -5,10 +5,9 @@ vimp.onoremap('ib', 'i[')
 vimp.onoremap('ip', 'i(')
 
 -- General
-vimp.nmap({ 'silent' }, '<space>no', ':nohlsearch <CR>')
+vimp.nmap({ 'silent' }, '<leader>no', ':nohlsearch <CR>')
 vimp.nnoremap({ 'silent' }, '<leader>r', ':source $MYVIMRC <CR>')
 vimp.nnoremap({ 'silent' }, 'gs', ':set spell! <CR>')
-vimp.nnoremap({ 'silent' }, '<leader>qq', ':exit <CR>')
 vimp.nnoremap({ 'silent' }, '<leader>cc', ':cclose <CR>')
 vimp.nnoremap({ 'silent' }, '<space>qq', ':Bdelete <CR> <Plug>(cokeline-focus-prev)<CR>')
 vimp.nnoremap({ 'silent' }, '<space>da', ':%bdelete|edit#|bdelete# <CR>')
@@ -27,7 +26,6 @@ vimp.nnoremap('<Leader>tm', ':e ~/.config/tmux/tmux.conf <CR>')
 vimp.nnoremap('<Leader>fs', ':e ~/.config/fish/config.fish <CR>')
 vimp.nnoremap('<Leader>al', ':e ~/.config/alacritty/alacritty.yml <CR>')
 vimp.nnoremap('<Leader>kt', ':e ~/.config/kitty/kitty.conf <CR>')
-vimp.nnoremap('<Leader>wz', ':e ~/.config/wezterm/wezterm.lua <CR>')
 vimp.nnoremap('<Leader>br', ':e ~/.config/brew/Brewfile <CR>')
 
 -- Navigate wrapped lines
