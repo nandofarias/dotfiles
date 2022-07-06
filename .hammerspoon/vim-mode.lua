@@ -2,11 +2,12 @@ local VimMode = hs.loadSpoon('VimMode')
 local vim = VimMode:new()
 
 vim
-  :disableForApp('Code')
-  :disableForApp('iTerm2')
-  :disableForApp('Terminal')
-  :disableForApp('kitty')
-  :disableForApp('Alacritty')
+    :disableForApp('Code')
+    :disableForApp('iTerm2')
+    :disableForApp('Terminal')
+    :disableForApp('kitty')
+    :disableForApp('Alacritty')
+    :disableForApp('VimR')
 
 vim:shouldDimScreenInNormalMode(false)
 
