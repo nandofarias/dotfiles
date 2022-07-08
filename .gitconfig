@@ -63,6 +63,7 @@
 
 [pull]
 	ff = only
+	rebase = true
 
 [init]
 	defaultBranch = main
@@ -72,5 +73,11 @@
 	gpgsign = true
 
 [gpg]
-	program = gpg
+	program = /usr/local/bin/gpg
 
+[rerere]
+	enabled = true
+[advice]
+	skippedCherryPicks = false
+[branch "develop"]
+	pushRemote = NOPE
