@@ -5,7 +5,7 @@ vimp.onoremap('ib', 'i[')
 vimp.onoremap('ip', 'i(')
 
 -- General
-vimp.nmap({ 'silent' }, '<leader>no', ':nohlsearch <CR>')
+vimp.nnoremap({ 'silent' }, '<space>no', ':nohlsearch <CR>')
 vimp.nnoremap({ 'silent' }, '<leader>r', ':source $MYVIMRC <CR>')
 vimp.nnoremap({ 'silent' }, 'gs', ':set spell! <CR>')
 vimp.nnoremap({ 'silent' }, '<leader>cc', ':cclose <CR>')
