@@ -142,3 +142,7 @@ fish_add_path -g $HOME/Library/Python/3.9/bin
 
 # Homebrew
 set -gx HOMEBREW_BUNDLE_FILE ~/.config/brew/Brewfile
+
+# Bun
+set -Ux BUN_INSTALL "$HOME/.bun"
+set -px --path PATH "$HOME/.bun/bin"
