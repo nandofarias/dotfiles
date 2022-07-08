@@ -146,3 +146,6 @@ set -gx HOMEBREW_BUNDLE_FILE ~/.config/brew/Brewfile
 # Bun
 set -Ux BUN_INSTALL "$HOME/.bun"
 set -px --path PATH "$HOME/.bun/bin"
+
+# git-pile
+set -gx GIT_PILE_PREFIX ff-
