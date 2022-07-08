@@ -81,3 +81,5 @@
 	skippedCherryPicks = false
 [branch "develop"]
 	pushRemote = NOPE
+[push]
+	autoSetupRemote = true
