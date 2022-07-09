@@ -58,7 +58,7 @@ set -gx KERL_CONFIGURE_OPTIONS "\
       --enable-threads \
       --enable-wx \
       --enable-webview \
-      --with-ssl=(brew --prefix openssl@1.1) \
+      --with-ssl=$(brew --prefix openssl@1.1) \
       --without-javac
       --enable-darwin-64bit \
       --enable-kernel-poll \
