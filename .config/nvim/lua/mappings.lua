@@ -11,6 +11,7 @@ vimp.nnoremap({ 'silent' }, 'gs', ':set spell! <CR>')
 vimp.nnoremap({ 'silent' }, '<leader>cc', ':cclose <CR>')
 vimp.nnoremap({ 'silent' }, '<space>qq', ':Bdelete <CR> <Plug>(cokeline-focus-prev)<CR>')
 vimp.nnoremap({ 'silent' }, '<space>da', ':%bdelete|edit#|bdelete# <CR>')
+vimp.nnoremap({ 'silent' }, '<space>w', ':w <CR>')
 
 -- Move lines
 vimp.nnoremap('<A-j>', ':m .+1<CR>==')
