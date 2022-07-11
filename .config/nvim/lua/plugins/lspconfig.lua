@@ -47,8 +47,10 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<C-d>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1, '<c-d>')<cr>", {})
 
   buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
-  if client.server_capabilities.document_formatting then
-    cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 2000)]]
+  if client.server_capabilities.documentFormattingProvider then
+    local group = vim.api.nvim_create_augroup('formatOnSave', { clear = true })
+    vim.api.nvim_create_autocmd('BufWritePre',
+      { command = 'lua vim.lsp.buf.format({ timeout_ms = 2000 })', group = group })
   end
 
   buf_set_keymap('n', '<space>cc', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
@@ -123,6 +125,3 @@ for _, server in ipairs(lsp_installer.get_installed_servers()) do
   lspconfig[server.name].setup(opts)
   vim.cmd [[ do User LspAttachBuffers ]]
 end
-
-local group = vim.api.nvim_create_augroup('formatOnSave', { clear = true })
-vim.api.nvim_create_autocmd('BufWritePre', { command = 'lua vim.lsp.buf.format({ timeout_ms = 2000 })', group = group })
