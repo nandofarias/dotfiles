@@ -16,6 +16,7 @@ require("indent_blankline").setup {
     "TelescopeResults",
     "NvimTree",
     "packer",
+    "dbout",
   },
   buftype_exclude = { "terminal" },
 }
