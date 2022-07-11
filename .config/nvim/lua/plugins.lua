@@ -74,9 +74,13 @@ return require('packer').startup(function(use)
   use 'folke/todo-comments.nvim'
   use 'numToStr/Comment.nvim'
   use 'kevinhwang91/nvim-hlslens'
-  use 'luukvbaal/stabilize.nvim'
   use { 'bennypowers/nvim-regexplainer', requires = { 'MunifTanjim/nui.nvim' } }
   use 'benizi/vim-automkdir'
+
+  -- Window hacks
+  use 'luukvbaal/stabilize.nvim'
+  use 'simeji/winresizer'
+  use 'xiyaowong/nvim-transparent'
 
   -- Better Git
   use 'TimUntersberger/neogit'
