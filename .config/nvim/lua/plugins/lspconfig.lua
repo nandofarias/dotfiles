@@ -33,20 +33,20 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<space>dq', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
   -- buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   -- buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  -- buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-  -- buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-  -- buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 
   -- lsp-saga
   buf_set_keymap('n', '<space>rn', '<cmd>Lspsaga rename<cr>', opts)
   buf_set_keymap('n', 'K', '<cmd>Lspsaga hover_doc<cr>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>Lspsaga show_line_diagnostics<cr>', opts)
-  buf_set_keymap('n', '[d', '<cmd>Lspsaga diagnostic_jump_next<cr>', opts)
-  buf_set_keymap('n', ']d', '<cmd>Lspsaga diagnostic_jump_prev<cr>', opts)
-  buf_set_keymap('n', '<C-u>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1, '<c-u>')<cr>", {})
-  buf_set_keymap('n', '<C-d>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1, '<c-d>')<cr>", {})
-
-  buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
+  -- buf_set_keymap('n', '<space>e', '<cmd>Lspsaga show_line_diagnostics<cr>', opts)
+  -- buf_set_keymap('n', '[d', '<cmd>Lspsaga diagnostic_jump_next<cr>', opts)
+  -- buf_set_keymap('n', ']d', '<cmd>Lspsaga diagnostic_jump_prev<cr>', opts)
+  -- buf_set_keymap('n', '<C-u>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<cr>", {})
+  -- buf_set_keymap('n', '<C-d>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<cr>", {})
+  --
+  -- buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
   if client.server_capabilities.documentFormattingProvider then
     local group = vim.api.nvim_create_augroup('formatOnSave', { clear = true })
     vim.api.nvim_create_autocmd('BufWritePre',
