@@ -5,15 +5,53 @@ local cmp = require('cmp')
 local lspkind = require('lspkind')
 
 cmp.setup {
+  window = {
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
+  },
   formatting = {
-    format = lspkind.cmp_format({
-      mode = 'symbol',
-      maxwidth = 50,
+    fields = { 'kind', 'abbr', 'menu' },
+    format = function(entry, vim_item)
+      local lspkind_icons = {
+        Text = '',
+        Method = '',
+        Function = '',
+        Constructor = ' ',
+        Field = '',
+        Variable = '',
+        Class = '',
+        Interface = '',
+        Module = '硫',
+        Property = '',
+        Unit = ' ',
+        Value = '',
+        Enum = ' ',
+        Keyword = 'ﱃ',
+        Snippet = ' ',
+        Color = ' ',
+        File = ' ',
+        Reference = 'Ꮢ',
+        Folder = ' ',
+        EnumMember = ' ',
+        Constant = ' ',
+        Struct = ' ',
+        Event = '',
+        Operator = '',
+        TypeParameter = ' ',
+      }
+      local meta_type = vim_item.kind
+      -- load lspkind icons
+      vim_item.kind = lspkind_icons[vim_item.kind] .. ''
 
-      before = function(_, vim_item)
-        return vim_item
-      end
-    })
+      vim_item.menu = ({
+        buffer = ' Buffer',
+        nvim_lsp = meta_type,
+        path = ' Path',
+        luasnip = ' LuaSnip',
+      })[entry.source.name]
+
+      return vim_item
+    end,
   },
   snippet = {
     expand = function(args)
