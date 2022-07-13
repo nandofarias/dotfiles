@@ -5,3 +5,4 @@
 .iex.exs
 .node-version
 **node_modules
+packer_compiled.lua

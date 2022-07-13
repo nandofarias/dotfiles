@@ -1,3 +1,5 @@
+local cache_dir = os.getenv('HOME') .. '/.cache/nvim/'
+
 vim.cmd [[syntax off]]
 vim.opt.termguicolors = true
 vim.opt.bg = 'dark'
@@ -16,7 +18,11 @@ vim.opt.signcolumn = 'yes'
 vim.opt.completeopt = 'menu,menuone,noselect'
 vim.opt.hidden = true
 vim.opt.undofile = true
-vim.opt.undodir = vim.fn.stdpath('config') .. '/vimundo'
+vim.opt.directory = cache_dir .. 'swag/'
+vim.opt.undodir = cache_dir .. 'undo/'
+vim.opt.backupdir = cache_dir .. 'backup/'
+vim.opt.viewdir = cache_dir .. 'view/'
+vim.opt.spellfile = cache_dir .. 'spell/en.uft-8.add'
 vim.opt.spelllang = 'en'
 vim.opt.showmatch = true
 vim.opt.matchtime = 1
