@@ -38,6 +38,18 @@ packer.init {
   },
 }
 
+-- Get list of all plugins config
+local get_plugins_list = function()
+  local vim_path = vim.fn.stdpath('config')
+  local modules_dir = vim_path .. '/lua/plugins'
+  local list = {}
+  local tmp = vim.split(fn.globpath(modules_dir, '*.lua'), '\n')
+  for _, f in ipairs(tmp) do
+    list[#list + 1] = string.match(f, 'lua/(.+).lua$')
+  end
+  return list
+end
+
 -- Install your plugins here
 return require('packer').startup(function(use)
   -- Lua helper
@@ -169,6 +181,7 @@ return require('packer').startup(function(use)
 
   -- UI
   use 'rcarriga/nvim-notify'
+  use 'mvllow/modes.nvim'
 
   -- Better wildmenu
   use 'gelguy/wilder.nvim'
@@ -177,5 +190,11 @@ return require('packer').startup(function(use)
   -- Put this at the end after all plugins
   if PACKER_BOOTSTRAP then
     require("packer").sync()
+  end
+
+  -- require all plugins config
+  local plugins_file = get_plugins_list()
+  for _, m in ipairs(plugins_file) do
+    require(m)
   end
 end)
