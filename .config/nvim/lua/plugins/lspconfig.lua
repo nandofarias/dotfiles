@@ -6,6 +6,8 @@ local buf_map = function(bufnr, mode, lhs, rhs, opts)
   })
 end
 
+local augroup = vim.api.nvim_create_augroup('formatOnSave', {})
+
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()) -- For nvim-cmp
 local on_attach = function(client, bufnr)
   -- vim-illuminate
@@ -47,10 +49,15 @@ local on_attach = function(client, bufnr)
   -- buf_set_keymap('n', '<C-d>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<cr>", {})
   --
   -- buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
-  if client.server_capabilities.documentFormattingProvider then
-    local group = vim.api.nvim_create_augroup('formatOnSave', { clear = true })
-    vim.api.nvim_create_autocmd('BufWritePre',
-      { command = 'lua vim.lsp.buf.format({ timeout_ms = 2000 })', group = group })
+  if client.supports_method("textDocument/formatting") then
+    vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      group = augroup,
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.format({ timeout_ms = 2000, bufnr = bufnr })
+      end,
+    })
   end
 
   buf_set_keymap('n', '<space>cc', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
