@@ -77,7 +77,7 @@ return require('packer').startup(function(use)
   use 'chentoast/marks.nvim'
   use 'dstein64/vim-startuptime'
   use { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview' }
-  use 'lewis6991/spaceless.nvim'
+  use 'mcauley-penney/tidy.nvim'
   use 'stsewd/gx-extended.vim'
   use 'lewis6991/impatient.nvim'
   use 'olimorris/persisted.nvim'
