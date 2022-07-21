@@ -80,7 +80,7 @@ test -e {$HOME}/.iterm2_shell_integration.fish; and source {$HOME}/.iterm2_shell
 source ~/.asdf/asdf.fish
 source ~/.asdf/plugins/java/set-java-home.fish
 
-# Abb
+# Abbreviations
 abbr -ag mps "iex -S mix phx.server"
 abbr -ag iem "iex -S mix"
 abbr -ag mcs "watchexec -e ex mix compile"
@@ -100,6 +100,9 @@ abbr -ag update-nvim 'asdf uninstall neovim nightly && asdf install neovim night
 abbr -ag plug-sync "nvim +PlugClean! +PlugUpdate +PlugInstall"
 abbr -ag vim-profile "nvim --startuptime timeCost.txt timeCost.txt; and rm timeCost.txt"
 abbr -ag lsp-logs "tail -f $HOME/.local/state/nvim/lsp.log"
+
+# aliases
+alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 
 # Starship
 starship init fish | source
