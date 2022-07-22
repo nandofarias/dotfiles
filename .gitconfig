@@ -62,7 +62,7 @@
 	editor = nvim +16 +startinsert
 
 [pull]
-	ff = only
+	ff = false
 	rebase = true
 
 [init]
