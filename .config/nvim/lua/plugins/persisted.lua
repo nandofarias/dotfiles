@@ -19,10 +19,7 @@ require("persisted").setup {
   telescope = {
     before_source = function()
       pcall(vim.cmd, "bufdo Bwipeout")
-    end,
-    after_source = function(session)
-      pcall(vim.cmd, "git switch " .. session.branch)
-    end,
+    end
   },
 }
 
