@@ -152,3 +152,6 @@ set -px --path PATH "$HOME/.bun/bin"
 
 # git-pile
 set -gx GIT_PILE_PREFIX ff-
+
+# Done
+set -U __done_notification_command "terminal-notifier -message \$message -title \$title"
