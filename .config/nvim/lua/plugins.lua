@@ -88,6 +88,7 @@ return require('packer').startup(function(use)
   use 'kevinhwang91/nvim-hlslens'
   use { 'bennypowers/nvim-regexplainer', requires = { 'MunifTanjim/nui.nvim' } }
   use 'benizi/vim-automkdir'
+  use 'gpanders/editorconfig.nvim'
 
   -- Window hacks
   use 'luukvbaal/stabilize.nvim'
