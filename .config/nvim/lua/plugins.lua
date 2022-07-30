@@ -143,7 +143,6 @@ return require('packer').startup(function(use)
   use 'glepnir/lspsaga.nvim'
   use 'kosayoda/nvim-lightbulb'
   use 'folke/lsp-colors.nvim'
-  use 'onsails/lspkind-nvim'
   use 'j-hui/fidget.nvim'
   use 'rmagatti/goto-preview'
 
