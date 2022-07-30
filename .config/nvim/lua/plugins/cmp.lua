@@ -2,7 +2,6 @@ vim.g.vsnip_snippet_dir = '~/.config/nvim/snippets'
 
 local vimp = require('vimp')
 local cmp = require('cmp')
-local lspkind = require('lspkind')
 
 cmp.setup {
   window = {
