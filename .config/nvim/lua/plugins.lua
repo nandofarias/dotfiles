@@ -145,6 +145,7 @@ return require('packer').startup(function(use)
   use 'folke/lsp-colors.nvim'
   use 'j-hui/fidget.nvim'
   use 'rmagatti/goto-preview'
+  use 'lukas-reineke/lsp-format.nvim'
 
   -- Autocomplete
   use 'hrsh7th/nvim-cmp'
