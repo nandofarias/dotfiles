@@ -93,7 +93,7 @@ for _, server in ipairs(lsp_installer.get_installed_servers()) do
   if server.name == 'elixirls' then
     opts.settings = {
       elixirLS = {
-        fetchDeps = true,
+        fetchDeps = false,
         dialyzerEnabled = true,
         dialyzerFormat = 'dialyxir_short',
         suggestSpecs = true,
