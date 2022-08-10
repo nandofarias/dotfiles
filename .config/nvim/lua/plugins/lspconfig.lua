@@ -1,4 +1,6 @@
-require("lsp-format").setup {}
+require('lsp-format').setup {
+  force = true,
+}
 local lspconfig = require('lspconfig')
 
 local buf_map = function(bufnr, mode, lhs, rhs, opts)
@@ -7,14 +9,14 @@ local buf_map = function(bufnr, mode, lhs, rhs, opts)
   })
 end
 
-local augroup = vim.api.nvim_create_augroup('formatOnSave', {})
+-- local augroup = vim.api.nvim_create_augroup('formatOnSave', {})
 
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()) -- For nvim-cmp
 local on_attach = function(client, bufnr)
   -- vim-illuminate
   require('illuminate').on_attach(client)
   -- lsp-format
-  require "lsp-format".on_attach(client)
+  require('lsp-format').on_attach(client)
 
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
 
