@@ -102,6 +102,7 @@ return require('packer').startup(function(use)
   use 'ruifm/gitlinker.nvim'
   use 'pwntester/octo.nvim'
   use 'kdheepak/lazygit.nvim'
+  use 'akinsho/git-conflict.nvim'
 
   -- Statusline
   use 'nvim-lualine/lualine.nvim'
