@@ -1,5 +1,6 @@
 require('lsp-format').setup {
   force = true,
+  sync = true,
 }
 local lspconfig = require('lspconfig')
 
