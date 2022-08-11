@@ -10,6 +10,8 @@ null_ls.setup({
       end
     }),
     null_ls.builtins.formatting.erlfmt,
-    null_ls.builtins.formatting.fish_indent
+    null_ls.builtins.diagnostics.fish,
+    null_ls.builtins.formatting.fish_indent,
+    null_ls.builtins.formatting.just
   },
 })
