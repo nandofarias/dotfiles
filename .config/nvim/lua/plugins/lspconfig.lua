@@ -1,7 +1,3 @@
-require('lsp-format').setup {
-  force = true,
-  sync = true,
-}
 local lspconfig = require('lspconfig')
 
 local buf_map = function(bufnr, mode, lhs, rhs, opts)
@@ -10,14 +6,12 @@ local buf_map = function(bufnr, mode, lhs, rhs, opts)
   })
 end
 
--- local augroup = vim.api.nvim_create_augroup('formatOnSave', {})
+local format_on_save_group = vim.api.nvim_create_augroup('formatOnSave', {})
 
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()) -- For nvim-cmp
 local on_attach = function(client, bufnr)
   -- vim-illuminate
   require('illuminate').on_attach(client)
-  -- lsp-format
-  require('lsp-format').on_attach(client)
 
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
 
@@ -55,16 +49,16 @@ local on_attach = function(client, bufnr)
   -- buf_set_keymap('n', '<C-d>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<cr>", {})
   --
   buf_set_keymap('n', '<space>bf', '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
-  -- if client.supports_method("textDocument/formatting") then
-  --   vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-  --   vim.api.nvim_create_autocmd("BufWritePre", {
-  --     group = augroup,
-  --     buffer = bufnr,
-  --     callback = function()
-  --       vim.lsp.buf.format({ timeout_ms = 2000, bufnr = bufnr })
-  --     end,
-  --   })
-  -- end
+  if client.supports_method("textDocument/formatting") then
+    vim.api.nvim_clear_autocmds({ group = format_on_save_group, buffer = bufnr })
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      group = format_on_save_group,
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.format({ async = true, bufnr = bufnr })
+      end,
+    })
+  end
 
   buf_set_keymap('n', '<space>cc', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   buf_set_keymap('n', 'ca', '<cmd>Lspsaga code_action<cr>', opts)
