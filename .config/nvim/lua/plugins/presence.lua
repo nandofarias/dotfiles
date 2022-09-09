@@ -1,4 +1,5 @@
 require('presence'):setup({
+  auto_update         = true,
   editing_text        = "Typing...",
   file_explorer_text  = "Browsing...",
   git_commit_text     = "Committing changes",
