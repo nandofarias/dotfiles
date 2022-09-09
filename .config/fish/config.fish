@@ -49,21 +49,24 @@ set -gx KERL_BUILD_DOCS yes
 set -gx KERL_INSTALL_MANPAGES yes
 set -gx KERL_INSTALL_HTMLDOCS yes
 set -gx KERL_CONFIGURE_OPTIONS "\
-      --disable-debug \
       --disable-silent-rules \
+      --disable-debug \
+      --disable-sctp \
+      --enable-gettimeofday-as-os-system-time \
       --enable-dynamic-ssl-lib \
-      --enable-hipe \
+      --enable-darwin-64bit \
+      --enable-kernel-poll \
       --enable-shared-zlib \
       --enable-smp-support \
       --enable-threads \
+      --enable-hipe \
       --enable-wx \
-      --enable-webview \
       --with-ssl=$(brew --prefix openssl@1.1) \
-      --without-javac
-      --enable-darwin-64bit \
-      --enable-kernel-poll \
-      --enable-gettimeofday-as-os-system-time \
-      --with-dynamic-trace=dtrace"
+      --with-wx-config=/usr/local/bin/wx-config \
+      --with-dynamic-trace=dtrace \
+      --without-jinterface \
+      --without-javac \
+"
 fish_add_path -g $HOME/.elixir-ls/release
 fish_add_path -g $HOME/.cache/rebar3/bin
 
