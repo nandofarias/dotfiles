@@ -19,6 +19,7 @@ require('telescope').setup {
 }
 
 require('telescope').load_extension('fzf')
+require("telescope").load_extension "file_browser"
 
 vimp.nnoremap('<C-p>', function() require('telescope.builtin').find_files() end)
 vimp.nnoremap('<leader>ff', function() require('telescope.builtin').live_grep() end)
