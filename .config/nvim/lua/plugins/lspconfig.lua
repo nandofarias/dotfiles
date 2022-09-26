@@ -1,7 +1,8 @@
 require("mason").setup()
 require("mason-lspconfig").setup({
-    ensure_installed = { "dockerls", "elixirls", "erlangls", "grammarly", "graphql", "sqlls", "sumneko_lua", "tailwindcss", "tsserver", "yamlls", "rust_analyzer", "zls", },
-    automatic_installlation = true,
+  ensure_installed = { "dockerls", "elixirls", "erlangls", "grammarly", "graphql", "sqlls", "sumneko_lua", "tailwindcss",
+    "tsserver", "yamlls", "rust_analyzer", "zls", },
+  automatic_installlation = true,
 })
 
 local lspconfig = require('lspconfig')
@@ -33,29 +34,29 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  buf_set_keymap('n', '<space>k', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<leader>k', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<space>dq', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
-  -- buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<leader>dq', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
+  -- buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   -- buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+  buf_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
   buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 
   -- lsp-saga
-  buf_set_keymap('n', '<space>rn', '<cmd>Lspsaga rename<cr>', opts)
+  buf_set_keymap('n', '<leader>rn', '<cmd>Lspsaga rename<cr>', opts)
   buf_set_keymap('n', 'K', '<cmd>Lspsaga hover_doc<cr>', opts)
-  -- buf_set_keymap('n', '<space>e', '<cmd>Lspsaga show_line_diagnostics<cr>', opts)
+  -- buf_set_keymap('n', '<leader>e', '<cmd>Lspsaga show_line_diagnostics<cr>', opts)
   -- buf_set_keymap('n', '[d', '<cmd>Lspsaga diagnostic_jump_next<cr>', opts)
   -- buf_set_keymap('n', ']d', '<cmd>Lspsaga diagnostic_jump_prev<cr>', opts)
   -- buf_set_keymap('n', '<C-u>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<cr>", {})
   -- buf_set_keymap('n', '<C-d>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<cr>", {})
   --
-  buf_set_keymap('n', '<space>bf', '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
+  buf_set_keymap('n', '<leader>bf', '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
   if client.supports_method("textDocument/formatting") then
     vim.api.nvim_clear_autocmds({ group = format_on_save_group, buffer = bufnr })
     vim.api.nvim_create_autocmd("BufWritePre", {
@@ -67,12 +68,11 @@ local on_attach = function(client, bufnr)
     })
   end
 
-  buf_set_keymap('n', '<space>cc', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  buf_set_keymap('n', 'ca', '<cmd>Lspsaga code_action<cr>', opts)
-  buf_set_keymap('x', 'ca', ':<c-u>Lspsaga range_code_action<cr>', opts)
+  buf_set_keymap('n', '<leader>ca', '<cmd>Lspsaga code_action<cr>', opts)
+  buf_set_keymap('x', '<leader>ca', ':<c-u>Lspsaga range_code_action<cr>', opts)
 
-  buf_set_keymap('n', '<space>cr', '<cmd>lua vim.lsp.codelens.run()<CR>', opts)
-  buf_set_keymap('n', '<space>cl', '<cmd>lua vim.lsp.codelens.refresh()<CR>', opts)
+  buf_set_keymap('n', '<leader>cr', '<cmd>lua vim.lsp.codelens.run()<CR>', opts)
+  buf_set_keymap('n', '<leader>cl', '<cmd>lua vim.lsp.codelens.refresh()<CR>', opts)
   if client.server_capabilities.code_lens then
     cmd [[augroup LspCodelensAutoGroup]]
     cmd [[au!]]
@@ -90,12 +90,12 @@ local opts = {
 }
 -- mason-lspconfig
 require("mason-lspconfig").setup_handlers {
-  function (server_name) -- default handler (optional)
+  function(server_name) -- default handler (optional)
     require("lspconfig")[server_name].setup {}
   end,
 
 
- ['elixirls'] = function()
+  ['elixirls'] = function()
     opts.settings = {
       elixirLS = {
         fetchDeps = false,
@@ -142,5 +142,10 @@ require("mason-lspconfig").setup_handlers {
     lspconfig.tsserver.setup(opts)
   end,
 
---  vim.cmd [[ do User LspAttachBuffers ]]
+  ['grammarly'] = function()
+    opts.init_options = { clientId = 'client_BaDkMgx4X19X9UxxYRCXZo', }
+    lspconfig.grammarly.setup(opts)
+  end
+
+  --  vim.cmd [[ do User LspAttachBuffers ]]
 }
