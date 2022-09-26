@@ -76,7 +76,6 @@ return require('packer').startup(function(use)
   use 'christoomey/vim-tmux-navigator'
   use 'chentoast/marks.nvim'
   use 'dstein64/vim-startuptime'
-  use { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview' }
   use 'mcauley-penney/tidy.nvim'
   use 'stsewd/gx-extended.vim'
   use 'lewis6991/impatient.nvim'
@@ -89,6 +88,7 @@ return require('packer').startup(function(use)
   use { 'bennypowers/nvim-regexplainer', requires = { 'MunifTanjim/nui.nvim' } }
   use 'benizi/vim-automkdir'
   use 'gpanders/editorconfig.nvim'
+  use 'ellisonleao/glow.nvim'
 
   -- Window hacks
   use 'luukvbaal/stabilize.nvim'
