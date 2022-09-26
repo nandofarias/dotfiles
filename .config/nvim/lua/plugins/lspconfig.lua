@@ -55,7 +55,7 @@ local on_attach = function(client, bufnr)
       group = format_on_save_group,
       buffer = bufnr,
       callback = function()
-        vim.lsp.buf.format({ async = true, bufnr = bufnr })
+        vim.lsp.buf.format({ bufnr = bufnr })
       end,
     })
   end
