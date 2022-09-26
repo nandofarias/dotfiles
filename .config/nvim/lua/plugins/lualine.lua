@@ -19,7 +19,7 @@ require('lualine').setup {
       { 'mode', separator = { left = '' }, right_padding = 2 },
     },
     lualine_b = { 'branch', 'diff', 'diagnostics' },
-    lualine_c = { 'filename' },
+    lualine_c = { 'filename', 'lsp_progress' },
     lualine_x = {},
     lualine_y = { 'filetype', 'progress' },
     lualine_z = {
@@ -27,4 +27,3 @@ require('lualine').setup {
     },
   },
 }
-

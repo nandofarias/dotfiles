@@ -106,6 +106,7 @@ return require('packer').startup(function(use)
 
   -- Statusline
   use 'nvim-lualine/lualine.nvim'
+  use 'arkav/lualine-lsp-progress'
 
   -- File explorer
   use 'glepnir/dashboard-nvim'
@@ -144,7 +145,6 @@ return require('packer').startup(function(use)
   use 'glepnir/lspsaga.nvim'
   use 'kosayoda/nvim-lightbulb'
   use 'folke/lsp-colors.nvim'
-  use 'j-hui/fidget.nvim'
   use 'rmagatti/goto-preview'
 
   -- Autocomplete
