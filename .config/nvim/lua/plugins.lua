@@ -118,6 +118,8 @@ return require('packer').startup(function(use)
   use 'nvim-telescope/telescope.nvim'
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
   use { 'mrjones2014/dash.nvim', run = 'make install' }
+  use 'nvim-telescope/telescope-file-browser.nvim'
+
 
   -- Language support - treesitter
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
@@ -185,6 +187,9 @@ return require('packer').startup(function(use)
 
   -- Better wildmenu
   use 'gelguy/wilder.nvim'
+
+  -- Note taking
+  use { 'epwalsh/obsidian.nvim', requires = { 'godlygeek/tabular', 'preservim/vim-markdown' } }
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
