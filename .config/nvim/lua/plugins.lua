@@ -138,8 +138,11 @@ return require('packer').startup(function(use)
   use 'folke/twilight.nvim'
 
   -- Language server protocol
-  use 'neovim/nvim-lspconfig'
-  use 'williamboman/nvim-lsp-installer'
+  use {
+    "williamboman/mason.nvim",
+    "williamboman/mason-lspconfig.nvim",
+    "neovim/nvim-lspconfig",
+  }
   use 'jose-elias-alvarez/null-ls.nvim'
   use 'jose-elias-alvarez/nvim-lsp-ts-utils'
   use 'ray-x/lsp_signature.nvim'
