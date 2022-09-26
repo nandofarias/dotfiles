@@ -1,3 +1,9 @@
+require("mason").setup()
+require("mason-lspconfig").setup({
+    ensure_installed = { "dockerls", "elixirls", "erlangls", "grammarly", "graphql", "sqlls", "sumneko_lua", "tailwindcss", "tsserver", "yamlls", "rust_analyzer", "zls", },
+    automatic_installlation = true,
+})
+
 local lspconfig = require('lspconfig')
 
 local buf_map = function(bufnr, mode, lhs, rhs, opts)
@@ -8,7 +14,8 @@ end
 
 local format_on_save_group = vim.api.nvim_create_augroup('formatOnSave', {})
 
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()) -- For nvim-cmp
+-- For nvim-cmp
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 local on_attach = function(client, bufnr)
   -- vim-illuminate
   require('illuminate').on_attach(client)
@@ -77,17 +84,18 @@ local on_attach = function(client, bufnr)
   end
 end
 
--- nvim-lsp-installer
-local lsp_installer = require('nvim-lsp-installer')
-lsp_installer.setup {}
+local opts = {
+  capabilities = capabilities,
+  on_attach = on_attach
+}
+-- mason-lspconfig
+require("mason-lspconfig").setup_handlers {
+  function (server_name) -- default handler (optional)
+    require("lspconfig")[server_name].setup {}
+  end,
 
-for _, server in ipairs(lsp_installer.get_installed_servers()) do
-  local opts = {
-    capabilities = capabilities,
-    on_attach = on_attach
-  }
 
-  if server.name == 'elixirls' then
+ ['elixirls'] = function()
     opts.settings = {
       elixirLS = {
         fetchDeps = false,
@@ -96,9 +104,10 @@ for _, server in ipairs(lsp_installer.get_installed_servers()) do
         suggestSpecs = true,
       }
     }
-  end
+    lspconfig.elixirls.setup(opts)
+  end,
 
-  if server.name == 'sumneko_lua' then
+  ['sumneko_lua'] = function()
     opts.settings = {
       Lua = {
         diagnostics = {
@@ -113,9 +122,11 @@ for _, server in ipairs(lsp_installer.get_installed_servers()) do
         },
       },
     }
-  end
 
-  if server.name == 'tsserver' then
+    lspconfig.sumneko_lua.setup(opts)
+  end,
+
+  ['tsserver'] = function()
     opts.on_attach = function(client, bufnr)
       client.server_capabilities.document_formatting = false
       client.server_capabilities.document_range_formatting = false
@@ -127,8 +138,9 @@ for _, server in ipairs(lsp_installer.get_installed_servers()) do
       buf_map(bufnr, 'n', 'go', ':TSLspImportAll<CR>')
       on_attach(client, bufnr)
     end
-  end
 
-  lspconfig[server.name].setup(opts)
-  vim.cmd [[ do User LspAttachBuffers ]]
-end
+    lspconfig.tsserver.setup(opts)
+  end,
+
+--  vim.cmd [[ do User LspAttachBuffers ]]
+}
