@@ -106,7 +106,7 @@ return require('packer').startup(function(use)
 
   -- Statusline
   use 'nvim-lualine/lualine.nvim'
-  use 'arkav/lualine-lsp-progress'
+  use 'WhoIsSethDaniel/lualine-lsp-progress'
 
   -- File explorer
   use 'glepnir/dashboard-nvim'
