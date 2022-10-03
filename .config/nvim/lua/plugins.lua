@@ -96,13 +96,12 @@ return require('packer').startup(function(use)
   use 'xiyaowong/nvim-transparent'
 
   -- Better Git
-  use 'TimUntersberger/neogit'
+  -- use 'TimUntersberger/neogit'
   use 'sindrets/diffview.nvim'
   use 'lewis6991/gitsigns.nvim'
   use 'ruifm/gitlinker.nvim'
   use 'pwntester/octo.nvim'
   use 'kdheepak/lazygit.nvim'
-  use 'akinsho/git-conflict.nvim'
 
   -- Statusline
   use 'nvim-lualine/lualine.nvim'
