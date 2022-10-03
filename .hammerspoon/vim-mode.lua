@@ -8,6 +8,7 @@ vim
     :disableForApp('kitty')
     :disableForApp('Alacritty')
     :disableForApp('VimR')
+    :disableForApp('GarageBand')
 
 vim:shouldDimScreenInNormalMode(false)
 
