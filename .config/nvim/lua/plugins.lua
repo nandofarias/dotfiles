@@ -90,6 +90,7 @@ return require('packer').startup(function(use)
   use 'gpanders/editorconfig.nvim'
   use 'ellisonleao/glow.nvim'
   use 'mong8se/actually.nvim'
+  use 'superhawk610/ascii-blocks.nvim'
 
   -- Window hacks
   use 'luukvbaal/stabilize.nvim'
