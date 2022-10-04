@@ -63,7 +63,7 @@ return require('packer').startup(function(use)
   use 'tpope/vim-abolish'
   use 'andymass/vim-matchup'
   use 'szw/vim-maximizer'
-  use 'norcalli/nvim-colorizer.lua'
+  use 'uga-rosa/ccc.nvim'
   use 'lukas-reineke/indent-blankline.nvim'
   use 'windwp/nvim-autopairs'
   use 'windwp/nvim-ts-autotag'
