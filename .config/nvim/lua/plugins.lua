@@ -184,7 +184,6 @@ return require('packer').startup(function(use)
 
   -- UI
   use 'rcarriga/nvim-notify'
-  use 'mvllow/modes.nvim'
   use 'stevearc/dressing.nvim'
 
   -- Better wildmenu
