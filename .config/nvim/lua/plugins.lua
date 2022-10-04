@@ -69,7 +69,7 @@ return require('packer').startup(function(use)
   use 'windwp/nvim-ts-autotag'
   use { 'karb94/neoscroll.nvim', config = function() require('neoscroll').setup() end }
   use 'famiu/bufdelete.nvim'
-  use 'tversteeg/registers.nvim'
+  use { 'tversteeg/registers.nvim', config = function() require('registers').setup() end }
   use 'andweeb/presence.nvim'
   use 'RRethy/vim-illuminate'
   use 'chaoren/vim-wordmotion'
