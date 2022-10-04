@@ -65,25 +65,24 @@ return require('packer').startup(function(use)
   use 'szw/vim-maximizer'
   use 'uga-rosa/ccc.nvim'
   use 'lukas-reineke/indent-blankline.nvim'
-  use 'windwp/nvim-autopairs'
+  use { 'windwp/nvim-autopairs', config = function() require('nvim-autopairs').setup({}) end }
   use 'windwp/nvim-ts-autotag'
-  use 'karb94/neoscroll.nvim'
+  use { 'karb94/neoscroll.nvim', config = function() require('neoscroll').setup() end }
   use 'famiu/bufdelete.nvim'
   use 'tversteeg/registers.nvim'
   use 'andweeb/presence.nvim'
   use 'RRethy/vim-illuminate'
   use 'chaoren/vim-wordmotion'
   use 'christoomey/vim-tmux-navigator'
-  use 'chentoast/marks.nvim'
+  use { 'chentoast/marks.nvim', config = function() require('marks').setup({}) end }
   use 'dstein64/vim-startuptime'
-  use 'mcauley-penney/tidy.nvim'
+  use { 'mcauley-penney/tidy.nvim', config = function() require('tidy').setup() end }
   use 'stsewd/gx-extended.vim'
   use 'lewis6991/impatient.nvim'
   use 'olimorris/persisted.nvim'
-  use 'code-biscuits/nvim-biscuits'
   use 'rhysd/clever-f.vim'
-  use 'folke/todo-comments.nvim'
-  use 'numToStr/Comment.nvim'
+  use { 'folke/todo-comments.nvim', config = function() require('todo-comments').setup({}) end }
+  use { 'numToStr/Comment.nvim', config = function() require('Comment').setup() end }
   use 'kevinhwang91/nvim-hlslens'
   use { 'bennypowers/nvim-regexplainer', requires = { 'MunifTanjim/nui.nvim' } }
   use 'benizi/vim-automkdir'
@@ -93,7 +92,7 @@ return require('packer').startup(function(use)
   use 'superhawk610/ascii-blocks.nvim'
 
   -- Window hacks
-  use 'luukvbaal/stabilize.nvim'
+  use { 'luukvbaal/stabilize.nvim', config = function() require('stabilize').setup() end }
   use 'simeji/winresizer'
   use 'xiyaowong/nvim-transparent'
 
@@ -101,7 +100,7 @@ return require('packer').startup(function(use)
   -- use 'TimUntersberger/neogit'
   use 'sindrets/diffview.nvim'
   use 'lewis6991/gitsigns.nvim'
-  use 'ruifm/gitlinker.nvim'
+  use { 'ruifm/gitlinker.nvim', config = function() require('gitlinker').setup() end }
   use 'pwntester/octo.nvim'
   use 'kdheepak/lazygit.nvim'
 
@@ -135,7 +134,7 @@ return require('packer').startup(function(use)
 
   -- Zen mode
   use 'folke/zen-mode.nvim'
-  use 'folke/twilight.nvim'
+  use { 'folke/twilight.nvim', config = function() require('twilight').setup({}) end }
 
   -- Language server protocol
   use {
@@ -146,7 +145,7 @@ return require('packer').startup(function(use)
   use 'jose-elias-alvarez/null-ls.nvim'
   use 'jose-elias-alvarez/nvim-lsp-ts-utils'
   use 'ray-x/lsp_signature.nvim'
-  use 'simrat39/symbols-outline.nvim'
+  use { 'simrat39/symbols-outline.nvim', config = function() require('symbols-outline').setup() end }
   use 'glepnir/lspsaga.nvim'
   use 'kosayoda/nvim-lightbulb'
   use 'folke/lsp-colors.nvim'
@@ -173,7 +172,7 @@ return require('packer').startup(function(use)
   use 'preservim/vimux'
 
   -- Rest
-  use 'NTBBloodbath/rest.nvim'
+  use { 'NTBBloodbath/rest.nvim', config = function() require('rest-nvim').setup() end }
 
   -- Database
   use 'tpope/vim-dadbod'
