@@ -193,6 +193,9 @@ return require('packer').startup(function(use)
   -- Note taking
   use 'epwalsh/obsidian.nvim'
 
+  -- Messages
+  use 'AckslD/messages.nvim'
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if PACKER_BOOTSTRAP then
