@@ -89,6 +89,7 @@ return require('packer').startup(function(use)
   use 'benizi/vim-automkdir'
   use 'gpanders/editorconfig.nvim'
   use 'ellisonleao/glow.nvim'
+  use 'mong8se/actually.nvim'
 
   -- Window hacks
   use 'luukvbaal/stabilize.nvim'
@@ -185,6 +186,7 @@ return require('packer').startup(function(use)
   -- UI
   use 'rcarriga/nvim-notify'
   use 'mvllow/modes.nvim'
+  use 'stevearc/dressing.nvim'
 
   -- Better wildmenu
   use 'gelguy/wilder.nvim'
