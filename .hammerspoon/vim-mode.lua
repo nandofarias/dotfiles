@@ -9,6 +9,7 @@ vim
     :disableForApp('Alacritty')
     :disableForApp('VimR')
     :disableForApp('GarageBand')
+    :disableForApp('Obsidian')
 
 vim:shouldDimScreenInNormalMode(false)
 
