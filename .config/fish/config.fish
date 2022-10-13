@@ -92,6 +92,7 @@ abbr -ag dc docker-compose
 
 abbr -ag g git
 abbr -ag gc "git checkout"
+abbr -ag lg lazygit
 
 abbr -ag tls "tmux ls"
 
