@@ -16,7 +16,7 @@ end
 local format_on_save_group = vim.api.nvim_create_augroup('formatOnSave', {})
 
 -- For nvim-cmp
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 local on_attach = function(client, bufnr)
   -- vim-illuminate
   require('illuminate').on_attach(client)
