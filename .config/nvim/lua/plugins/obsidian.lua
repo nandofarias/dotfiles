@@ -1,7 +1,6 @@
 local vault_dir = '~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes'
 
 require('obsidian').setup({
-  dir = vault_dir,
   completion = {
     nvim_cmp = true,
   }
