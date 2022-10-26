@@ -13,12 +13,13 @@ vimp.nnoremap('<Leader>st', ':Telescope persisted<CR>')
 
 require("persisted").setup {
   use_git_branch = true,
+  branch_separator = "@@",
   after_save = function()
     vim.notify("Session was saved!")
   end,
   telescope = {
     before_source = function()
-      pcall(vim.cmd, "bufdo Bwipeout")
+      vim.cmd("bufdo Bwipeout")
     end
   },
 }
