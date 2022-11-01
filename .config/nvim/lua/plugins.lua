@@ -117,7 +117,6 @@ return require('packer').startup(function(use)
   -- Telescope
   use 'nvim-telescope/telescope.nvim'
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-  use { 'mrjones2014/dash.nvim', run = 'make install' }
   use 'nvim-telescope/telescope-file-browser.nvim'
 
   -- Language support - treesitter
@@ -189,7 +188,8 @@ return require('packer').startup(function(use)
   -- Better wildmenu
   use 'gelguy/wilder.nvim'
 
-  -- Note taking
+  -- Ext utilities integration
+  use { 'mrjones2014/dash.nvim', run = 'make install' }
   use 'epwalsh/obsidian.nvim'
 
   -- Messages
