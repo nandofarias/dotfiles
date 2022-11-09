@@ -10,13 +10,15 @@ local default_bg = '#22212C'
 require('cokeline').setup({
   buffers = {
     new_buffers_position = 'next',
+    filter_valid = function(buffer)
+      return buffer.type ~= "terminal" and buffer.type ~= "quickfix"
+    end
   },
   default_hl = {
     fg = function(buffer)
-      return
-        buffer.is_focused
-        and get_hex('Normal', 'fg')
-         or get_hex('Comment', 'fg')
+      return buffer.is_focused
+          and get_hex('Normal', 'fg')
+          or get_hex('Comment', 'fg')
     end,
     bg = default_bg,
   },
@@ -59,16 +61,14 @@ require('cokeline').setup({
     },
     {
       text = function(buffer)
-        return
-          (buffer.diagnostics.errors ~= 0 and '  ' .. buffer.diagnostics.errors)
-          or (buffer.diagnostics.warnings ~= 0 and ' ⚠ ' .. buffer.diagnostics.warnings)
-          or ''
+        return (buffer.diagnostics.errors ~= 0 and '  ' .. buffer.diagnostics.errors)
+            or (buffer.diagnostics.warnings ~= 0 and ' ⚠ ' .. buffer.diagnostics.warnings)
+            or ''
       end,
       fg = function(buffer)
-        return
-          (buffer.diagnostics.errors ~= 0 and errors_fg)
-          or (buffer.diagnostics.warnings ~= 0 and warnings_fg)
-          or nil
+        return (buffer.diagnostics.errors ~= 0 and errors_fg)
+            or (buffer.diagnostics.warnings ~= 0 and warnings_fg)
+            or nil
       end,
       truncation = { priority = 1 },
     },
@@ -92,10 +92,9 @@ require('cokeline').setup({
     },
   },
 })
-map('n', '<S-Tab>',   '<Plug>(cokeline-focus-prev)',  { silent = true })
-map('n', '<Tab>',     '<Plug>(cokeline-focus-next)',  { silent = true })
+map('n', '<S-Tab>', '<Plug>(cokeline-focus-prev)', { silent = true })
+map('n', '<Tab>', '<Plug>(cokeline-focus-next)', { silent = true })
 
-for i = 1,9 do
+for i = 1, 9 do
   map('n', ('<Leader>%s'):format(i), ('<Plug>(cokeline-focus-%s)'):format(i), { silent = true })
 end
-
