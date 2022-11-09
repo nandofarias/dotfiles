@@ -1,6 +1,6 @@
 local db = require('dashboard')
 db.custom_center = {
-  { icon = '   ', desc = 'Find File                      ', shortcut = 'ctrl   p  ', action = 'Telescope find_files' },
+  { icon = '   ', desc = 'Find File                      ', shortcut = 'leader f s', action = 'Telescope find_files' },
   { icon = '   ', desc = 'Find Word                      ', shortcut = 'leader f g', action = 'Telescope live_grep' },
   { icon = '   ', desc = 'Sessions                       ', shortcut = 'leader s t', action = 'Telescope persisted' },
   { icon = '   ', desc = 'New File                       ', shortcut = 'leader c n', action = 'DashboardNewFile' },

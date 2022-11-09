@@ -6,12 +6,13 @@ vimp.onoremap('ip', 'i(')
 
 -- General
 vimp.nnoremap({ 'silent' }, '<space>no', ':nohlsearch <CR>')
-vimp.nnoremap({ 'silent' }, '<leader>r', ':source $MYVIMRC <CR>')
+vimp.nnoremap({ 'silent' }, '<space>r', ':source $MYVIMRC <CR>')
 vimp.nnoremap({ 'silent' }, 'gs', ':set spell! <CR>')
-vimp.nnoremap({ 'silent' }, '<leader>cc', ':cclose <CR>')
-vimp.nnoremap({ 'silent' }, '<space>qq', ':Bdelete <CR> <Plug>(cokeline-focus-prev)<CR>')
-vimp.nnoremap({ 'silent' }, '<space>da', ':%bdelete|edit#|bdelete# <CR>')
+vimp.nnoremap({ 'silent' }, '<space>cc', ':cclose <CR>')
+vimp.nnoremap({ 'silent' }, '<space>bx', ':Bdelete <CR> <Plug>(cokeline-focus-prev)<CR>')
+vimp.nnoremap({ 'silent' }, '<space>bd', ':%bdelete|edit#|bdelete# <CR>')
 vimp.nnoremap({ 'silent' }, '<space>w', ':w <CR>')
+vimp.nnoremap({ 'silent' }, '<space>qq', ':qa <CR>')
 
 -- Move lines
 vimp.nnoremap('<A-j>', ':m .+1<CR>==')
@@ -22,12 +23,12 @@ vimp.vnoremap('<A-j>', ":m '>+1<CR>gv=gv")
 vimp.vnoremap('<A-k>', ":m '<-2<CR>gv=gv")
 
 -- Open config
-vimp.nnoremap('<Leader>vi', ':e $MYVIMRC <CR>')
-vimp.nnoremap('<Leader>tm', ':e ~/.config/tmux/tmux.conf <CR>')
-vimp.nnoremap('<Leader>fs', ':e ~/.config/fish/config.fish <CR>')
-vimp.nnoremap('<Leader>al', ':e ~/.config/alacritty/alacritty.yml <CR>')
-vimp.nnoremap('<Leader>kt', ':e ~/.config/kitty/kitty.conf <CR>')
-vimp.nnoremap('<Leader>br', ':e ~/.config/brew/Brewfile <CR>')
+vimp.nnoremap('<space>ov', ':e $MYVIMRC <CR>')
+vimp.nnoremap('<space>ot', ':e ~/.config/tmux/tmux.conf <CR>')
+vimp.nnoremap('<space>of', ':e ~/.config/fish/config.fish <CR>')
+vimp.nnoremap('<space>oa', ':e ~/.config/alacritty/alacritty.yml <CR>')
+vimp.nnoremap('<space>ok', ':e ~/.config/kitty/kitty.conf <CR>')
+vimp.nnoremap('<space>ob', ':e ~/.config/brew/Brewfile <CR>')
 
 -- Navigate wrapped lines
 vimp.nnoremap('j', 'gj')
