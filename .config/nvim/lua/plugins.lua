@@ -72,7 +72,6 @@ return require('packer').startup(function(use)
   use { 'tversteeg/registers.nvim', config = function() require('registers').setup() end }
   use 'andweeb/presence.nvim'
   use 'RRethy/vim-illuminate'
-  use 'chaoren/vim-wordmotion'
   use 'christoomey/vim-tmux-navigator'
   use { 'chentoast/marks.nvim', config = function() require('marks').setup({}) end }
   use 'dstein64/vim-startuptime'
