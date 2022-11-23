@@ -89,6 +89,10 @@ return require('packer').startup(function(use)
   use 'ellisonleao/glow.nvim'
   use 'mong8se/actually.nvim'
   use 'superhawk610/ascii-blocks.nvim'
+  use { 'lukas-reineke/virt-column.nvim', config = function()
+    vim.cmd [[ au VimEnter * highlight VirtColumn guifg=#202020 gui=nocombine ]]
+    require('virt-column').setup()
+  end }
 
   -- Window hacks
   use { 'luukvbaal/stabilize.nvim', config = function() require('stabilize').setup() end }
