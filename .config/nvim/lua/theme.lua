@@ -3,32 +3,55 @@ vim.cmd('colorscheme dracula_pro_van_helsing')
 vim.g.dracula_colorterm = 0
 
 -- Fix colors mapping with nvim-treesitter, https://github.com/dracula/vim/blob/master/after/plugin/dracula.vim
--- # Misc
-vim.cmd [[au VimEnter * hi! link TSPunctSpecial Special]]
--- Constants
-vim.cmd [[au VimEnter * hi! link TSConstMacro Macro]]
-vim.cmd [[au VimEnter * hi! link TSStringEscape Character]]
-vim.cmd [[au VimEnter * hi! link TSSymbol DraculaPurple]]
-vim.cmd [[au VimEnter * hi! link TSAnnotation DraculaYellow]]
-vim.cmd [[au VimEnter * hi! link TSAttribute DraculaGreenItalic]]
--- Functions
-vim.cmd [[au VimEnter * hi! link TSFuncBuiltin DraculaCyan]]
-vim.cmd [[au VimEnter * hi! link TSFuncMacro Function]]
-vim.cmd [[au VimEnter * hi! link TSParameter DraculaOrangeItalic]]
-vim.cmd [[au VimEnter * hi! link TSParameterReference DraculaOrange]]
-vim.cmd [[au VimEnter * hi! link TSField DraculaOrange]]
-vim.cmd [[au VimEnter * hi! link TSConstructor DraculaCyan]]
--- Keywords
-vim.cmd [[au VimEnter * hi! link TSLabel DraculaPurpleItalic]]
--- Variable
-vim.cmd [[au VimEnter * hi! link TSVariableBuiltin DraculaPurpleItalic]]
--- Text
-vim.cmd [[au VimEnter * hi! link TSStrong DraculaFgBold]]
-vim.cmd [[au VimEnter * hi! link TSEmphasis DraculaFg]]
-vim.cmd [[au VimEnter * hi! link TSUnderline Underlined]]
-vim.cmd [[au VimEnter * hi! link TSTitle DraculaYellow]]
-vim.cmd [[au VimEnter * hi! link TSLiteral DraculaYellow]]
-vim.cmd [[au VimEnter * hi! link TSURI DraculaYellow]]
--- HTML and JSX tag attributes. By default, this group is linked to TSProperty,
--- which in turn links to Identifer (white).
-vim.cmd [[au VimEnter * hi! link TSTagAttribute DraculaGreenItalic]]
+local highlights = {
+  -- Misc
+  ["@punctuation.delimiter"] = "Delimiter",
+  ["@punctuation.bracket"] = "DraculaFg",
+  ["@punctuation.special"] = "Special",
+  -- Constants
+  ["@constant"] = "Constant",
+  ["@constant.builtin"] = "Constant",
+  ["@constant.macro"] = "Macro",
+  ["@string.regex"] = "String",
+  ["@string.escape"] = "Character",
+  ["@symbol"] = "DraculaPurple",
+  ["@annotation"] = "DraculaYellow",
+  ["@attribute"] = "DraculaGreenItalic",
+  ["@namespace"] = "Structure",
+  -- Functions
+  ["@function.builtin"] = "DraculaCyan",
+  ["@funcion.macro"] = "Function",
+  ["@parameter"] = "DraculaOrangeItalic",
+  ["@parameter.reference"] = "DraculaOrange",
+  ["@field"] = "DraculaOrange",
+  ["@property"] = "DraculaFg",
+  ["@constructor"] = "DraculaCyan",
+  -- Keywords
+  ["@label"] = "DraculaPurpleItalic",
+  ["@keyword.function"] = "DraculaPink",
+  ["@keyword.operator"] = "Operator",
+  ["@exception"] = "DraculaPurple",
+  -- Variable
+  ["@variable"] = "DraculaFg",
+  ["@variable.builtin"] = "DraculaPurpleItalic",
+  -- Text
+  ["@text"] = "DraculaFg",
+  ["@text.strong"] = "DraculaFgBold",
+  ["@text.emphasis"] = "DraculaFg",
+  ["@text.underline"] = "Underlined",
+  ["@text.title"] = "DraculaYellow",
+  ["@text.literal"] = "DraculaYellow",
+  ["@text.uri"] = "DraculaYellow",
+  ["@text.diff.add"] = "DiffAdd",
+  ["@text.diff.delete"] = "DiffDelete",
+  -- Tags",
+  ["@tag"] = "DraculaCyan",
+  ["@tag.delimiter"] = "DraculaFg",
+  -- HTML and JSX tag attributes. By default, this group is linked to TSProperty,
+  -- which in turn links to Identifer (white).
+  ["@tag.attribute"] = "DraculaGreenItalic",
+}
+
+for k, v in pairs(highlights) do
+  vim.api.nvim_set_hl(0, k, { link = v, default = true })
+end
