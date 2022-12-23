@@ -1,7 +1,7 @@
-local vimp = require('vimp')
 local neogit = require('neogit')
 
 neogit.setup {
+  disable_context_highlighting = true,
   integrations = {
     diffview = true
   },
@@ -12,6 +12,7 @@ neogit.setup {
     }
   }
 }
-vimp.nnoremap('<C-g>', function()
-  neogit.open()
+
+vim.keymap.set('n', '<Leader>gg', function()
+  neogit.open({ kind = 'split' })
 end)
