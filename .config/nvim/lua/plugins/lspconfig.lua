@@ -146,6 +146,4 @@ require("mason-lspconfig").setup_handlers {
     opts.init_options = { clientId = 'client_BaDkMgx4X19X9UxxYRCXZo', }
     lspconfig.grammarly.setup(opts)
   end
-
-  --  vim.cmd [[ do User LspAttachBuffers ]]
 }

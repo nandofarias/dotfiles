@@ -1,5 +1,5 @@
-vim.cmd('packadd! dracula_pro')
-vim.cmd('colorscheme dracula_pro_van_helsing')
+vim.cmd.packadd('dracula_pro')
+vim.cmd.colorscheme('dracula_pro_van_helsing')
 vim.g.dracula_colorterm = 0
 
 -- Fix colors mapping with nvim-treesitter, https://github.com/dracula/vim/blob/master/after/plugin/dracula.vim

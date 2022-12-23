@@ -1,6 +1,6 @@
 local cache_dir = os.getenv('HOME') .. '/.cache/nvim/'
 
-vim.cmd [[syntax off]]
+vim.cmd.syntax('off')
 vim.opt.termguicolors = true
 vim.opt.bg = 'dark'
 vim.opt.showcmd = true
