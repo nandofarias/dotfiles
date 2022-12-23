@@ -173,7 +173,7 @@ return require('packer').startup(function(use)
   use 'preservim/vimux'
 
   -- Rest
-  use { 'NTBBloodbath/rest.nvim', config = function() require('rest-nvim').setup() end }
+  use 'rest-nvim/rest.nvim'
 
   -- Database
   use 'tpope/vim-dadbod'
