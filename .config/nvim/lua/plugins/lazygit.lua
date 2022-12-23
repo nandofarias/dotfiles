@@ -1,8 +1,6 @@
-local vimp = require('vimp')
-
-vimp.nnoremap({ 'silent' }, '<leader>gg', ':LazyGit<CR>')
-vimp.nnoremap({ 'silent' }, '<leader>gp', function()
+vim.keymap.set('n', '<leader>gl', ':LazyGit<CR>', { silent = true })
+vim.keymap.set('n', '<leader>gp', function()
   require("telescope").extensions.lazygit.lazygit()
-end)
+end, { silent = true })
 
 require("telescope").load_extension("lazygit")

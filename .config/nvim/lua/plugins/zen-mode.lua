@@ -1,4 +1,3 @@
-local vimp = require('vimp')
 local zen = require('zen-mode')
 
 zen.setup({
@@ -8,7 +7,7 @@ zen.setup({
   },
 })
 
-vimp.nnoremap('<Leader>z', function()
+vim.keymap.set('n', '<Leader>z', function()
   zen.toggle({
     window = {
       width = .6

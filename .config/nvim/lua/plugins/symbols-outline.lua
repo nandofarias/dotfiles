@@ -1,4 +1,3 @@
 require('symbols-outline').setup()
 
-local vimp = require('vimp')
-vimp.nnoremap({ 'silent' }, '<leader>so', ':SymbolsOutline<CR>')
+vim.keymap.set('n', '<leader>so', ':SymbolsOutline<CR>', { silent = true })

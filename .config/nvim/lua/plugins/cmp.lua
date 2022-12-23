@@ -1,6 +1,5 @@
 vim.g.vsnip_snippet_dir = '~/.config/nvim/snippets'
 
-local vimp = require('vimp')
 local cmp = require('cmp')
 
 cmp.setup {
@@ -85,10 +84,12 @@ cmp.setup {
   }
 }
 
-vimp.imap({ 'expr' }, '<Tab>', "vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : '<Tab>'")
-vimp.smap({ 'expr' }, '<Tab>', "vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : '<Tab>'")
-vimp.imap({ 'expr' }, '<S-Tab>', "vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'")
-vimp.smap({ 'expr' }, '<S-Tab>', "vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'")
+local opts = { remap = true, expr = true, replace_keycodes = false }
+-- vim.keymap.set({'i','s'}, '<C-J>',   "vsnip#expandable() ? '<Plug>(vsnip-expand)'         : '<C-J>'",   opts)
+-- vim.keymap.set({'i','s'}, '<C-L>',   "vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-L>'",   opts)
+vim.keymap.set({ 'i', 's' }, '<Tab>', "vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'      : '<Tab>'", opts)
+vim.keymap.set({ 'i', 's' }, '<S-Tab>', "vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'", opts)
+
 
 -- Missing highlights
 vim.cmd [[au VimEnter * hi! link CmpItemAbbr DraculaPurple]]
