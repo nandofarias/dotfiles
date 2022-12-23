@@ -6,6 +6,6 @@ require('obsidian').setup({
   }
 })
 
-vim.keymap.set("n", "<space>ob", function()
+vim.keymap.set('n', '<space>ob', function()
   require('telescope').extensions.file_browser.file_browser({ path = vault_dir })
 end)

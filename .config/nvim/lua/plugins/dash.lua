@@ -1,4 +1,3 @@
 require('dash').setup({})
 
-local vimp = require('vimp')
-vimp.nnoremap('<leader>df', ':DashWord! <CR>')
+vim.keymap.set('n', '<space>df', ':DashWord! <CR>')

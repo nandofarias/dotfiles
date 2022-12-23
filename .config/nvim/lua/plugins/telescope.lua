@@ -1,5 +1,3 @@
-local vimp = require('vimp')
-
 require('telescope').setup {
   defaults = {
     layout_config = {
@@ -21,8 +19,8 @@ require('telescope').setup {
 require('telescope').load_extension('fzf')
 require("telescope").load_extension "file_browser"
 
-vimp.nnoremap('<leader>fs', function() require('telescope.builtin').find_files() end)
-vimp.nnoremap('<leader>ff', function() require('telescope.builtin').live_grep() end)
-vimp.nnoremap('<leader>fb', function() require('telescope.builtin').buffers() end)
-vimp.nnoremap('<leader>fh', function() require('telescope.builtin').help_tags() end)
-vimp.nnoremap('<leader>ft', function() require('telescope.builtin').treesitter() end)
+vim.keymap.set('n', '<leader>fs', function() require('telescope.builtin').find_files() end)
+vim.keymap.set('n', '<leader>ff', function() require('telescope.builtin').live_grep() end)
+vim.keymap.set('n', '<leader>fb', function() require('telescope.builtin').buffers() end)
+vim.keymap.set('n', '<leader>fh', function() require('telescope.builtin').help_tags() end)
+vim.keymap.set('n', '<leader>ft', function() require('telescope.builtin').treesitter() end)

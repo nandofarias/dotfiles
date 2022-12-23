@@ -1,7 +1,5 @@
 vim.cmd [[au VimEnter * hi! TabLineFill gui=none guifg=none guibg=none]]
 
-local vimp = require('vimp')
-
 require('nvim-tree').setup {
   git = {
     ignore = false,
@@ -24,7 +22,7 @@ require('nvim-tree').setup {
   }
 }
 vim.g.nvim_tree_respect_buf_cwd = 1
-vimp.nnoremap('<leader>fa', ':NvimTreeToggle<CR>')
-vimp.nnoremap('<leader>fg', ':NvimTreeFindFile<CR>')
--- https://github.com/kyazdani42/nvim-tree.lua/issues/549
+vim.keymap.set('n', '<leader>fa', ':NvimTreeToggle<CR>')
+vim.keymap.set('n', '<leader>fg', ':NvimTreeFindFile<CR>')
+-- https://github.com/nvim-tree/nvim-tree.lua/wiki/Troubleshooting#fish
 vim.g.shell = '/bin/zsh'

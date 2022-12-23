@@ -1,3 +1,1 @@
-local vimp = require('vimp')
-
-vimp.nnoremap('<leader>m', ':MaximizerToggle')
+vim.keymap.set('n', '<space>m', ':MaximizerToggle <CR>')

@@ -1,14 +1,14 @@
 vim.notify = require("notify")
-local vimp = require('vimp')
-vimp.nnoremap('<Leader>sl', function()
+
+vim.keymap.set('n', '<Leader>sl', function()
   require("persisted").load()
 end)
 
-vimp.nnoremap('<Leader>ss', function()
+vim.keymap.set('n', '<Leader>ss', function()
   require("persisted").save()
 end)
 
-vimp.nnoremap('<Leader>st', ':Telescope persisted<CR>')
+vim.keymap.set('n', '<Leader>st', ':Telescope persisted<CR>')
 
 
 require("persisted").setup {
