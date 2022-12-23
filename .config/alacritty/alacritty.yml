@@ -2,7 +2,7 @@ live_config_reload: true
 
 font:
   normal:
-    family: MonoLisaCustom Nerd Font
+    family: MonoLisa 2
   size: 14.0
 
 window:
