@@ -67,6 +67,8 @@ local on_attach = function(client, bufnr)
       end,
     })
   end
+  vim.api.nvim_create_user_command('Format', function() vim.lsp.buf.format({ async = true }) end, {})
+
 
   buf_set_keymap('n', '<leader>ca', '<cmd>Lspsaga code_action<cr>', opts)
   buf_set_keymap('x', '<leader>ca', ':<c-u>Lspsaga range_code_action<cr>', opts)
