@@ -144,7 +144,7 @@ return require('packer').startup(function(use)
   use 'jose-elias-alvarez/nvim-lsp-ts-utils'
   use 'ray-x/lsp_signature.nvim'
   use { 'simrat39/symbols-outline.nvim', config = function() require('symbols-outline').setup() end }
-  use 'glepnir/lspsaga.nvim'
+  use { "glepnir/lspsaga.nvim", config = function() require('lspsaga').setup({}) end }
   use 'kosayoda/nvim-lightbulb'
   use 'folke/lsp-colors.nvim'
   use 'rmagatti/goto-preview'
