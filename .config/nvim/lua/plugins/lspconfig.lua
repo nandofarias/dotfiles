@@ -49,7 +49,7 @@ local on_attach = function(client, bufnr)
 
   -- lsp-saga
   buf_set_keymap('n', '<leader>rn', '<cmd>Lspsaga rename<cr>', opts)
-  buf_set_keymap('n', 'K', '<cmd>Lspsaga hover_doc<cr>', opts)
+  buf_set_keymap('n', 'K', '<cmd>Lspsaga hover_doc ++quiet<cr>', opts)
   -- buf_set_keymap('n', '<leader>e', '<cmd>Lspsaga show_line_diagnostics<cr>', opts)
   -- buf_set_keymap('n', '[d', '<cmd>Lspsaga diagnostic_jump_next<cr>', opts)
   -- buf_set_keymap('n', ']d', '<cmd>Lspsaga diagnostic_jump_prev<cr>', opts)
