@@ -1,5 +1,10 @@
-require('ccc').setup {
-  highlighter = {
-    auto_enable = true,
-  }
+return {
+  'uga-rosa/ccc.nvim',
+  config = function()
+    require('ccc').setup {
+      highlighter = {
+        auto_enable = true,
+      }
+    }
+  end
 }
