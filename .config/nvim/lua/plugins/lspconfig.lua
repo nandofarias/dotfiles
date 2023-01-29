@@ -102,6 +102,7 @@ require("mason-lspconfig").setup_handlers {
         dialyzerEnabled = true,
         dialyzerFormat = 'dialyxir_short',
         suggestSpecs = true,
+        root_dir = vim.fs.dirname(vim.fs.find({ 'mix.exs', '.git' }, { upward = true })[1])
       }
     }
     lspconfig.elixirls.setup(opts)
