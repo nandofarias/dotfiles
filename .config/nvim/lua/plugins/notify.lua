@@ -1,5 +1,12 @@
-require('telescope').load_extension('notify')
-require('notify').setup({
-  background_colour = '#202020',
-})
-vim.notify = require('notify')
+return {
+  'rcarriga/nvim-notify',
+  dependencies = {
+    'stevearc/dressing.nvim',
+  },
+  config = function()
+    local notify = require('notify')
+    notify.setup()
+    vim.notify = notify
+    require('telescope').load_extension('notify')
+  end
+}

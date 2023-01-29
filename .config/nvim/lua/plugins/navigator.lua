@@ -1,7 +1,11 @@
-require('Navigator').setup()
-
-vim.keymap.set({ 'n', 't' }, '<C-h>', '<CMD>NavigatorLeft<CR>')
-vim.keymap.set({ 'n', 't' }, '<C-l>', '<CMD>NavigatorRight<CR>')
-vim.keymap.set({ 'n', 't' }, '<C-k>', '<CMD>NavigatorUp<CR>')
-vim.keymap.set({ 'n', 't' }, '<C-j>', '<CMD>NavigatorDown<CR>')
-vim.keymap.set({ 'n', 't' }, '<C-p>', '<CMD>NavigatorPrevious<CR>')
+return {
+  'numToStr/Navigator.nvim',
+  config = true,
+  keys = {
+    { '<C-h>', '<CMD>NavigatorLeft<CR>', desc = 'Navigate Left' },
+    { '<C-l>', '<CMD>NavigatorRight<CR>', desc = 'Navigate Right' },
+    { '<C-k>', '<CMD>NavigatorUp<CR>', desc = 'Navigate Up' },
+    { '<C-j>', '<CMD>NavigatorDown<CR>', desc = 'Navigate Down' },
+    { '<C-p>', '<CMD>NavigatorPrevious<CR>', desc = 'Navigate Previous' },
+  }
+}

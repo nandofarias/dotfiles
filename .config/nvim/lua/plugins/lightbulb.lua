@@ -1,6 +1,12 @@
-require('nvim-lightbulb').setup({
-  ignore = { "null-ls" },
-})
+return {
+  'kosayoda/nvim-lightbulb',
+  config = function()
+    require('nvim-lightbulb').setup({
+      ignore = { "null-ls" },
+    })
 
-local group = vim.api.nvim_create_augroup('updateLightbulb', { clear = true })
-vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, { command = 'lua require("nvim-lightbulb").update_lightbulb()', group = group })
+    local group = vim.api.nvim_create_augroup('updateLightbulb', { clear = true })
+    vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' },
+      { command = 'lua require("nvim-lightbulb").update_lightbulb()', group = group })
+  end
+}

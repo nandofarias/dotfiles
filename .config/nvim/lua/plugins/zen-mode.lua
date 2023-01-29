@@ -1,16 +1,27 @@
-local zen = require('zen-mode')
-
-zen.setup({
-  plugins = {
-    twilight = { enabled = false },
-    tmux = { enabled = true },
+return {
+  'folke/zen-mode.nvim',
+  dependencies = {
+    { 'folke/twilight.nvim', config = true },
   },
-})
-
-vim.keymap.set('n', '<Leader>z', function()
-  zen.toggle({
-    window = {
-      width = .6
+  keys = {
+    {
+      '<Leader>z',
+      function()
+        require('zen-mode').toggle({
+          window = {
+            width = .6
+          }
+        })
+      end,
+      desc = 'Zen Toggle'
     }
-  })
-end)
+  },
+  config = function()
+    require('zen-mode').setup({
+      plugins = {
+        twilight = { enabled = false },
+        tmux = { enabled = true },
+      },
+    })
+  end
+}
