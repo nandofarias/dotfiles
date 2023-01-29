@@ -76,7 +76,6 @@ return require('packer').startup(function(use)
   use 'dstein64/vim-startuptime'
   use { 'mcauley-penney/tidy.nvim', config = function() require('tidy').setup() end }
   use 'stsewd/gx-extended.vim'
-  use 'lewis6991/impatient.nvim'
   use 'olimorris/persisted.nvim'
   use 'rhysd/clever-f.vim'
   use { 'folke/todo-comments.nvim', config = function() require('todo-comments').setup({}) end }
@@ -125,7 +124,6 @@ return require('packer').startup(function(use)
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
   use 'nvim-treesitter/nvim-treesitter-textobjects'
   use 'nvim-treesitter/playground'
-  use 'p00f/nvim-ts-rainbow'
   use 'JoosepAlviste/nvim-ts-context-commentstring'
   use 'RRethy/nvim-treesitter-textsubjects'
 
