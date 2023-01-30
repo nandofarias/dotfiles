@@ -3,10 +3,10 @@
 current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $current_dir/utils.sh
 
-IFS=' ' read -r -a hide_status <<< $(get_tmux_option "@dracula-git-disable-status" "false")
-IFS=' ' read -r -a current_symbol <<< $(get_tmux_option "@dracula-git-show-current-symbol" "✓")
-IFS=' ' read -r -a diff_symbol <<< $(get_tmux_option "@dracula-git-show-diff-symbol" "!")
-IFS=' ' read -r -a no_repo_message <<< $(get_tmux_option "@dracula-git-no-repo-message" "")
+IFS=' ' read -r -a hide_status <<< $(get_tmux_option "@git-disable-status" "false")
+IFS=' ' read -r -a current_symbol <<< $(get_tmux_option "@git-show-current-symbol" "✓")
+IFS=' ' read -r -a diff_symbol <<< $(get_tmux_option "@git-show-diff-symbol" "!")
+IFS=' ' read -r -a no_repo_message <<< $(get_tmux_option "@git-no-repo-message" "")
 
 # Get added, modified, updated and deleted files from git status
 getChanges()
@@ -19,15 +19,15 @@ getChanges()
 for i in $(git -C $path status -s)
 
     do
-      case $i in 
+      case $i in
       'A')
-        added+=1 
+        added+=1
       ;;
       'M')
         modified+=1
       ;;
       'U')
-        updated+=1 
+        updated+=1
       ;;
       'D')
        deleted+=1
@@ -41,12 +41,10 @@ for i in $(git -C $path status -s)
     [ $modified -gt 0 ] && output+=" ${modified}M"
     [ $updated -gt 0 ] && output+=" ${updated}U"
     [ $deleted -gt 0 ] && output+=" ${deleted}D"
-  
-    echo $output    
+
+    echo $output
 }
 
-
-# getting the #{pane_current_path} from dracula.sh is no longer possible
 getPaneDir()
 {
  nextone="false"
@@ -55,7 +53,7 @@ getPaneDir()
     if [ "$nextone" == "true" ]; then
        echo $i
        return
-    fi 
+    fi
     if [ "$i" == "1" ]; then
         nextone="true"
     fi
@@ -66,7 +64,7 @@ getPaneDir()
 # check if the current or diff symbol is empty to remove ugly padding
 checkEmptySymbol()
 {
-    symbol=$1    
+    symbol=$1
     if [ "$symbol" == "" ]; then
         echo "true"
     else
@@ -86,7 +84,7 @@ checkForChanges()
     else
         echo "false"
     fi
-}     
+}
 
 # check if a git repo exists in the directory
 checkForGitDir()
@@ -100,7 +98,7 @@ checkForGitDir()
 
 # return branch name if there is one
 getBranch()
-{   
+{
     if [ $(checkForGitDir) == "true" ]; then
         echo $(git -C $path rev-parse --abbrev-ref HEAD)
     else
@@ -113,14 +111,14 @@ getMessage()
 {
     if [ $(checkForGitDir) == "true" ]; then
         branch="$(getBranch)"
-        
-        if [ $(checkForChanges) == "true" ]; then 
-            
-            changes="$(getChanges)" 
-            
+
+        if [ $(checkForChanges) == "true" ]; then
+
+            changes="$(getChanges)"
+
             if [ "${hide_status}" == "false" ]; then
                 if [ $(checkEmptySymbol $diff_symbol) == "true" ]; then
-                    echo "${changes} $branch"                    
+                    echo "${changes} $branch"
                 else
                     echo "$diff_symbol ${changes} $branch"
                 fi
@@ -128,7 +126,7 @@ getMessage()
                 if [ $(checkEmptySymbol $diff_symbol) == "true" ]; then
                     echo "$branch"
                 else
-                    echo "$diff_symbol $branch"                    
+                    echo "$diff_symbol $branch"
                 fi
             fi
 
@@ -145,10 +143,10 @@ getMessage()
 }
 
 main()
-{  
+{
     path=$(getPaneDir)
     getMessage
 }
 
 #run main driver program
-main 
+main

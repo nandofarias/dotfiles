@@ -1,6 +1,6 @@
 return {
   'kyazdani42/nvim-tree.lua',
-  depencencies = {
+  dependencies = {
     'kyazdani42/nvim-web-devicons',
   },
   keys = {
@@ -8,7 +8,9 @@ return {
     { 'n', '<leader>fg', ':NvimTreeFindFile<CR>' },
   },
   config = function()
-    vim.cmd [[au VimEnter * hi! TabLineFill gui=none guifg=none guibg=none]]
+    vim.cmd [[hi! NvimTreeNormalNC guibg=none ctermbg=none ]]
+    vim.cmd [[hi! NvimTreeNormal guibg=none ctermbg=none ]]
+    vim.cmd [[hi! NvimTreeWinSeparator guibg=none ctermbg=none ]]
 
     require('nvim-tree').setup {
       git = {

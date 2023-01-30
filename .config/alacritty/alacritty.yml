@@ -4,6 +4,7 @@ font:
   normal:
     family: MonoLisa 2
   size: 14.0
+  draw_bold_text_with_bright_colors: true
 
 window:
   padding:
@@ -13,36 +14,10 @@ window:
   decorations: buttonless
   startup_mode: Maximized
 
-background_opacity: 1.0
 
-colors:
-  primary:
-    background: "0x0b0d0f"
-    foreground: "0xf8f8f2"
-  cursor:
-    text: "0x414d58"
-    cursor: "0xf8f8f2"
-  selection:
-    text: "0xf8f8f2"
-    background: "0x414d58"
-  normal:
-    black: "0x0b0d0f"
-    red: "0xff9580"
-    green: "0x8aff80"
-    yellow: "0xffff80"
-    blue: "0x9580ff"
-    magenta: "0xff80bf"
-    cyan: "0x80ffea"
-    white: "0xf8f8f2"
-  bright:
-    black: "0x0b0d0f"
-    red: "0xffaa99"
-    green: "0xa2ff99"
-    yellow: "0xffff99"
-    blue: "0xaa99ff"
-    magenta: "0xff99cc"
-    cyan: "0x99ffee"
-    white: "0xffffff"
+# Colorscheme
+import:
+  - ~/.config/alacritty/theme.yml
 
 key_bindings:
   # Keybindings for tmux split and move https://www.hamvocke.com/blog/a-guide-to-customizing-your-tmux-conf/

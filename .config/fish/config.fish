@@ -99,10 +99,9 @@ abbr -ag tls "tmux ls"
 abbr -ag ss "cmatrix -C green"
 
 abbr -ag v nvim
-abbr -ag vim nvim
-abbr -ag update-nvim 'asdf uninstall neovim stable && asdf install neovim stable'
-abbr -ag plug-sync "nvim +PlugClean! +PlugUpdate +PlugInstall"
-abbr -ag vim-profile "nvim --startuptime timeCost.txt timeCost.txt; and rm timeCost.txt"
+abbr -ag vu 'asdf uninstall neovim stable && asdf install neovim stable'
+abbr -ag vup 'nvim --headless "+Lazy! sync" +qa'
+abbr -ag vp "nvim --startuptime timeCost.txt timeCost.txt; and rm timeCost.txt"
 abbr -ag lsp-logs "tail -f $HOME/.local/state/nvim/lsp.log"
 
 # aliases
