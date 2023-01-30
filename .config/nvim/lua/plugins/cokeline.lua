@@ -1,6 +1,6 @@
 return {
   'noib3/nvim-cokeline',
-  depencencies = {
+  dependencies = {
     'kyazdani42/nvim-web-devicons',
   },
   config = function()
@@ -11,7 +11,7 @@ return {
     local green = vim.g.terminal_color_2
     local errors_fg = get_hex('DiagnosticError', 'fg')
     local warnings_fg = get_hex('DiagnosticWarn', 'fg')
-    local default_bg = '#22212C'
+    local default_bg = '#444a73'
 
     require('cokeline').setup({
       buffers = {

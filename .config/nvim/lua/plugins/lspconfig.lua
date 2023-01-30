@@ -30,9 +30,6 @@ return {
     -- For nvim-cmp
     local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
     local on_attach = function(client, bufnr)
-      -- vim-illuminate
-      require('illuminate').on_attach(client)
-
       local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
 
       local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end

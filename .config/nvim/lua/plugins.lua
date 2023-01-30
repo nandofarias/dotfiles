@@ -2,11 +2,16 @@ return {
   -- Colorscheme
   {
     "folke/tokyonight.nvim",
-    lazy = false, -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other start plugins
+    lazy = false,
+    priority = 1000,
     config = function()
-      -- load the colorscheme here
       vim.cmd([[colorscheme tokyonight-moon]])
+      require("tokyonight").setup({
+        style = 'moon',
+        transparent = true,
+        dim_inactive = true,
+        hide_inactive_statusline = true,
+      })
     end,
   },
 
@@ -23,7 +28,6 @@ return {
   { 'karb94/neoscroll.nvim', config = true },
   'famiu/bufdelete.nvim',
   { 'tversteeg/registers.nvim', config = true },
-  'RRethy/vim-illuminate',
   { 'chentoast/marks.nvim', config = true },
   'dstein64/vim-startuptime',
   { 'mcauley-penney/tidy.nvim', config = true },
@@ -37,7 +41,7 @@ return {
   'mong8se/actually.nvim',
   'superhawk610/ascii-blocks.nvim',
   { 'lukas-reineke/virt-column.nvim', config = function()
-    vim.cmd [[ au VimEnter * highlight VirtColumn guifg=#202020 gui=nocombine ]]
+    vim.cmd [[ au VimEnter * highlight VirtColumn guifg=#1e2030 gui=nocombine ]]
     require('virt-column').setup()
   end },
 
@@ -47,7 +51,7 @@ return {
   'xiyaowong/nvim-transparent',
 
   -- Better Git
-  'sindrets/diffview.nvim',
+  { 'sindrets/diffview.nvim', dependencies = { 'kyazdani42/nvim-web-devicons' } },
   { 'ruifm/gitlinker.nvim', config = true },
 
   -- Earthly, will be removed when tree-sitter is available
