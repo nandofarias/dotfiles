@@ -3,5 +3,11 @@
 SETUVAR --export BUN_INSTALL:/Users/nandofarias/\x2ebun
 SETUVAR __done_notification_command:terminal\x2dnotifier\x20\x2dmessage\x20\x24message\x20\x2dtitle\x20\x24title
 SETUVAR __fish_initialized:3400
+SETUVAR _fisher_upgraded_to_4_4:\x1d
 SETUVAR fish_key_bindings:fish_hybrid_key_bindings
 SETUVAR fish_user_paths:/Users/nandofarias/\x2elocal/bin\x1e/Users/nandofarias/\x2efig/bin
+SETUVAR sponge_allow_previously_successful:true
+SETUVAR sponge_delay:2
+SETUVAR sponge_filters:sponge_filter_failed\x1esponge_filter_matched
+SETUVAR sponge_regex_patterns:\x1d
+SETUVAR sponge_successful_exit_codes:0
