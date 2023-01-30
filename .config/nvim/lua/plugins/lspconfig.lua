@@ -12,7 +12,6 @@ return {
     require("mason").setup()
     require("mason-lspconfig").setup({
       ensure_installed = { "dockerls", "elixirls", "erlangls", "grammarly", "graphql", "sqlls", "sumneko_lua",
-        "tailwindcss",
         "tsserver", "yamlls", "rust_analyzer", "zls", },
       automatic_installlation = true,
     })
