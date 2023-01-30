@@ -64,5 +64,8 @@ return {
   { 'kevinhwang91/nvim-bqf', ft = 'qf' },
 
   -- Better wildmenu
-  { 'gelguy/wilder.nvim', config = function() require('wilder').setup({ modes = { ':', '/', '?' } }) end }
+  { 'gelguy/wilder.nvim', config = function() require('wilder').setup({ modes = { ':', '/', '?' } }) end },
+
+  -- Which key
+  { "folke/which-key.nvim", config = true },
 }
