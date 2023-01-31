@@ -19,4 +19,3 @@ hs.loadSpoon('SpoonInstall')
 
 -- import modules
 require('keymaps')
-require('vim-mode')
