@@ -4,8 +4,17 @@ return {
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
     'jose-elias-alvarez/nvim-lsp-ts-utils',
-    { 'glepnir/lspsaga.nvim', config = true },
     'folke/lsp-colors.nvim',
+    {
+      'glepnir/lspsaga.nvim',
+      config = function()
+        require('lspsaga').setup({
+          symbol_in_winbar = {
+            enable = false,
+          }
+        })
+      end
+    },
   },
   config = function()
 
