@@ -9,5 +9,6 @@ SETUVAR fish_user_paths:/Users/nandofarias/\x2elocal/bin\x1e/Users/nandofarias/\
 SETUVAR sponge_allow_previously_successful:true
 SETUVAR sponge_delay:2
 SETUVAR sponge_filters:sponge_filter_failed\x1esponge_filter_matched
+SETUVAR sponge_purge_only_on_exit:false
 SETUVAR sponge_regex_patterns:\x1d
 SETUVAR sponge_successful_exit_codes:0
