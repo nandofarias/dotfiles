@@ -7,7 +7,7 @@
 [user]
 	email = nandofarias@me.com
 	name = Fernando Farias
-	signingkey = D045B882803B8576AF93AAC9D3287E305727B4E7
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAYfInuPmQ2VISW7BAS0KyIFOSKpGjYTuIEAlsFNG2Wh
 
 [http]
 	postBuffer = 1048576000
@@ -24,7 +24,7 @@
 [alias]
   st = status -s
   ht = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(magenta)%h%C(reset) %C(green)(%ar)%C(reset) %C(red)%d%C(reset) %C(white)%s%C(reset) - %C(blue)%an%C(reset)'
-  
+
   # Git Commit, Add all and Push — in one step.
   cap = "!f() { git commit -m \"$@\"; }; f"
   new = "!f() { git cap \"📦 new: $@\"; }; f"
@@ -73,13 +73,19 @@
 	gpgsign = true
 
 [gpg]
-	program = /usr/local/bin/gpg
+	format = ssh
+
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
 
 [rerere]
 	enabled = true
+
 [advice]
 	skippedCherryPicks = false
+
 [branch "develop"]
 	pushRemote = NOPE
+
 [push]
 	autoSetupRemote = true
