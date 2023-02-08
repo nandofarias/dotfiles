@@ -5,7 +5,7 @@ return {
   },
   keys = {
     { '<leader>fa', ':NvimTreeToggle<CR>' },
-    { 'n', '<leader>fg', ':NvimTreeFindFile<CR>' },
+    { '<leader>fg', ':NvimTreeFindFile<CR>' },
   },
   config = function()
     vim.cmd [[hi! NvimTreeNormalNC guibg=none ctermbg=none ]]
