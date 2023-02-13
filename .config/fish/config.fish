@@ -79,10 +79,6 @@ set -gx GPG_TTY (tty)
 # iTerm
 test -e {$HOME}/.iterm2_shell_integration.fish; and source {$HOME}/.iterm2_shell_integration.fish
 
-# asdf
-source ~/.asdf/asdf.fish
-source ~/.asdf/plugins/java/set-java-home.fish
-
 # Abbreviations
 abbr -ag mps "iex -S mix phx.server"
 abbr -ag iem "iex -S mix"
@@ -99,7 +95,7 @@ abbr -ag tls "tmux ls"
 abbr -ag ss "cmatrix -C green"
 
 abbr -ag v nvim
-abbr -ag vu 'asdf uninstall neovim stable && asdf install neovim stable'
+abbr -ag vu 'rtx uninstall neovim@stable && rtx install neovim@stable'
 abbr -ag vup 'nvim --headless "+Lazy! sync" +qa'
 abbr -ag vp "nvim --startuptime timeCost.txt timeCost.txt; and rm timeCost.txt"
 abbr -ag lsp-logs "tail -f $HOME/.local/state/nvim/lsp.log"
@@ -158,3 +154,6 @@ set -gx GIT_PILE_PREFIX ff-
 
 # Done
 set -U __done_notification_command "terminal-notifier -message \$message -title \$title"
+
+# rtx
+rtx activate fish | source
