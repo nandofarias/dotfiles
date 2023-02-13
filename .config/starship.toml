@@ -49,7 +49,7 @@ disabled = true
 
 [custom.elixir]
 symbol = " "
-command = "echo v$(asdf_current elixir)"
+command = "echo v$(elixir --short-version)"
 files = ["mix.exs"]
 style = "bold cyan"
 format = "[$symbol](purple)[$output]($style) "
