@@ -19,7 +19,7 @@ return {
     config = function()
       require("mason").setup()
       require("mason-lspconfig").setup({
-          ensure_installed = { "dockerls", "elixirls", "erlangls", "grammarly", "graphql", "sqlls", "sumneko_lua",
+          ensure_installed = { "dockerls", "elixirls", "erlangls", "grammarly", "graphql", "sqlls", "lua_ls",
               "tsserver", "yamlls", "rust_analyzer", "zls", },
           automatic_installlation = true,
       })
@@ -131,7 +131,7 @@ return {
             lspconfig.elixirls.setup(opts)
           end,
 
-          ['sumneko_lua'] = function()
+          ['lua_ls'] = function()
             opts.settings = {
                 Lua = {
                     diagnostics = {
@@ -147,7 +147,7 @@ return {
                 },
             }
 
-            lspconfig.sumneko_lua.setup(opts)
+            lspconfig.lua_ls.setup(opts)
           end,
 
           ['tsserver'] = function()
