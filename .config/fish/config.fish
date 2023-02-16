@@ -91,6 +91,8 @@ abbr -ag gc "git checkout"
 abbr -ag lg lazygit
 
 abbr -ag tls "tmux ls"
+abbr -ag tn "tmux new -s"
+abbr -ag ta "tmux attach -t"
 
 abbr -ag ss "cmatrix -C green"
 
@@ -132,9 +134,6 @@ mcfly init fish | source
 set -gx MCFLY_KEY_SCHEME vim
 set -gx MCFLY_FUZZY true
 set -gx MCFLY_RESULTS 50
-
-# Source functions https://github.com/fish-shell/fish-shell/issues/5034
-source ~/.config/fish/functions/tmux.fish
 
 # radicle.xyz
 fish_add_path -g $HOME/.radicle/bin
