@@ -156,4 +156,5 @@ set -gx GIT_PILE_PREFIX ff-
 set -U __done_notification_command "terminal-notifier -message \$message -title \$title"
 
 # rtx
+set -gx RTX_QUIET 1
 rtx activate fish | source
