@@ -1,7 +1,7 @@
 add_newline = false
 command_timeout = 5000
 
-[character] 
+[character]
 success_symbol = "[➜](bold green)"
 error_symbol = "[✗](bold red)"
 vicmd_symbol = "[V](bold green)"
@@ -54,3 +54,6 @@ files = ["mix.exs"]
 style = "bold cyan"
 format = "[$symbol](purple)[$output]($style) "
 shell = ["bash", "--noprofile", "--norc"]
+
+[directory.substitutions]
+"com~apple~CloudDocs" = "/iCloud"
