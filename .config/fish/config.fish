@@ -89,12 +89,13 @@ abbr -ag dc docker-compose
 abbr -ag g git
 abbr -ag gc "git checkout"
 abbr -ag lg lazygit
+abbr -ag lc "lazygit -g ~/.cfg"
 
 abbr -ag tls "tmux ls"
 abbr -ag tn "tmux new -s"
 abbr -ag ta "tmux attach -t"
 
-abbr -ag ss "cmatrix -C green"
+abbr -ag ss "cmatrix -C blue"
 
 abbr -ag v nvim
 abbr -ag vu 'rtx uninstall neovim@stable && rtx install neovim@stable'
