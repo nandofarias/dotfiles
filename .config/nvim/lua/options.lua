@@ -38,3 +38,5 @@ vim.opt.ch = 0
 vim.opt.colorcolumn = "120"
 -- vim.opt if for things you would set in vimscript. vim.g is for things you'd let.
 vim.g.mapleader = ' '
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1

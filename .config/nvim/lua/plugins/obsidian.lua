@@ -12,7 +12,7 @@ return {
               folder = "dailies",
           },
           completion = {
-              nvim_cmp = false,
+              nvim_cmp = true,
           },
           note_id_func = function(title)
             -- Create note IDs in a Zettelkasten format with a timestamp and a suffix.
