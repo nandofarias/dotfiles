@@ -28,10 +28,10 @@ return {
       require("telescope").load_extension "file_browser"
     end,
     keys = {
-        { '<leader>fs', function() require('telescope.builtin').find_files() end },
-        { '<leader>ff', function() require('telescope.builtin').live_grep() end },
-        { '<leader>fb', function() require('telescope.builtin').buffers() end },
-        { '<leader>fh', function() require('telescope.builtin').help_tags() end },
-        { '<leader>ft', function() require('telescope.builtin').treesitter() end },
+        { '<leader>fs', function() require('telescope.builtin').find_files() end, desc = "Find Files" },
+        { '<leader>ff', function() require('telescope.builtin').live_grep() end,  desc = "Find Word" },
+        { '<leader>fb', function() require('telescope.builtin').buffers() end,    desc = "Find Buffers" },
+        { '<leader>fh', function() require('telescope.builtin').help_tags() end,  desc = "Find Tags" },
+        { '<leader>ft', function() require('telescope.builtin').treesitter() end, desc = "Find Treesitter" },
     }
 }
