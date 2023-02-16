@@ -63,6 +63,7 @@
   "presence.nvim": { "branch": "main", "commit": "87c857a56b7703f976d3a5ef15967d80508df6e6" },
   "registers.nvim": { "branch": "main", "commit": "667ae447d2c7efb64461a2c58f5311d1248cdb5f" },
   "rest.nvim": { "branch": "main", "commit": "0fdb69f328529b34a2279c14be63b3325dc52740" },
+  "silicon.nvim": { "branch": "main", "commit": "311093804e19e7a7eede7f3417533115bd6a058f" },
   "stabilize.nvim": { "branch": "master", "commit": "34069870a8e72632c5447188e638e1c6bfebc353" },
   "symbols-outline.nvim": { "branch": "master", "commit": "512791925d57a61c545bc303356e8a8f7869763c" },
   "telescope-file-browser.nvim": { "branch": "master", "commit": "4a7a7d2746c1c11d0e26b9dd638a62df08692ae5" },
