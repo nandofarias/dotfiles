@@ -10,7 +10,7 @@ return {
             config = function()
               require('lspsaga').setup({
                   symbol_in_winbar = {
-                      enable = false,
+                      enable = true,
                   }
               })
             end
@@ -40,8 +40,6 @@ return {
         local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
 
         local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
-        local cmd = vim.api.nvim_command
 
         buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -92,13 +90,11 @@ return {
         buf_set_keymap('n', '<leader>cr', '<cmd>lua vim.lsp.codelens.run()<CR>', opts)
         buf_set_keymap('n', '<leader>cl', '<cmd>lua vim.lsp.codelens.refresh()<CR>', opts)
         if client.server_capabilities.code_lens then
-          cmd [[augroup LspCodelensAutoGroup]]
-          cmd [[au!]]
-          cmd [[au BufEnter <buffer> lua vim.lsp.codelens.refresh()]]
-          cmd [[au CursorHold <buffer> lua vim.lsp.codelens.refresh()]]
-          cmd [[au InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
-          cmd [[augroup end]]
-          cmd [[hi link LspCodeLens DraculaYellow]]
+          vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+              buffer = bufnr,
+              callback = vim.lsp.codelens.refresh,
+          })
+          vim.lsp.codelens.refresh()
         end
       end
 
