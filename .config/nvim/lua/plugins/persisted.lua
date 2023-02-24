@@ -1,5 +1,6 @@
 return {
     'olimorris/persisted.nvim',
+    event = 'BufReadPre',
     keys = {
         { '<Leader>sl', function()
           require('persisted').load()
@@ -12,7 +13,6 @@ return {
     config = function()
       require('persisted').setup {
           use_git_branch = true,
-          branch_separator = '@@',
           after_save = function()
             vim.notify('Session was saved!')
           end,
