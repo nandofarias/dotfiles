@@ -62,5 +62,7 @@ return {
     { 'gelguy/wilder.nvim',    config = function() require('wilder').setup({ modes = { ':', '/', '?' } }) end },
 
     -- Which key
-    { "folke/which-key.nvim",  config = true },
+    { 'folke/which-key.nvim',  config = true },
+
+    'github/copilot.vim',
 }
