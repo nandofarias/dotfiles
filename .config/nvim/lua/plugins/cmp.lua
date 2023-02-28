@@ -49,17 +49,18 @@ return {
             Event = '',
             Operator = '',
             TypeParameter = ' ',
+            Copilot = "",
           }
           local meta_type = vim_item.kind
           -- load lspkind icons
           vim_item.kind = lspkind_icons[vim_item.kind] .. ''
 
           vim_item.menu = ({
-            buffer = ' Buffer',
-            nvim_lsp = meta_type,
-            path = ' Path',
-            luasnip = ' LuaSnip',
-          })[entry.source.name]
+                buffer = ' Buffer',
+                nvim_lsp = meta_type,
+                path = ' Path',
+                luasnip = ' LuaSnip',
+              })[entry.source.name]
 
           return vim_item
         end,
@@ -70,7 +71,7 @@ return {
         end,
       },
       mapping = {
-        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-d>'] = cmp.mapping.scroll_docs( -4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-y>'] = cmp.mapping.close(),
@@ -82,6 +83,7 @@ return {
         ['<C-p>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
       },
       sources = {
+        { name = 'copilot' },
         { name = 'nvim_lsp' },
         { name = 'nvim_lua' },
         { name = 'vsnip' },
