@@ -1,0 +1,7 @@
+[[conn]]
+type = "postgres"
+user = "postgres"
+host = "localhost"
+port = 5432
+database = "sched_development"
+name = "Sched Locally"
