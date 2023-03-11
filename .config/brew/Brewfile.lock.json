@@ -6310,6 +6310,12 @@
         "options": {
           "full_name": "zoom"
         }
+      },
+      "app-cleaner": {
+        "version": "8.1.1",
+        "options": {
+          "full_name": "app-cleaner"
+        }
       }
     },
     "mas": {
