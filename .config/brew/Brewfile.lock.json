@@ -6316,6 +6316,18 @@
         "options": {
           "full_name": "app-cleaner"
         }
+      },
+      "appcleaner": {
+        "version": "3.6.7,4301",
+        "options": {
+          "full_name": "appcleaner"
+        }
+      },
+      "sublime-text": {
+        "version": "4143",
+        "options": {
+          "full_name": "sublime-text"
+        }
       }
     },
     "mas": {
