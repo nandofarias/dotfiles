@@ -26,7 +26,14 @@ echo "Installing brew packages …"
 export HOMEBREW_BUNDLE_FILE=~/.config/brew/Brewfile
 brew bundle
 
+echo "Setting up fish …"
+echo /usr/local/bin/fish | sudo tee -a /etc/shells
+chsh -s /usr/local/bin/fish
+
+echo "Setting up languages and tools …"
+rtx install
+
 echo "Setting macos defaults …"
-./macos
+~/.bin/macos
 
 echo "All good to go!"
