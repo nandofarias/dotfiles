@@ -2,7 +2,7 @@
 
 if ! command -v brew &>/dev/null; then
   echo "Homebrew not found. Installing …"
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
@@ -23,6 +23,7 @@ if [ ! -d "$DOTFILES" ]; then
 fi
 
 echo "Installing brew packages …"
+export HOMEBREW_BUNDLE_FILE=~/.config/brew/Brewfile
 brew bundle
 
 echo "All good to go!"

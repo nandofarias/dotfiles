@@ -5,4 +5,6 @@ Hello, my friend, this is a friendly reminder to myself on how to use my dotfile
 ## Install
 
 Setup script:
-`curl https://raw.githubusercontent.com/nandofarias/dotfiles/main/setup.sh | sh`
+```sh
+curl https://raw.githubusercontent.com/nandofarias/dotfiles/main/setup.sh | sh
+```
