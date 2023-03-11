@@ -18,7 +18,7 @@ fi
 DOTFILES="$HOME/.cfg"
 if [ ! -d "$DOTFILES" ]; then
   echo "Dotfiles not found. Cloning …"
-  git clone --bare git@github.com:nandofarias/dotfiles.git $HOME/.cfg
+  git clone --bare https://github.com/nandofarias/dotfiles.git $HOME/.cfg
   git --git-dir=$HOME/.cfg/ --work-tree=$HOME checkout
 fi
 
