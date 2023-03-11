@@ -26,4 +26,7 @@ echo "Installing brew packages …"
 export HOMEBREW_BUNDLE_FILE=~/.config/brew/Brewfile
 brew bundle
 
+echo "Setting macos defaults …"
+./macos
+
 echo "All good to go!"
