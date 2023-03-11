@@ -1,3 +1,30 @@
+tap "aws/tap"
+tap "buo/cask-upgrade"
+tap "cantino/mcfly"
+tap "coin-or-tools/coinor"
+tap "d12frosted/emacs-plus"
+tap "derailed/k9s"
+tap "derailed/popeye"
+tap "earthly/earthly"
+tap "facebook/fb"
+tap "github/gh"
+tap "hashicorp/tap"
+tap "helix-editor/helix"
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/cask-fonts"
+tap "homebrew/cask-versions"
+tap "homebrew/core"
+tap "homebrew/services"
+tap "keith/formulae"
+tap "orf/brew"
+tap "railwaycat/emacsmacport"
+tap "remotemobprogramming/brew"
+tap "schniz/tap"
+tap "syncdk/aws-session-manager-plugin"
+tap "tako8ki/tap"
+tap "wez/wezterm"
+tap "withgraphite/tap"
 brew "asciinema"
 brew "autoconf"
 brew "autoconf@2.69", link: true
@@ -152,57 +179,28 @@ cask "mockoon"
 cask "ngrok"
 cask "podman-desktop"
 cask "raycast"
+cask "slack"
+cask "tailscale"
 cask "temurin8"
+cask "the-unarchiver"
+cask "todoist"
 cask "wez/wezterm/wezterm-nightly"
 cask "wkhtmltopdf"
+cask "whatsapp"
+cask "zoom"
 mas "1Password for Safari", id: 1569813296
-mas "Amphetamine", id: 937984704
 mas "Bear", id: 1091189122
 mas "Boop", id: 1518425043
 mas "Dark Reader for Safari", id: 1438243180
 mas "Dynamo", id: 1445910651
-mas "Endel", id: 1484348796
 mas "Flow", id: 1423210932
 mas "Gifski", id: 1351639930
 mas "Grammarly for Safari", id: 1462114288
 mas "Hand Mirror", id: 1502839586
 mas "Keynote", id: 409183694
 mas "LimeChat", id: 414030210
-mas "Magnet", id: 441258766
 mas "Numbers", id: 409203825
 mas "OverPicture", id: 1188020834
 mas "Pages", id: 409201541
 mas "Save to Matter", id: 1548677272
-mas "Slack", id: 803453959
-mas "Tailscale", id: 1475387142
-mas "The Unarchiver", id: 425424353
-mas "Todoist", id: 585829637
-mas "WhatsApp", id: 1147396723
 mas "Xcode", id: 497799835
-tap "aws/tap"
-tap "buo/cask-upgrade"
-tap "cantino/mcfly"
-tap "coin-or-tools/coinor"
-tap "d12frosted/emacs-plus"
-tap "derailed/k9s"
-tap "derailed/popeye"
-tap "earthly/earthly"
-tap "facebook/fb"
-tap "github/gh"
-tap "hashicorp/tap"
-tap "helix-editor/helix"
-tap "homebrew/bundle"
-tap "homebrew/cask"
-tap "homebrew/cask-fonts"
-tap "homebrew/cask-versions"
-tap "homebrew/core"
-tap "homebrew/services"
-tap "keith/formulae"
-tap "orf/brew"
-tap "railwaycat/emacsmacport"
-tap "remotemobprogramming/brew"
-tap "schniz/tap"
-tap "syncdk/aws-session-manager-plugin"
-tap "tako8ki/tap"
-tap "wez/wezterm"
-tap "withgraphite/tap"
