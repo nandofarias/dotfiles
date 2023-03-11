@@ -5,6 +5,6 @@ Hello, my friend, this is a friendly reminder to myself on how to use my dotfile
 ## Install
 
 Setup script:
-```sh
-curl https://raw.githubusercontent.com/nandofarias/dotfiles/main/setup.sh | sh
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/nandofarias/dotfiles/main/setup.sh)"
 ```
