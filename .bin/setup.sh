@@ -30,8 +30,9 @@ export HOMEBREW_BUNDLE_FILE=~/.config/brew/Brewfile
 brew bundle
 
 echo "Setting up fish …"
-echo $(brew --prefix fish) | sudo tee -a /etc/shells
-chsh -s $(brew --prefix fish)
+echo $(which fish) | sudo tee -a /etc/shells
+chsh -s $(which fish)
+curl -sS https://starship.rs/install.sh | sh
 
 echo "Setting up tmux …"
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
