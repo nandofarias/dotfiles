@@ -32,7 +32,9 @@ brew bundle
 echo "Setting up fish …"
 echo $(which fish) | sudo tee -a /etc/shells
 chsh -s $(which fish)
-curl -sS https://starship.rs/install.sh | sh
+if ! command -v brew &>/dev/null; then
+  curl -sS https://starship.rs/install.sh | sh
+fi
 
 echo "Setting up tmux …"
 tic -x ~/.config/tmux/tmux.terminfo
