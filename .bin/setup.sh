@@ -16,6 +16,7 @@ if [ ! -d "$DOTFILES" ]; then
   alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
   config config --local status.showUntrackedFiles no
   config checkout
+  config remote set-url origin git@github.com:nandofarias/dotfiles.git
 fi
 
 if ! command -v brew &>/dev/null; then
