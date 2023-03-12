@@ -6377,6 +6377,96 @@
         "options": {
           "full_name": "sublime-text"
         }
+      },
+      "klogg": {
+        "version": "22.06.0.1289",
+        "options": {
+          "full_name": "klogg"
+        }
+      },
+      "livebook": {
+        "version": "0.8.1",
+        "options": {
+          "full_name": "livebook"
+        }
+      },
+      "airflow": {
+        "version": "3.3.3",
+        "options": {
+          "full_name": "airflow"
+        }
+      },
+      "dash": {
+        "version": "6.4.0,1006",
+        "options": {
+          "full_name": "dash"
+        }
+      },
+      "discord": {
+        "version": "0.0.273",
+        "options": {
+          "full_name": "discord"
+        }
+      },
+      "keybase": {
+        "version": "6.0.4,20230113195947,6e1343b357",
+        "options": {
+          "full_name": "keybase"
+        }
+      },
+      "camo-studio": {
+        "version": "1.9.2,8695",
+        "options": {
+          "full_name": "camo-studio"
+        }
+      },
+      "commander-one": {
+        "version": "3.5.2,3667",
+        "options": {
+          "full_name": "commander-one"
+        }
+      },
+      "daisydisk": {
+        "version": "4.24",
+        "options": {
+          "full_name": "daisydisk"
+        }
+      },
+      "figma": {
+        "version": "116.7.6",
+        "options": {
+          "full_name": "figma"
+        }
+      },
+      "telegram": {
+        "version": "9.4.2,243859",
+        "options": {
+          "full_name": "telegram"
+        }
+      },
+      "vlc": {
+        "version": "3.0.18",
+        "options": {
+          "full_name": "vlc"
+        }
+      },
+      "obs": {
+        "version": "29.0.2",
+        "options": {
+          "full_name": "obs"
+        }
+      },
+      "onionshare": {
+        "version": "2.6",
+        "options": {
+          "full_name": "onionshare"
+        }
+      },
+      "tor-browser": {
+        "version": "12.0.3",
+        "options": {
+          "full_name": "tor-browser"
+        }
       }
     },
     "mas": {
