@@ -185,7 +185,6 @@ cask "podman-desktop"
 cask "raycast"
 cask "slack"
 cask "sublime-text"
-cask "tailscale"
 cask "the-unarchiver"
 cask "todoist"
 cask "wez/wezterm/wezterm-nightly"
@@ -207,4 +206,5 @@ mas "Numbers", id: 409203825
 mas "OverPicture", id: 1188020834
 mas "Pages", id: 409201541
 mas "Save to Matter", id: 1548677272
+mas "Tailscale", id: 1475387142
 mas "Xcode", id: 497799835
