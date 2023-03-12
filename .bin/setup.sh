@@ -14,8 +14,8 @@ if [ ! -d "$DOTFILES" ]; then
   echo "Dotfiles not found. Cloning …"
   git clone --bare https://github.com/nandofarias/dotfiles.git $HOME/.cfg
   alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-  config config --local status.showUntrackedFiles no
   config checkout
+  config config --local status.showUntrackedFiles no
   config remote set-url origin git@github.com:nandofarias/dotfiles.git
 fi
 
@@ -35,6 +35,7 @@ chsh -s $(which fish)
 curl -sS https://starship.rs/install.sh | sh
 
 echo "Setting up tmux …"
+tic -x ~/.config/tmux/tmux.terminfo
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ~/.tmux/plugins/tpm/bin/install_plugins
 
