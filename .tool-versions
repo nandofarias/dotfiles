@@ -1,7 +1,5 @@
 elixir 1.14.1-otp-25
 erlang 25.0.4
 gleam 0.26.1
-bazel 3.1.0
 yarn 1.22.5
-java graalvm-21.3.0+java17
 neovim stable

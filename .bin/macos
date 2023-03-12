@@ -61,6 +61,8 @@ defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortOrder" -stri
 plutil -replace AppleSymbolicHotKeys.60.enabled -bool NO ~/Library/Preferences/com.apple.symbolichotkeys.plist
 # Disable "Spotlight" shortcut
 plutil -replace AppleSymbolicHotKeys.60.enabled -bool NO ~/Library/Preferences/com.apple.symbolichotkeys.plist
+# Enable ssh
+sudo systemsetup -setremotelogin on
 
 echo "\n\ndone!\nYou must logout for your new MacOS settings to take effect\n"
 osascript -e 'tell application "System Events" to log out'

@@ -103,6 +103,8 @@ abbr -ag vup 'nvim --headless "+Lazy! sync" +qa'
 abbr -ag vp "nvim --startuptime timeCost.txt timeCost.txt; and rm timeCost.txt"
 abbr -ag lsp-logs "tail -f $HOME/.local/state/nvim/lsp.log"
 
+abbr -ag barenvim "nvim -u NONE"
+
 # aliases
 alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 

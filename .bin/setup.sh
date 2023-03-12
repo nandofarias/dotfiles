@@ -13,7 +13,9 @@ DOTFILES="$HOME/.cfg"
 if [ ! -d "$DOTFILES" ]; then
   echo "Dotfiles not found. Cloning …"
   git clone --bare https://github.com/nandofarias/dotfiles.git $HOME/.cfg
-  git --git-dir=$HOME/.cfg/ --work-tree=$HOME checkout
+  alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+  config config --local status.showUntrackedFiles no
+  config checkout
 fi
 
 if ! command -v brew &>/dev/null; then
@@ -27,8 +29,12 @@ export HOMEBREW_BUNDLE_FILE=~/.config/brew/Brewfile
 brew bundle
 
 echo "Setting up fish …"
-echo /usr/local/bin/fish | sudo tee -a /etc/shells
-chsh -s /usr/local/bin/fish
+echo $(brew --prefix fish) | sudo tee -a /etc/shells
+chsh -s $(brew --prefix fish)
+
+echo "Setting up tmux …"
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+~/.tmux/plugins/tpm/bin/install_plugins
 
 echo "Setting up languages and tools …"
 rtx install
