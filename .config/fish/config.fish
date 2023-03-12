@@ -13,6 +13,9 @@ set -gx HOMEBREW_BUNDLE_FILE ~/.config/brew/Brewfile
 if [ -s "/opt/homebrew/bin/brew" ];
   eval "$(/opt/homebrew/bin/brew shellenv)"
 end
+if [ -s "/usr/local/bin/brew" ];
+  eval "$(/usr/local/bin/brew shellenv)"
+end
 
 # Fix curl
 fish_add_path -g /usr/local/opt/curl/bin
