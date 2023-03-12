@@ -8,6 +8,12 @@ set -gx EDITOR nvim
 ulimit -n 65536 # See: https://stackoverflow.com/a/45004802
 fish_add_path -g $HOME/.bin $HOME/.local/bin
 
+# Homebrew
+set -gx HOMEBREW_BUNDLE_FILE ~/.config/brew/Brewfile
+if [ -s "/opt/homebrew/bin/brew" ];
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+end
+
 # Fix curl
 fish_add_path -g /usr/local/opt/curl/bin
 
@@ -143,9 +149,6 @@ fish_add_path -g $HOME/.radicle/bin
 
 # Python 3.9
 fish_add_path -g $HOME/Library/Python/3.9/bin
-
-# Homebrew
-set -gx HOMEBREW_BUNDLE_FILE ~/.config/brew/Brewfile
 
 # Bun
 set -Ux BUN_INSTALL "$HOME/.bun"

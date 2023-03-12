@@ -125,6 +125,7 @@ brew "python@3.9"
 brew "qemu"
 brew "qt"
 brew "reattach-to-user-namespace"
+brew "rebar3"
 brew "redis", restart_service: true
 brew "mob"
 brew "ripgrep"
