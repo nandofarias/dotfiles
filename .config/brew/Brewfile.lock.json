@@ -2,7 +2,7 @@
   "entries": {
     "tap": {
       "aws/tap": {
-        "revision": "cb039b4d6ec386bc9cea7843209807af18c2e14e"
+        "revision": "63fea466fe9728c6d4c4b5041f9b7e3c86370539"
       },
       "buo/cask-upgrade": {
         "revision": "8239f3b7063f0cea966bc822cab34f741dd8a8e0"
@@ -32,7 +32,7 @@
         "revision": "209f59cda890de69b74c224982591642c21323d3"
       },
       "hashicorp/tap": {
-        "revision": "5f703a18c61b5cb030a93bb320b5eb23610a79f4"
+        "revision": "737655db15694d6afdc631c7da072c1cee5c00ee"
       },
       "helix-editor/helix": {
         "revision": "6ca92b1117e6e3e8f89545ee4c3729fe2ad2bbc3"
@@ -41,25 +41,25 @@
         "revision": "4c5d4cf248f2981f66ea8988f81d6afc63edee85"
       },
       "homebrew/cask": {
-        "revision": "9bc77693e287718447849c4705b14b99847ebe73"
+        "revision": "ec805d95633c96815e33f5bd39d763f648ff53d0"
       },
       "homebrew/cask-fonts": {
         "revision": "fc7b81ff084770ae7db4f3218f2569c4f731e335"
       },
       "homebrew/cask-versions": {
-        "revision": "6c32761b6e25a819c09422108a0b0a42738080f6"
+        "revision": "3696d3aef9bcf167591a85ea1d9801e371c46201"
       },
       "homebrew/core": {
-        "revision": "d36248c2857d97179b3c474697d353edc728ad64"
+        "revision": "2debb9106155b3474665c13cd101e5574084ecf8"
       },
       "homebrew/services": {
-        "revision": "737d01a841cec5a50fb207a63c880ceb385991cb"
+        "revision": "84881e62f69d68615e1549cb1ababb1c844d687d"
       },
       "orf/brew": {
         "revision": "21768fe252f92822b42f3620e1c3e4750f8d2661"
       },
       "railwaycat/emacsmacport": {
-        "revision": "2ea9be1b4c3c86e5535801303ccbcb2674a1f2e0"
+        "revision": "622c7bf0b236e1e1b61a858a4c179e5c446a81a0"
       },
       "remotemobprogramming/brew": {
         "revision": "7de38a1501fedafc21415dd0bf20d408287be819"
@@ -74,7 +74,7 @@
         "revision": "1bf23475a3e16ec99a8ec8d75f9f4148130601c0"
       },
       "withgraphite/tap": {
-        "revision": "494ce8e907b351d128c446f7462dbadc91791c1f"
+        "revision": "cd5cae7a805b2d64031c07fc19a9a19ef2e20411"
       },
       "keith/formulae": {
         "revision": "dbb359ee06cfd2f733b137354d8dd74f79c9aca6"
@@ -6063,7 +6063,7 @@
         }
       },
       "jdxcode/tap/rtx": {
-        "version": "1.23.4",
+        "version": "1.23.5",
         "bottle": false
       },
       "silicon": {
@@ -6241,7 +6241,7 @@
         }
       },
       "ngrok": {
-        "version": "3.1.1,an2KvqCaZyY,a",
+        "version": "3.1.1,ewxEwpSWPaS,a",
         "options": {
           "full_name": "ngrok"
         }
@@ -6319,7 +6319,7 @@
         }
       },
       "hammerspoon": {
-        "version": "0.9.98",
+        "version": "0.9.99",
         "options": {
           "full_name": "hammerspoon"
         }
@@ -6409,7 +6409,7 @@
         }
       },
       "keybase": {
-        "version": "6.0.4,20230113195947,6e1343b357",
+        "version": "6.0.4,20230113191846,6e1343b357",
         "options": {
           "full_name": "keybase"
         }
@@ -6722,8 +6722,8 @@
         "macOS": "12.6"
       },
       "ventura": {
-        "HOMEBREW_VERSION": "4.0.6",
-        "HOMEBREW_PREFIX": "/opt/homebrew",
+        "HOMEBREW_VERSION": "4.0.6-43-gb4aac9d",
+        "HOMEBREW_PREFIX": "/usr/local",
         "Homebrew/homebrew-core": "api",
         "CLT": "14.2.0.0.1.1668646533",
         "Xcode": "14.2",
