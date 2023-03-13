@@ -127,12 +127,7 @@ end
 
 # Blvd
 set MATCHWORKER_PREFER_PREBUILT 1
-# Okta
-if test -d ~/.okta
-    fish_add_path -g $HOME/.okta/bin
-    source ~/.okta/fish_functions/okta-aws.fish
-    source ~/.okta/fish_functions/okta-sls.fish
-end
+set DATABASE_POOL_SIZE 100
 
 # Emacs
 set -gx DOOMDIR $HOME/.doom.d
