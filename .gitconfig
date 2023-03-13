@@ -33,7 +33,6 @@
   up = "!f() { git cap \"✍🏻 update: $@\"; }; f"
   fix = "!f() { git cap \"🐞 fix: $@\"; }; f"
   rlz = "!f() { git cap \"🚀 release: $@\"; }; f"
-  doc = "!f() { git cap \"📖 doc: $@\"; }; f"
   tst = "!f() { git cap \"🤖 test: $@\"; }; f"
   brk = "!f() { git cap \"‼️ BREAKING CHANGES: $2\"; }; f"
   rem = "!f() { git cap \"🗑  remove: $@\"; }; f"
@@ -55,6 +54,7 @@
   ca = commit --amend
 
 	amend-to = "!f() { SHA=$1; git commit --fixup \"$SHA\" && git rebase --interactive --autosquash \"$SHA^\"; }; f"
+  untrack = "!f() { git rm --cached $@; }; f"
 
 [core]
 	excludesfile = /Users/nandofarias/.gitignore
