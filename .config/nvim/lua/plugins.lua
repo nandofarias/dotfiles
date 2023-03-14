@@ -35,10 +35,13 @@ return {
   'ellisonleao/glow.nvim',
   'mong8se/actually.nvim',
   'superhawk610/ascii-blocks.nvim',
-  { 'lukas-reineke/virt-column.nvim', config = function()
-    require('virt-column').setup()
-    vim.cmd [[ au VimEnter * highlight VirtColumn guifg=#1e2030 gui=nocombine ]]
-  end },
+  {
+    'lukas-reineke/virt-column.nvim',
+    config = function()
+      require('virt-column').setup()
+      vim.cmd [[ au VimEnter * highlight VirtColumn guifg=#1e2030 gui=nocombine ]]
+    end
+  },
 
   -- Window hacks
   { 'luukvbaal/stabilize.nvim', config = true },
@@ -63,6 +66,4 @@ return {
 
   -- Which key
   { 'folke/which-key.nvim',  config = true },
-
-  -- 'github/copilot.vim',
 }
