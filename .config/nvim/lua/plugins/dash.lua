@@ -3,6 +3,6 @@ return {
   build = 'make install',
   config = true,
   keys = {
-    { '<space>df', ':DashWord! <CR>', desc = "Dash" }
+    { '<space>sf', ':DashWord! <CR>', desc = "Dash" }
   }
 }

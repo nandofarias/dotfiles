@@ -4,3 +4,4 @@ gleam 0.26.1
 nodejs 19.7.0
 yarn 1.22.5
 neovim stable
+rust stable
