@@ -1,7 +1,7 @@
 elixir 1.14.1-otp-25
 erlang 25.0.4
 gleam 0.26.1
-nodejs 19.7.0
+nodejs lts
 yarn 1.22.5
 neovim stable
 rust stable
