@@ -1,8 +1,13 @@
 return {
   'tpope/vim-dadbod',
+  cmd = "DBUI",
   dependencies = {
     'kristijanhusak/vim-dadbod-ui',
     'kristijanhusak/vim-dadbod-completion',
+  },
+  keys = {
+    { '<leader>do', ':DBUI<CR><CR>',  desc = "Database UI Open" },
+    { '<leader>dc', ':DBUIClose<CR>', desc = "Database UI Close" },
   },
   config = function()
     vim.g['db_ui_winwidth'] = 60
