@@ -18,7 +18,12 @@ if [ -s "/usr/local/bin/brew" ];
 end
 
 # Fix curl
-fish_add_path -g /usr/local/opt/curl/bin
+if [ -s "/usr/local/opt/curl" ];
+  fish_add_path -g /usr/local/opt/curl/bin
+end
+if [ -s "/opt/homebrew/opt/curl" ];
+  fish_add_path -g /opt/homebrew/opt/curl/bin
+end
 
 # Android
 set -gx ANDROID_HOME $HOME/Library/Android/sdk
