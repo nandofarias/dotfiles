@@ -5,7 +5,6 @@ vim.keymap.set('o', 'ip', 'i(')
 
 -- General
 vim.keymap.set('n', '<space>no', ':nohlsearch <CR>', { silent = true })
-vim.keymap.set('n', '<space>r', ':source $MYVIMRC <CR>', { silent = true })
 vim.keymap.set('n', 'gs', ':set spell! <CR>', { silent = true })
 vim.keymap.set('n', '<space>cc', ':cclose <CR>', { silent = true })
 vim.keymap.set('n', '<space>bd', ':Bdelete <CR> <Plug>(cokeline-focus-prev)<CR>',

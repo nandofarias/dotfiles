@@ -2,8 +2,8 @@ return {
   'rest-nvim/rest.nvim',
   config = true,
   keys = {
-    { '<leader>rf', '<Plug>RestNvim<CR>' },
-    { '<leader>rl', '<Plug>RestNvimLast<CR>' },
-    { '<leader>rp', '<Plug>RestNvimPreview<CR>' },
+    { '<leader>rf', '<Plug>RestNvim<CR>',        desc = "HTTP Request" },
+    { '<leader>rl', '<Plug>RestNvimLast<CR>',    desc = "HTTP Last Request" },
+    { '<leader>rp', '<Plug>RestNvimPreview<CR>', desc = "HTTP Preview" },
   }
 }
