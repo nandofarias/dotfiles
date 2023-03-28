@@ -10,9 +10,10 @@ return {
     { '<leader>dc', ':DBUIClose<CR>', desc = "Database UI Close" },
   },
   config = function()
-    vim.g['db_ui_winwidth'] = 60
-    vim.g['db_ui_win_position'] = 'left'
-    vim.g['db_ui_force_echo_notifications'] = 1
+    vim.opt.cmdheight = 1
+    vim.g.db_ui_show_help = 0
+    vim.g.db_ui_win_position = 'left'
+    vim.g.db_ui_tmp_query_location = '~/Develper/queries'
 
     vim.api.nvim_create_autocmd('FileType', {
       pattern = { 'sql', 'mysql', 'plsql' },
