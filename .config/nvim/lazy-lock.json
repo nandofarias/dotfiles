@@ -74,6 +74,7 @@
   "tidy.nvim": { "branch": "main", "commit": "9b15a0eb12d6d4f0bb5c197c1f5b72bcc57f09ff" },
   "todo-comments.nvim": { "branch": "main", "commit": "14e2cd9a6e5e67483a03660f08471ca9a981c4a5" },
   "tokyonight.nvim": { "branch": "main", "commit": "edffa82026914be54c8220973b0385f61d3392f0" },
+  "tree-sitter-just": { "branch": "main", "commit": "4e5f5f3ff37b12a1bbf664eb3966b3019e924594" },
   "trouble.nvim": { "branch": "main", "commit": "7915277a259fdff5d46c6f1d2e100df2ec384d3b" },
   "twilight.nvim": { "branch": "main", "commit": "2e13bd1886562b737f38c418ed542677b41ef5cb" },
   "vim-abolish": { "branch": "master", "commit": "880a562ff9176773897930b5a26a496f68e5a985" },
