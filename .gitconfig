@@ -55,6 +55,7 @@
 
 	amend-to = "!f() { SHA=$1; git commit --fixup \"$SHA\" && git rebase --interactive --autosquash \"$SHA^\"; }; f"
   untrack = "!f() { git rm --cached $@; }; f"
+  edit = !$EDITOR $(git status --short | awk '$1 ~ /^M|A|U/ {print $2}' )
 
 [core]
 	excludesfile = /Users/nandofarias/.gitignore
