@@ -196,6 +196,7 @@ cask "kitty"
 cask "klogg"
 cask "krisp"
 cask "livebook"
+cask "logi-options-plus"
 cask "loopback"
 cask "lunar"
 cask "meetingbar"
@@ -236,6 +237,7 @@ mas "Flow", id: 1423210932
 mas "Gifski", id: 1351639930
 mas "Grammarly for Safari", id: 1462114288
 mas "Hand Mirror", id: 1502839586
+mas "iWallpaper - Live Wallpaper", id: 1552826194
 mas "Keynote", id: 409183694
 mas "LimeChat", id: 414030210
 mas "Numbers", id: 409203825
