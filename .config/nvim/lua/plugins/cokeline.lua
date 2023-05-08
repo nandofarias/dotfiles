@@ -1,5 +1,5 @@
 return {
-  'noib3/nvim-cokeline',
+  'willothy/nvim-cokeline',
   lazy = false,
   dependencies = {
     'kyazdani42/nvim-web-devicons',
@@ -34,17 +34,13 @@ return {
         filetype = 'NvimTree',
         components = {
           {
-            text = '  NvimTree',
+            text = '  FileTree',
             style = 'bold',
             bg = 'none',
           },
         }
       },
       components = {
-        {
-          text = ' ',
-          bg = 'none',
-        },
         {
           text = '',
           bg = 'none',
