@@ -35,6 +35,7 @@ return {
   'ellisonleao/glow.nvim',
   'mong8se/actually.nvim',
   'superhawk610/ascii-blocks.nvim',
+  { 'akinsho/git-conflict.nvim', version = "*", config = true },
   {
     'lukas-reineke/virt-column.nvim',
     config = function()
@@ -44,16 +45,16 @@ return {
   },
 
   -- Window hacks
-  { 'luukvbaal/stabilize.nvim', config = true },
+  { 'luukvbaal/stabilize.nvim',  config = true },
   'simeji/winresizer',
   'xiyaowong/nvim-transparent',
 
   -- Better Git
-  { 'sindrets/diffview.nvim',   dependencies = { 'kyazdani42/nvim-web-devicons' } },
-  { 'ruifm/gitlinker.nvim',     config = true },
+  { 'sindrets/diffview.nvim', dependencies = { 'kyazdani42/nvim-web-devicons' } },
+  { 'ruifm/gitlinker.nvim',   config = true },
 
   -- Earthly, will be removed when tree-sitter is available
-  { 'earthly/earthly.vim',      branch = 'main' },
+  { 'earthly/earthly.vim',    branch = 'main' },
 
   -- Frontend
   'mattn/emmet-vim',
