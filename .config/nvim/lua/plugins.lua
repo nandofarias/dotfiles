@@ -12,6 +12,7 @@ return {
         hide_inactive_statusline = true,
       })
       vim.cmd([[colorscheme tokyonight-moon]])
+      vim.cmd([[hi TabLine guibg=NONE guifg=NONE]])
     end,
   },
 
@@ -35,17 +36,11 @@ return {
   'ellisonleao/glow.nvim',
   'mong8se/actually.nvim',
   'superhawk610/ascii-blocks.nvim',
-  { 'akinsho/git-conflict.nvim', version = "*", config = true },
-  {
-    'lukas-reineke/virt-column.nvim',
-    config = function()
-      require('virt-column').setup()
-      vim.cmd [[ au VimEnter * highlight VirtColumn guifg=#1e2030 gui=nocombine ]]
-    end
-  },
+  { 'akinsho/git-conflict.nvim',      version = "*", config = true },
+  { 'lukas-reineke/virt-column.nvim', config = true },
 
   -- Window hacks
-  { 'luukvbaal/stabilize.nvim',  config = true },
+  { 'luukvbaal/stabilize.nvim',       config = true },
   'simeji/winresizer',
   'xiyaowong/nvim-transparent',
 
