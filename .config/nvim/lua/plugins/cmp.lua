@@ -2,18 +2,21 @@ return {
   'hrsh7th/nvim-cmp',
   event = "InsertEnter",
   dependencies = {
+    'onsails/lspkind.nvim',
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-vsnip',
     'hrsh7th/vim-vsnip',
     'hrsh7th/cmp-path',
     'hrsh7th/cmp-nvim-lua',
+    'hrsh7th/cmp-nvim-lsp-signature-help',
     'andersevenrud/cmp-tmux',
   },
   config = function()
     vim.g.vsnip_snippet_dir = '~/.config/nvim/snippets'
 
     local cmp = require('cmp')
+    local lspkind = require('lspkind')
 
     cmp.setup {
       window = {
@@ -22,48 +25,19 @@ return {
       },
       formatting = {
         fields = { 'kind', 'abbr', 'menu' },
-        format = function(entry, vim_item)
-          local lspkind_icons = {
-            Text = '',
-            Method = '',
-            Function = '',
-            Constructor = ' ',
-            Field = '',
-            Variable = '',
-            Class = '',
-            Interface = '',
-            Module = '硫',
-            Property = '',
-            Unit = ' ',
-            Value = '',
-            Enum = ' ',
-            Keyword = 'ﱃ',
-            Snippet = ' ',
-            Color = ' ',
-            File = ' ',
-            Reference = 'Ꮢ',
-            Folder = ' ',
-            EnumMember = ' ',
-            Constant = ' ',
-            Struct = ' ',
-            Event = '',
-            Operator = '',
-            TypeParameter = ' ',
-            Copilot = "",
-          }
-          local meta_type = vim_item.kind
-          -- load lspkind icons
-          vim_item.kind = lspkind_icons[vim_item.kind] .. ''
+        format = lspkind.cmp_format({
+          symbol_map = { Copilot = "" },
+          before = function(entry, vim_item)
+            vim_item.menu = ({
+              buffer = ' Buffer',
+              nvim_lsp = vim_item.kind,
+              path = ' Path',
+              luasnip = ' LuaSnip',
+            })[entry.source.name]
 
-          vim_item.menu = ({
-                buffer = ' Buffer',
-                nvim_lsp = meta_type,
-                path = ' Path',
-                luasnip = ' LuaSnip',
-              })[entry.source.name]
-
-          return vim_item
-        end,
+            return vim_item
+          end,
+        }),
       },
       snippet = {
         expand = function(args)
@@ -71,7 +45,7 @@ return {
         end,
       },
       mapping = {
-        ['<C-d>'] = cmp.mapping.scroll_docs( -4),
+        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-y>'] = cmp.mapping.close(),
@@ -85,11 +59,13 @@ return {
       sources = {
         { name = 'copilot' },
         { name = 'nvim_lsp' },
+        { name = 'nvim_lsp_signature_help' },
         { name = 'nvim_lua' },
         { name = 'vsnip' },
         { name = 'path' },
         { name = 'tmux' },
-        { name = 'buffer',
+        {
+          name = 'buffer',
           option = {
             get_bufnrs = function()
               return vim.api.nvim_list_bufs()
