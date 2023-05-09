@@ -94,6 +94,10 @@ return {
           bg = 'none',
           fg = default_bg,
         },
+        {
+          text = ' ',
+          bg = 'none',
+        },
       },
     })
   end
