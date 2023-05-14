@@ -1,5 +1,6 @@
 return {
   'pwntester/octo.nvim',
+  cmd = { 'Octo' },
   dependencies = {
     'nvim-treesitter/nvim-treesitter',
   },
@@ -8,7 +9,6 @@ return {
       default_remote = { 'origin' },
     })
 
-    local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
-    parser_config.markdown.filetype_to_parsername = 'octo'
+    vim.treesitter.language.register('markdown', 'octo')
   end
 }
