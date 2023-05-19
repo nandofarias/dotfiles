@@ -160,8 +160,8 @@ set -px --path PATH "$HOME/.bun/bin"
 # git-pile
 set -gx GIT_PILE_PREFIX ff-
 
-# Done
-set -U __done_notification_command "terminal-notifier -message \$message -title \$title"
+# colima
+set -gx DOCKER_HOST "unix://$HOME/.colima/default/docker.sock"
 
 # rtx
 set -gx RTX_QUIET 1
