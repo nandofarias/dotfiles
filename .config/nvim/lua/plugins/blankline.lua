@@ -5,8 +5,8 @@ return {
     vim.cmd [[ au VimEnter * highlight IndentBlanklineContextChar guifg=#454545 gui=nocombine ]]
 
     require("indent_blankline").setup {
-      enabled = true,
-      use_treesitter = true,
+      enabled = false,
+      use_treesitter = false,
       show_first_indent_level = false,
       show_trailing_blankline_indent = false,
       show_current_context = true,
