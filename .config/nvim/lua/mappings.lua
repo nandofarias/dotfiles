@@ -14,8 +14,6 @@ vim.keymap.set('n', '<space>wq', ':wq <CR>', { silent = true, desc = "Save and Q
 vim.keymap.set('n', '<space>qa', ':qa <CR>', { silent = true, desc = "Quit" })
 
 -- Move lines
-vim.keymap.set('n', '<A-j>', ':m .+1<CR>==')
-vim.keymap.set('n', '<A-k>', ':m .-2<CR>==')
 vim.keymap.set('i', '<A-j>', '<Esc>:m .+1<CR>==gi')
 vim.keymap.set('i', '<A-k>', '<Esc>:m .-2<CR>==gi')
 vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv")
