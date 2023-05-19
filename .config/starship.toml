@@ -47,6 +47,9 @@ disabled = true
 [git_status]
 disabled = true
 
+[docker_context]
+disabled = true
+
 [custom.elixir]
 symbol = " "
 command = "echo v$(elixir --short-version)"
