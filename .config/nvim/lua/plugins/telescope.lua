@@ -23,6 +23,11 @@ return {
           prompt_prefix = " ",
         },
       },
+      extensions = {
+        persisted = {
+          layout_config = { width = 0.55, height = 0.55 }
+        }
+      }
     }
 
     require('telescope').load_extension('fzf')
