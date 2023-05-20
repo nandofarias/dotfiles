@@ -166,3 +166,7 @@ set -gx DOCKER_HOST "unix://$HOME/.colima/default/docker.sock"
 # rtx
 set -gx RTX_QUIET 1
 rtx activate fish | source
+
+# direnv
+set -gx DIRENV_LOG_FORMAT ""
+direnv hook fish | source

@@ -7,3 +7,4 @@
 **node_modules
 packer_compiled.lua
 .env
+.envrc
