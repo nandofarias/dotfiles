@@ -76,7 +76,6 @@ set -gx KERL_CONFIGURE_OPTIONS "\
       --enable-hipe \
       --enable-wx \
       --with-ssl=$(brew --prefix openssl@1.1) \
-      --with-wx-config=/usr/local/bin/wx-config \
       --with-dynamic-trace=dtrace \
       --without-jinterface \
       --without-javac \
