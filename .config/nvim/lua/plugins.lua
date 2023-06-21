@@ -36,11 +36,11 @@ return {
   'ellisonleao/glow.nvim',
   'mong8se/actually.nvim',
   'superhawk610/ascii-blocks.nvim',
-  { 'akinsho/git-conflict.nvim',      version = "*", config = true },
-  { 'lukas-reineke/virt-column.nvim', config = true },
+  { 'akinsho/git-conflict.nvim', version = "*", config = true },
+  'Bekaboo/deadcolumn.nvim',
 
   -- Window hacks
-  { 'luukvbaal/stabilize.nvim',       config = true },
+  { 'luukvbaal/stabilize.nvim',  config = true },
   'simeji/winresizer',
   'xiyaowong/nvim-transparent',
 
