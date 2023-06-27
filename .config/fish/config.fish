@@ -169,3 +169,6 @@ rtx activate fish | source
 # direnv
 set -gx DIRENV_LOG_FORMAT ""
 direnv hook fish | source
+
+# snowflake-snowsql
+alias snowsql=/Applications/SnowSQL.app/Contents/MacOS/snowsql
