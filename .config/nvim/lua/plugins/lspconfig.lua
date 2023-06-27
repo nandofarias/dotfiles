@@ -26,51 +26,52 @@ return {
 
     local lspconfig = require('lspconfig')
 
-    local buf_map = function(bufnr, mode, lhs, rhs, opts)
-      vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts or {
-        silent = true,
-      })
-    end
-
     local format_on_save_group = vim.api.nvim_create_augroup('formatOnSave', {})
 
     -- For nvim-cmp
     local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+    vim.api.nvim_create_autocmd('LspAttach', {
+      group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+      callback = function(ev)
+        -- Enable completion triggered by <c-x><c-o>
+        vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+
+        local opts = { noremap = true, silent = true }
+
+        vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+        vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+        vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+        vim.keymap.set('n', '<leader>k', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+        vim.keymap.set('n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+        vim.keymap.set('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+        vim.keymap.set('n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+        vim.keymap.set('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+        vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+        vim.keymap.set('n', '<leader>dq', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
+        -- vim.keymap.set('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+        -- vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+        vim.keymap.set('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+        vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+        vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+
+        -- lsp-saga
+        vim.keymap.set('n', '<leader>rn', '<cmd>Lspsaga rename<cr>', opts)
+        vim.keymap.set('n', 'K', '<cmd>Lspsaga hover_doc ++quiet<cr>', opts)
+
+        vim.keymap.set('n', '<leader>bf', '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
+        vim.api.nvim_create_user_command('Format', function() vim.lsp.buf.format({ async = true }) end, {})
+
+
+        vim.keymap.set('n', '<leader>ca', ':Lspsaga code_action<cr>', opts)
+        vim.keymap.set('x', '<leader>ca', ':<c-u>Lspsaga range_code_action<cr>', opts)
+
+        vim.keymap.set('n', '<leader>cr', '<cmd>lua vim.lsp.codelens.run()<CR>', opts)
+        vim.keymap.set('n', '<leader>cl', '<cmd>lua vim.lsp.codelens.refresh()<CR>', opts)
+      end,
+    })
+
     local on_attach = function(client, bufnr)
-      local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-
-      local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
-      buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-      local opts = { noremap = true, silent = true }
-
-      buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-      buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-      buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-      buf_set_keymap('n', '<leader>k', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-      buf_set_keymap('n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-      buf_set_keymap('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-      buf_set_keymap('n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-      buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-      buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-      buf_set_keymap('n', '<leader>dq', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
-      -- buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-      -- buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-      buf_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-      buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-      buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-
-      -- lsp-saga
-      buf_set_keymap('n', '<leader>rn', '<cmd>Lspsaga rename<cr>', opts)
-      buf_set_keymap('n', 'K', '<cmd>Lspsaga hover_doc ++quiet<cr>', opts)
-      -- buf_set_keymap('n', '<leader>e', '<cmd>Lspsaga show_line_diagnostics<cr>', opts)
-      -- buf_set_keymap('n', '[d', '<cmd>Lspsaga diagnostic_jump_next<cr>', opts)
-      -- buf_set_keymap('n', ']d', '<cmd>Lspsaga diagnostic_jump_prev<cr>', opts)
-      -- buf_set_keymap('n', '<C-u>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<cr>", {})
-      -- buf_set_keymap('n', '<C-d>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<cr>", {})
-      --
-      buf_set_keymap('n', '<leader>bf', '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
       if client.supports_method("textDocument/formatting") then
         vim.api.nvim_clear_autocmds({ group = format_on_save_group, buffer = bufnr })
         vim.api.nvim_create_autocmd("BufWritePre", {
@@ -81,14 +82,7 @@ return {
           end,
         })
       end
-      vim.api.nvim_create_user_command('Format', function() vim.lsp.buf.format({ async = true }) end, {})
 
-
-      buf_set_keymap('n', '<leader>ca', ':Lspsaga code_action<cr>', opts)
-      buf_set_keymap('x', '<leader>ca', ':<c-u>Lspsaga range_code_action<cr>', opts)
-
-      buf_set_keymap('n', '<leader>cr', '<cmd>lua vim.lsp.codelens.run()<CR>', opts)
-      buf_set_keymap('n', '<leader>cl', '<cmd>lua vim.lsp.codelens.refresh()<CR>', opts)
       if client.server_capabilities.code_lens then
         vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
           buffer = bufnr,
@@ -97,10 +91,9 @@ return {
         vim.lsp.codelens.refresh()
       end
     end
-
     local opts = {
       capabilities = capabilities,
-      on_attach = on_attach
+      on_attach = on_attach,
     }
 
 
@@ -140,6 +133,9 @@ return {
       ['lua_ls'] = function()
         opts.settings = {
           Lua = {
+            runtime = {
+              version = 'LuaJIT',
+            },
             diagnostics = {
               globals = { 'vim', 'hs' }
             },
@@ -163,9 +159,9 @@ return {
           local ts_utils = require('nvim-lsp-ts-utils')
           ts_utils.setup({})
           ts_utils.setup_client(client)
-          buf_map(bufnr, 'n', 'gs', ':TSLspOrganize<CR>')
-          buf_map(bufnr, 'n', 'gi', ':TSLspRenameFile<CR>')
-          buf_map(bufnr, 'n', 'go', ':TSLspImportAll<CR>')
+          vim.keymap.set('n', 'gs', ':TSLspOrganize<CR>', { silent = true, buffer = bufnr })
+          vim.keymap.set('n', 'gi', ':TSLspRenameFile<CR>', { silent = true, buffer = bufnr })
+          vim.keymap.set('n', 'go', ':TSLspImportAll<CR>', { silent = true, buffer = bufnr })
           on_attach(client, bufnr)
         end
 
