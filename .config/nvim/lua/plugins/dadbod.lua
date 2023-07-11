@@ -13,7 +13,7 @@ return {
     vim.opt.cmdheight = 1
     vim.g.db_ui_show_help = 0
     vim.g.db_ui_win_position = 'left'
-    vim.g.db_ui_tmp_query_location = '~/Develper/queries'
+    vim.g.db_ui_tmp_query_location = '~/Developer/queries'
 
     vim.api.nvim_create_autocmd('FileType', {
       pattern = { 'sql', 'mysql', 'plsql' },
