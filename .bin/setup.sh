@@ -44,6 +44,9 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 echo "Setting up languages and tools …"
 rtx install
 
+echo "Install npm packages …"
+npmg
+
 echo "Setting macos defaults …"
 ~/.bin/macos
 

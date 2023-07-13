@@ -175,3 +175,6 @@ alias snowsql=/Applications/SnowSQL.app/Contents/MacOS/snowsql
 
 # tldr
 alias tldrf='tldr --list | fzf --preview "tldr {1} --color=always" --preview-window=right,70% | xargs tldr'
+
+# global npm
+fish_add_path -g ~/.npmbin/node_modules/.bin
