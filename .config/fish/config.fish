@@ -172,3 +172,6 @@ direnv hook fish | source
 
 # snowflake-snowsql
 alias snowsql=/Applications/SnowSQL.app/Contents/MacOS/snowsql
+
+# tldr
+alias tldrf='tldr --list | fzf --preview "tldr {1} --color=always" --preview-window=right,70% | xargs tldr'
