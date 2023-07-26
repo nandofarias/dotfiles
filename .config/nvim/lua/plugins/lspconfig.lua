@@ -13,6 +13,7 @@ return {
             enable = true,
           }
         })
+        vim.keymap.set({ 'n', 't' }, '<leader>to', '<cmd>Lspsaga term_toggle<CR>')
       end
     },
   },
