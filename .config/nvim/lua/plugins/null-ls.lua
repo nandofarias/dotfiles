@@ -8,9 +8,6 @@ return {
         null_ls.builtins.diagnostics.eslint_d,
         null_ls.builtins.formatting.prettierd.with({
           extra_args = {
-            "--single-quote",
-            "--no-semi",
-            "--jsx-single-quote",
             "--arrow-parens avoid",
           },
           filetypes = {
