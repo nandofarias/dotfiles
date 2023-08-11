@@ -38,8 +38,11 @@ fi
 
 echo "Setting up tmux …"
 tic -x ~/.config/tmux/tmux.terminfo
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-~/.tmux/plugins/tpm/bin/install_plugins
+if test ! -d ~/.config/tmux/plugins/tpm; then
+    mkdir ~/.config/tmux/plugins
+    git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+fi
+~/.config/tmux/plugins/tpm/bin/install_plugins
 
 echo "Setting up languages and tools …"
 rtx install
