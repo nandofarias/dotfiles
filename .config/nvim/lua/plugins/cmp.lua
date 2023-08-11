@@ -26,7 +26,7 @@ return {
       formatting = {
         fields = { 'kind', 'abbr', 'menu' },
         format = lspkind.cmp_format({
-          symbol_map = { Copilot = "" },
+          symbol_map = { Copilot = "", Codeium = "", },
           before = function(entry, vim_item)
             vim_item.menu = ({
               buffer = ' Buffer',
@@ -50,7 +50,7 @@ return {
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-y>'] = cmp.mapping.close(),
         ['<C-c>'] = cmp.mapping.abort(),
-        ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        ['<CR>'] = cmp.mapping.confirm({ select = false}),
         ['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
         ['<S-Tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
         ['<C-n>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
@@ -58,6 +58,7 @@ return {
       },
       sources = {
         { name = 'copilot' },
+        { name = "codeium" },
         { name = 'nvim_lsp' },
         { name = 'nvim_lsp_signature_help' },
         { name = 'nvim_lua' },

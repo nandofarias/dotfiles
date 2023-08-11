@@ -178,3 +178,6 @@ alias tldrf='tldr --list | fzf --preview "tldr {1}" --preview-window=right,70% |
 
 # global npm
 fish_add_path -g ~/.npmbin/node_modules/.bin
+
+# invoice
+invoice completion fish | source
