@@ -60,3 +60,6 @@ shell = ["bash", "--noprofile", "--norc"]
 
 [directory.substitutions]
 "com~apple~CloudDocs" = "/iCloud"
+
+[battery]
+disabled=true
