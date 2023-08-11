@@ -26,6 +26,7 @@ return {
     })
 
     local lspconfig = require('lspconfig')
+    local configs = require("lspconfig.configs")
 
     local format_on_save_group = vim.api.nvim_create_augroup('formatOnSave', {})
 
@@ -92,14 +93,38 @@ return {
         vim.lsp.codelens.refresh()
       end
     end
+
     local opts = {
       capabilities = capabilities,
       on_attach = on_attach,
     }
 
 
+
     -- manual lspconfig
     lspconfig.gleam.setup(opts)
+
+    -- local lexical_config = {
+    --   filetypes = { "elixir", "eelixir", },
+    --   cmd = { "/Users/nandofarias/Developer/lexical/_build/dev/rel/lexical/start_lexical.sh" },
+    --   settings = {},
+    -- }
+    --
+    -- if not configs.lexical then
+    --   configs.lexical = {
+    --     default_config = {
+    --       filetypes = lexical_config.filetypes,
+    --       cmd = lexical_config.cmd,
+    --       root_dir = function(fname)
+    --         return lspconfig.util.root_pattern("mix.exs", ".git")(fname) or vim.loop.os_homedir()
+    --       end,
+    --       -- optional settings
+    --       settings = lexical_config.settings,
+    --     },
+    --   }
+    -- end
+    --
+    -- lspconfig.lexical.setup({})
 
     -- mason-lspconfig
     require("mason-lspconfig").setup_handlers {
@@ -127,6 +152,7 @@ return {
 
           return maybe_umbrella_path or child_or_root_path or vim.loop.os_homedir()
         end
+
 
         lspconfig.elixirls.setup(opts)
       end,
