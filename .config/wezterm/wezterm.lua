@@ -4,7 +4,6 @@ return {
   font = wezterm.font("MonoLisa"),
   font_size = 15,
   line_height = 1.2,
-  local_echo_threshold_ms = 300,
 
   window_decorations = "RESIZE",
   window_close_confirmation = "NeverPrompt",
@@ -29,7 +28,8 @@ return {
       },
       compose_cursor = "#ff9580",
       tab_bar = {
-        background = "#0b0d0f", active_tab = {
+        background = "#0b0d0f",
+        active_tab = {
           bg_color = "#708ca9",
           fg_color = "#f8f8f2",
           intensity = "Normal",
@@ -60,23 +60,18 @@ return {
   },
 
   keys = {
-    { key = "d", mods = "CMD", action = wezterm.action { SendString = "\x02\x76" } },
+    { key = "d", mods = "CMD",       action = wezterm.action { SendString = "\x02\x76" } },
     { key = "d", mods = "CMD|SHIFT", action = wezterm.action { SendString = "\x02\x73" } },
-    { key = "t", mods = "CMD", action = wezterm.action { SendString = "\x02\x63" } },
-    { key = "w", mods = "CMD", action = wezterm.action { SendString = "\x02\x78" } },
-
+    { key = "t", mods = "CMD",       action = wezterm.action { SendString = "\x02\x63" } },
+    { key = "w", mods = "CMD",       action = wezterm.action { SendString = "\x02\x78" } },
     { key = "[", mods = "CMD|SHIFT", action = wezterm.action { SendString = "\x02\x70" } },
     { key = "]", mods = "CMD|SHIFT", action = wezterm.action { SendString = "\x02\x6e" } },
-
-    { key = "`", mods = "CTRL", action = wezterm.action { SendString = "\x02\x7a" } },
-
-    { key = "[", mods = "CTRL", action = wezterm.action { SendString = "\x02\x5b" } },
-
+    { key = "`", mods = "CTRL",      action = wezterm.action { SendString = "\x02\x7a" } },
+    { key = "[", mods = "CTRL",      action = wezterm.action { SendString = "\x02\x5b" } },
     { key = "h", mods = "CMD|SHIFT", action = wezterm.action { SendString = "\x02\x3c" } },
     { key = "j", mods = "CMD|SHIFT", action = wezterm.action { SendString = "\x02\x2d" } },
     { key = "k", mods = "CMD|SHIFT", action = wezterm.action { SendString = "\x02\x2b" } },
     { key = "l", mods = "CMD|SHIFT", action = wezterm.action { SendString = "\x02\x3e" } },
-
-    { key = "k", mods = "CMD", action = wezterm.action { SendString = "\x63\x6C\x65\x61\x72\x0A" } },
+    { key = "k", mods = "CMD",       action = wezterm.action { SendString = "\x63\x6C\x65\x61\x72\x0A" } },
   },
 }

@@ -32,6 +32,10 @@ vim.keymap.set('n', '<space>ob', ':e ~/.config/brew/Brewfile <CR>', { desc = "Op
 vim.keymap.set('n', 'j', 'gj')
 vim.keymap.set('n', 'k', 'gk')
 
+-- Splits
+vim.keymap.set('n', '<space>vs', ':vs<CR>')
+vim.keymap.set('n', '<space>hs', ':split<CR>')
+
 local group = vim.api.nvim_create_augroup('closeWithEsc', { clear = true })
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'qf' },

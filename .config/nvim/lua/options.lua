@@ -36,6 +36,7 @@ vim.opt.guifont = 'MonoLisa Nerd Font:h15'
 vim.opt.foldenable = false
 vim.opt.ch = 0
 vim.opt.colorcolumn = "120"
+vim.opt.splitkeep='screen'
 -- vim.opt if for things you would set in vimscript. vim.g is for things you'd let.
 vim.g.mapleader = ' '
 vim.g.loaded_netrw = 1
