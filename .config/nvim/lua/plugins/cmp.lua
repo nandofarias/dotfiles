@@ -26,7 +26,7 @@ return {
       formatting = {
         fields = { 'kind', 'abbr', 'menu' },
         format = lspkind.cmp_format({
-          symbol_map = { Copilot = "", Codeium = "", },
+          symbol_map = { Copilot = "" },
           before = function(entry, vim_item)
             vim_item.menu = ({
               buffer = ' Buffer',
@@ -58,7 +58,6 @@ return {
       },
       sources = {
         { name = 'copilot' },
-        { name = "codeium" },
         { name = 'nvim_lsp' },
         { name = 'nvim_lsp_signature_help' },
         { name = 'nvim_lua' },

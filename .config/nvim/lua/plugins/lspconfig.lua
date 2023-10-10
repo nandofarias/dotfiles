@@ -26,7 +26,6 @@ return {
     })
 
     local lspconfig = require('lspconfig')
-    local configs = require("lspconfig.configs")
 
     local format_on_save_group = vim.api.nvim_create_augroup('formatOnSave', {})
 
