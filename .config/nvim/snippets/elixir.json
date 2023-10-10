@@ -49,6 +49,15 @@
     "body": "|> IO.inspect(label: \"$1\")",
     "description": "|> IO.inspect"
   },
+  "def_function": {
+    "prefix": "def",
+    "body": [
+      "def $1($2) do",
+      "  $3",
+      "end"
+    ],
+    "description": "Creates a new inline function"
+  },
   "def_inline": {
     "prefix": "defl",
     "body": "def $1($2), do: $3",

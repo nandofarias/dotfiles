@@ -13,6 +13,7 @@ return {
     require('tree-sitter-just').setup {}
     require('nvim-treesitter.configs').setup({
       ensure_installed = 'all',
+      ignore_install = { "liquidsoap" },
       indent = {
         enable = true
       },
