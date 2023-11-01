@@ -37,6 +37,7 @@ brew "bash"
 brew "bat"
 brew "broot"
 brew "bun"
+brew "circleci", args: ["ignore-dependencies"]
 brew "cmake"
 brew "cmatrix"
 brew "colima"
