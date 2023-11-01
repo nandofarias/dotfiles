@@ -64,6 +64,7 @@ if status is-interactive
   set -gx KERL_INSTALL_MANPAGES yes
   set -gx KERL_INSTALL_HTMLDOCS yes
   set -gx KERL_CONFIGURE_OPTIONS "\
+        --disable-jit \
         --disable-silent-rules \
         --disable-debug \
         --disable-sctp \
@@ -80,6 +81,7 @@ if status is-interactive
         --with-dynamic-trace=dtrace \
         --without-jinterface \
         --without-javac \
+        --without-wx \
   "
   fish_add_path -g $HOME/.elixir-ls/release
   fish_add_path -g $HOME/.cache/rebar3/bin
