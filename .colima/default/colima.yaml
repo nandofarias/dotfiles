@@ -30,15 +30,9 @@ kubernetes:
   # Default: latest stable release
   version: v1.25.4+k3s1
   
-  # Disable k3s features [coredns servicelb traefik local-storage metrics-server].
-  # All features are enabled unless disabled.
-  #
-  # EXAMPLE - disable traefik and metrics-server
-  # disable: [traefik, metrics-server]
-  #
-  # Default: [traefik]
-  disable:
-    - traefik
+  # Additional args to pass to k3s https://docs.k3s.io/cli/server
+  # Default: traefik is disabled
+  k3sArgs: []
 
 # Auto-activate on the Host for client access.
 # Setting to true does the following on startup
@@ -129,6 +123,10 @@ rosetta: true
 # Default: virtiofs (for vz), sshfs (for qemu)
 mountType: 9p
 
+# Propagate inotify file events to the VM.
+# NOTE: this is experimental.
+mountInotify: false
+
 # The CPU type for the virtual machine (requires vmType `qemu`).
 # Options available for host emulation can be checked with: `qemu-system-$(arch) -cpu help`.
 # Instructions are also supported by appending to the cpu type e.g. "qemu64,+ssse3".
@@ -146,12 +144,12 @@ layer: false
 # Custom provision scripts for the virtual machine.
 # Provisioning scripts are executed on startup and therefore needs to be idempotent.
 #
-# EXAMPLE - script exected as root
+# EXAMPLE - script executed as root
 # provision:
 #   - mode: system
 #     script: apk add htop vim
 #
-# EXAMPLE - script exected as user
+# EXAMPLE - script executed as user
 # provision:
 #   - mode: user
 #     script: |
@@ -191,3 +189,8 @@ mounts: []
 #
 # Default: {}
 env: {}
+
+# Enable cgroups v2 as a temporary workaround for https://github.com/abiosoft/colima/issues/764.
+# NOTE: this is incompatible with Kubernetes and Ubuntu Layer.
+# NOTE: this config will be removed in future versions.
+cgroupsV2: false
