@@ -1,5 +1,5 @@
-elixir 1.15.1-otp-26
-erlang 26.0.2
+elixir 1.15.7-otp-26
+erlang 26.1.2
 gleam 0.29.0
 nodejs 16.19.1
 yarn 1.22.5
