@@ -185,9 +185,9 @@ return {
           local ts_utils = require('nvim-lsp-ts-utils')
           ts_utils.setup({})
           ts_utils.setup_client(client)
-          vim.keymap.set('n', 'gs', ':TSLspOrganize<CR>', { silent = true, buffer = bufnr })
-          vim.keymap.set('n', 'gi', ':TSLspRenameFile<CR>', { silent = true, buffer = bufnr })
-          vim.keymap.set('n', 'go', ':TSLspImportAll<CR>', { silent = true, buffer = bufnr })
+          vim.keymap.set('n', '<leader>gs', ':TSLspOrganize<CR>', { silent = true, buffer = bufnr })
+          vim.keymap.set('n', '<leader>gr', ':TSLspRenameFile<CR>', { silent = true, buffer = bufnr })
+          vim.keymap.set('n', '<leader>ga', ':TSLspImportAll<CR>', { silent = true, buffer = bufnr })
           on_attach(client, bufnr)
         end
 
