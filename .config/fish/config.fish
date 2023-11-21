@@ -123,6 +123,9 @@ if status is-interactive
 
   # aliases
   alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+  alias ic='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs'
+  alias snowsql=/Applications/SnowSQL.app/Contents/MacOS/snowsql
+  alias tldrf='tldr --list | fzf --preview "tldr {1}" --preview-window=right,70% | xargs tldr'
 
   # Starship
   starship init fish | source
@@ -172,12 +175,6 @@ if status is-interactive
   # direnv
   set -gx DIRENV_LOG_FORMAT ""
   direnv hook fish | source
-
-  # snowflake-snowsql
-  alias snowsql=/Applications/SnowSQL.app/Contents/MacOS/snowsql
-
-  # tldr
-  alias tldrf='tldr --list | fzf --preview "tldr {1}" --preview-window=right,70% | xargs tldr'
 
   # global npm
   fish_add_path -g ~/.npmbin/node_modules/.bin
