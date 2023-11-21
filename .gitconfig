@@ -61,6 +61,7 @@
 	excludesfile = /Users/nandofarias/.gitignore
 	autocrlf = input
 	editor = nvim +16 +startinsert
+	pager = delta
 
 [pull]
 	ff = false
