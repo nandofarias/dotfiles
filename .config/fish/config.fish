@@ -181,4 +181,9 @@ if status is-interactive
 
   # invoice
   invoice completion fish | source
+
+  #jira
+  if [ -f '/Users/nandofarias/.bin/jira' ]
+    jira completion fish | source
+  end
 end
