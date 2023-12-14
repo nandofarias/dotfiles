@@ -5,3 +5,5 @@ defmodule IExHelpers do
   def whats_this?(term) when is_atom(term), do: "Type: Atom"
   def whats_this?(_term), do: "Type: Unknown"
 end
+
+IEx.configure(inspect: [limit: :infinity])
