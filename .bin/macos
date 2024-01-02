@@ -57,6 +57,8 @@ defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
 defaults write com.apple.mail DraftsViewerAttributes -dict-add "DisplayInThreadedMode" -string "yes"
 defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortedDescending" -string "yes"
 defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortOrder" -string "received-date"
+# Drag any window using cmd+ctrl mouse
+defaults write -g NSWindowShouldDragOnGesture YES
 # Enable ssh
 sudo systemsetup -setremotelogin on
 
