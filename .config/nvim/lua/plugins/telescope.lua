@@ -9,6 +9,7 @@ return {
   config = function()
     require('telescope').setup {
       defaults = {
+        winblend = 60,
         layout_config = {
           center = { width = 0.8 },
         },
