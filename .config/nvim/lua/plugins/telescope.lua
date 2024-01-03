@@ -9,7 +9,7 @@ return {
   config = function()
     require('telescope').setup {
       defaults = {
-        winblend = 60,
+        -- winblend = 60,
         layout_config = {
           center = { width = 0.8 },
         },
@@ -34,6 +34,8 @@ return {
     require('telescope').load_extension('fzf')
     require("telescope").load_extension('file_browser')
     require("telescope").load_extension('undo')
+    vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "none" })
+    vim.api.nvim_set_hl(0, "TelescopeBorder", { bg = "none" })
   end,
   keys = {
     { '<leader>fs', function() require('telescope.builtin').find_files() end,   desc = "Find Files" },
