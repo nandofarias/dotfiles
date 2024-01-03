@@ -114,7 +114,7 @@ if status is-interactive
   abbr -ag ss "cmatrix -C blue"
 
   abbr -ag v nvim
-  abbr -ag vu 'rtx uninstall neovim@stable && rtx install neovim@stable'
+  abbr -ag vu 'mise uninstall neovim@stable && mise install neovim@stable'
   abbr -ag vup 'nvim --headless "+Lazy! sync" +qa'
   abbr -ag vp "nvim --startuptime timeCost.txt timeCost.txt; and rm timeCost.txt"
   abbr -ag lsp-logs "tail -f $HOME/.local/state/nvim/lsp.log"
@@ -166,11 +166,11 @@ if status is-interactive
   set -gx GIT_PILE_PREFIX ff-
 
   # colima
-  set -gx DOCKER_HOST "unix://$HOME/.colima/default/docker.sock"
+  # set -gx DOCKER_HOST "unix://$HOME/.colima/default/docker.sock"
 
-  # rtx
-  set -gx RTX_QUIET 1
-  rtx activate fish | source
+  # mise
+  set -gx MISE_QUIET 1
+  mise activate fish | source
 
   # direnv
   set -gx DIRENV_LOG_FORMAT ""
