@@ -8,11 +8,14 @@ return {
       require("tokyonight").setup({
         style = 'moon',
         transparent = true,
+        tokyonight_dark_float = false,
         dim_inactive = true,
         hide_inactive_statusline = true,
       })
       vim.cmd([[colorscheme tokyonight-moon]])
       vim.cmd([[hi TabLine guibg=NONE guifg=NONE]])
+      vim.api.nvim_set_hl(0, "FloatBorder", { bg = "none" })
+
     end,
   },
 
