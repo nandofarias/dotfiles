@@ -59,6 +59,7 @@
 
   dft = difftool
   dlog = "!f() { GIT_EXTERNAL_DIFF=difft git log -p --ext-diff $@; }; f"
+  review = diff --staged
 
 [core]
 	excludesfile = /Users/nandofarias/.gitignore
