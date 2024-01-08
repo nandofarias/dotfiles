@@ -57,11 +57,13 @@
   untrack = "!f() { git rm --cached $@; }; f"
   edit = !$EDITOR $(git status --short | awk '$1 ~ /^M|A|U/ {print $2}' )
 
+  dft = difftool
+  dlog = "!f() { GIT_EXTERNAL_DIFF=difft git log -p --ext-diff $@; }; f"
+
 [core]
 	excludesfile = /Users/nandofarias/.gitignore
 	autocrlf = input
 	editor = nvim +16 +startinsert
-	pager = delta
 
 [pull]
 	ff = false
@@ -91,3 +93,15 @@
 
 [push]
 	autoSetupRemote = true
+
+[diff]
+  tool = difftastic
+
+[difftool]
+  prompt = false
+
+[difftool "difftastic"]
+  cmd = difft "$LOCAL" "$REMOTE"
+
+[pager]
+  difftool = true
