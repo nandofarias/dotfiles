@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "@fsouza/prettierd": "^0.24.2",
+    "codeowners": "^5.1.1",
     "eslint_d": "^12.2.1",
     "i": "^0.3.7",
     "opencommit": "^2.4.2",
