@@ -288,7 +288,7 @@ play() {
 	fi
 }
 
-usage="Usage: am.sh [function] [-grouping] [name]
+usage="Usage: am [function] [-grouping] [name]
 
   list -s              	List all songs in your library.
   list -r              	List all records.

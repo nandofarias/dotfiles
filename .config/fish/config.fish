@@ -121,6 +121,8 @@ if status is-interactive
 
   abbr -ag barenvim "nvim -u NONE"
 
+  abbr -ag icat "kitty icat"
+
   # aliases
   alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
   alias ic='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs'
@@ -183,7 +185,5 @@ if status is-interactive
   invoice completion fish | source
 
   #jira
-  if [ -f '/Users/nandofarias/.bin/jira' ]
-    jira completion fish | source
-  end
+  jira completion fish | source
 end
