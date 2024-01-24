@@ -21,6 +21,7 @@ return {
 
   disable_default_key_bindings = true,
   debug_key_events = true,
+  scrollback_lines = 1000000,
 
   keys = {
     { key = "q",     mods = "CMD",       action = wezterm.action.QuitApplication },

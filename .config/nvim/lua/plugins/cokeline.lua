@@ -69,7 +69,7 @@ return {
         },
         {
           text = function(buffer)
-            return (buffer.diagnostics.errors ~= 0 and '  ' .. buffer.diagnostics.errors)
+            return (buffer.diagnostics.errors ~= 0 and '  ' .. buffer.diagnostics.errors)
                 or (buffer.diagnostics.warnings ~= 0 and ' ⚠ ' .. buffer.diagnostics.warnings)
                 or ''
           end,
