@@ -1,7 +1,0 @@
-elixir 1.16.0-otp-26
-erlang 26.2.1
-gleam 0.29.0
-nodejs 16.19.1
-yarn 1.22.5
-neovim stable
-rust stable
