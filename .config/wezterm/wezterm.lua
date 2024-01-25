@@ -1,5 +1,15 @@
 local wezterm = require 'wezterm';
 
+wezterm.on('toggle-opacity', function(window, pane)
+  local overrides = window:get_config_overrides() or {}
+  if not overrides.window_background_opacity then
+    overrides.window_background_opacity = 0.5
+  else
+    overrides.window_background_opacity = nil
+  end
+  window:set_config_overrides(overrides)
+end)
+
 return {
   font = wezterm.font("MonoLisaPlus Nerd Font"),
   font_size = 14,
@@ -48,5 +58,7 @@ return {
     { key = "k",     mods = "CMD|SHIFT", action = wezterm.action { SendString = "\x02\x2b" } },
     { key = "l",     mods = "CMD|SHIFT", action = wezterm.action { SendString = "\x02\x3e" } },
     { key = "k",     mods = "CMD",       action = wezterm.action { SendString = "\x63\x6C\x65\x61\x72\x0A" } },
+
+    { key = "b",     mods = "CMD|CTRL",     action = wezterm.action.EmitEvent "toggle-opacity" },
   },
 }
