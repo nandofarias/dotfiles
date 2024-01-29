@@ -1,3 +1,4 @@
+hs.application.enableSpotlightForNameSearches(true)
 hs.window.highlight.ui.overlay = true
 hs.window.highlight.ui.overlayColor = { 0, 0, 0, 0.001 }
 hs.window.highlight.ui.frameWidth = 2
