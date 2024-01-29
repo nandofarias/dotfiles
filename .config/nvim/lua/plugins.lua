@@ -30,7 +30,6 @@ return {
   { 'chentoast/marks.nvim',     config = true },
   'dstein64/vim-startuptime',
   { 'mcauley-penney/tidy.nvim', config = true },
-  'stsewd/gx-extended.vim',
   'rhysd/clever-f.vim',
   { 'folke/todo-comments.nvim', config = true },
   { 'numToStr/Comment.nvim',    config = true },
