@@ -20,7 +20,6 @@ return {
   },
 
   -- Utilities
-  'tpope/vim-surround',
   'tpope/vim-abolish',
   { 'szw/vim-maximizer',     keys = { { '<space>m', ':MaximizerToggle <CR>' } } },
   { 'windwp/nvim-autopairs', config = true },
