@@ -37,7 +37,6 @@ return {
   'ellisonleao/glow.nvim',
   'mong8se/actually.nvim',
   'superhawk610/ascii-blocks.nvim',
-  { 'akinsho/git-conflict.nvim', version = "*",                                    config = true },
   'Bekaboo/deadcolumn.nvim',
 
   -- Better Git
