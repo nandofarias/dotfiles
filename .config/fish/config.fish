@@ -182,3 +182,4 @@ if status is-interactive
   #jira
   jira completion fish | source
 end
+source /Users/nandofarias/.config/op/plugins.sh
