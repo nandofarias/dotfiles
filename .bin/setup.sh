@@ -7,6 +7,7 @@ if [ $? -ne 0 ]; then
   touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress;
   PROD=$(softwareupdate -l | grep "\*.*Command Line" | tail -n 1 | sed "s/^[^C]* //")
   softwareupdate -i "$PROD" --verbose;
+  softwareupdate --install-rosetta
 fi
 
 DOTFILES="$HOME/.cfg"
@@ -16,7 +17,7 @@ if [ ! -d "$DOTFILES" ]; then
   alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
   config checkout
   config config --local status.showUntrackedFiles no
-  config remote set-url origin git@github.com:nandofarias/dotfiles.git
+  # config remote set-url origin git@github.com:nandofarias/dotfiles.git
 fi
 
 if ! command -v brew &>/dev/null; then
@@ -27,6 +28,7 @@ fi
 
 echo "Installing brew packages …"
 export HOMEBREW_BUNDLE_FILE=~/.config/brew/Brewfile
+brew update --auto-update
 brew bundle
 
 echo "Setting up fish …"
