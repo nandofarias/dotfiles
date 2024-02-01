@@ -19,6 +19,7 @@ if status is-interactive
   end
 
   # Fix curl
+  set -gx HOMEBREW_FORCE_BREWED_CURL 1
   if [ -s "/usr/local/opt/curl" ];
     fish_add_path -g /usr/local/opt/curl/bin
   end
