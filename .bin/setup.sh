@@ -7,8 +7,11 @@ if [ $? -ne 0 ]; then
   touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress;
   PROD=$(softwareupdate -l | grep "\*.*Command Line" | tail -n 1 | sed "s/^[^C]* //")
   softwareupdate -i "$PROD" --verbose;
-  softwareupdate --install-rosetta
 fi
+
+echo "Installing rosetta and xcode comand line tools …"
+softwareupdate --install-rosetta
+xcode-select --install
 
 DOTFILES="$HOME/.cfg"
 if [ ! -d "$DOTFILES" ]; then
@@ -28,6 +31,7 @@ fi
 
 echo "Installing brew packages …"
 export HOMEBREW_BUNDLE_FILE=~/.config/brew/Brewfile
+export HOMEBREW_FORCE_BREWED_CURL=1
 brew update --auto-update
 brew bundle
 
