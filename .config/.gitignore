@@ -7,4 +7,5 @@ fontforge/
 gh/
 github-copilot/
 grammarly-languageserver/
-op/
+op/*
+!op/plugins.sh
