@@ -117,6 +117,7 @@ if status is-interactive
   abbr -ag v nvim
   abbr -ag vu 'mise uninstall neovim@stable && mise install neovim@stable'
   abbr -ag vup 'nvim --headless "+Lazy! sync" +qa'
+  abbr -ag vrp 'nvim --headless "+Lazy! restore" +qa'
   abbr -ag vp "nvim --startuptime timeCost.txt timeCost.txt; and rm timeCost.txt"
   abbr -ag lsp-logs "tail -f $HOME/.local/state/nvim/lsp.log"
 
