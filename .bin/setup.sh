@@ -38,6 +38,9 @@ if ! command -v brew &>/dev/null; then
   curl -sS https://starship.rs/install.sh | sh
 fi
 
+echo "Setting up neovim …"
+nvim --headless "+Lazy! restore" +qa
+
 echo "Setting up tmux …"
 tic -x ~/.config/tmux/tmux.terminfo
 if test ! -d ~/.config/tmux/plugins/tpm; then
@@ -47,10 +50,10 @@ fi
 ~/.config/tmux/plugins/tpm/bin/install_plugins
 
 echo "Setting up languages and tools …"
-rtx install
+mise install
 
 echo "Install npm packages …"
-npmg
+npmg i
 
 echo "Setting macos defaults …"
 ~/.bin/macos

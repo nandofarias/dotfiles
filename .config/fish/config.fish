@@ -161,10 +161,6 @@ if status is-interactive
   # Python 3.9
   fish_add_path -g $HOME/Library/Python/3.9/bin
 
-  # Bun
-  set -Ux BUN_INSTALL "$HOME/.bun"
-  set -px --path PATH "$HOME/.bun/bin"
-
   # git-pile
   set -gx GIT_PILE_PREFIX ff-
 
@@ -181,9 +177,6 @@ if status is-interactive
 
   # global npm
   fish_add_path -g ~/.npmbin/node_modules/.bin
-
-  # invoice
-  invoice completion fish | source
 
   #jira
   jira completion fish | source
