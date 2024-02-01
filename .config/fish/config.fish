@@ -179,7 +179,9 @@ if status is-interactive
   # global npm
   fish_add_path -g ~/.npmbin/node_modules/.bin
 
-  #jira
+  # jira
   jira completion fish | source
+
+  # op plugins
+  source ~/.config/op/plugins.sh
 end
-source /Users/nandofarias/.config/op/plugins.sh
