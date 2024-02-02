@@ -216,7 +216,6 @@ cask "grammarly"
 cask "grammarly-desktop"
 cask "hammerspoon"
 cask "httpie"
-cask "insomnia"
 cask "keybase"
 cask "keycastr"
 cask "kitty"
@@ -226,7 +225,6 @@ cask "livebook"
 cask "logi-options-plus"
 cask "loopback"
 cask "lunar"
-cask "meetingbar"
 cask "mitmproxy"
 cask "mockoon"
 cask "monodraw"
@@ -235,7 +233,6 @@ cask "ngrok"
 cask "notion-calendar"
 cask "obs"
 cask "obsidian"
-cask "onionshare"
 cask "pictogram"
 cask "postgres-unofficial"
 cask "protonmail-bridge"
@@ -252,7 +249,6 @@ cask "soundsource"
 cask "spotify"
 cask "sublime-text"
 cask "tableplus"
-cask "telegram"
 cask "the-unarchiver"
 cask "todoist"
 cask "tor-browser"
@@ -262,7 +258,6 @@ cask "wkhtmltopdf"
 cask "zoom"
 mas "1Password for Safari", id: 1569813296
 mas "Bear", id: 1091189122
-mas "Boop", id: 1518425043
 mas "Dark Reader for Safari", id: 1438243180
 mas "Dynamo", id: 1445910651
 mas "Flow", id: 1423210932
@@ -270,7 +265,6 @@ mas "Gifski", id: 1351639930
 mas "Grammarly for Safari", id: 1462114288
 mas "Hand Mirror", id: 1502839586
 mas "Keynote", id: 409183694
-mas "LimeChat", id: 414030210
 mas "Numbers", id: 409203825
 mas "OverPicture", id: 1188020834
 mas "Pages", id: 409201541
