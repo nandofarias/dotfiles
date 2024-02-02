@@ -20,3 +20,4 @@ hs.loadSpoon('SpoonInstall')
 -- import modules
 require('keymaps')
 require('border')
+require('yabai')
