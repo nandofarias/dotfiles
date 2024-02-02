@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# CPPFLAGS="-I/opt/homebrew/include -L/opt/homebrew/lib" pip install python-snappy
 
 from __future__ import annotations
 
