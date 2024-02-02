@@ -178,4 +178,7 @@ if status is-interactive
 
   # op plugins
   source ~/.config/op/plugins.sh
+
+  # atuin
+  atuin init fish --disable-up-arrow | source
 end
