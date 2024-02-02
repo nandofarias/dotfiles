@@ -78,7 +78,6 @@ if status is-interactive
         --enable-threads \
         --enable-hipe \
         --enable-wx \
-        --with-ssl=$(brew --prefix openssl@1.1) \
         --with-dynamic-trace=dtrace \
         --without-jinterface \
         --without-javac \
