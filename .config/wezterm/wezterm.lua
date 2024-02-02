@@ -41,8 +41,7 @@ return {
     { key = "n",     mods = "CMD|SHIFT", action = wezterm.action.SpawnWindow },
     { key = "p",     mods = "CMD|SHIFT", action = wezterm.action.ActivateCommandPalette },
     { key = "v",     mods = "CMD",       action = wezterm.action.PasteFrom("Clipboard") },
-    { key = "Copy",  mods = "NONE",      action = wezterm.action.CopyTo("Clipboard") },
-    { key = "Paste", mods = "NONE",      action = wezterm.action.PasteFrom("Clipboard") },
+    { key = "c",     mods = "CMD",       action = wezterm.action.CopyTo("Clipboard") },
     { key = "Enter", mods = "CMD",       action = wezterm.action.ToggleFullScreen },
 
     { key = "d",     mods = "CMD",       action = wezterm.action { SendString = "\x02\x76" } },
@@ -59,6 +58,6 @@ return {
     { key = "l",     mods = "CMD|SHIFT", action = wezterm.action { SendString = "\x02\x3e" } },
     { key = "k",     mods = "CMD",       action = wezterm.action { SendString = "\x63\x6C\x65\x61\x72\x0A" } },
 
-    { key = "b",     mods = "CMD|CTRL",     action = wezterm.action.EmitEvent "toggle-opacity" },
+    { key = "b",     mods = "CMD|CTRL",  action = wezterm.action.EmitEvent "toggle-opacity" },
   },
 }
