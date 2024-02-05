@@ -32,8 +32,8 @@ yabai -m config mouse_action2 resize
 yabai -m config mouse_drop_action swap
 
 # rules
-yabai -m rule --add app="^(Music|Software Update|VLC|System Preferences|System Settings|zoom.us|Archive Utility|App Store|Activity Monitor)$" manage=off
-yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
+yabai -m rule --add app="^(Music|Software Update|VLC|System Preferences|System Settings|zoom.us|Archive Utility|App Store|Activity Monitor)$" manage=off layer=below
+yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off layer=below
 yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
 
 # signals
