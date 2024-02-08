@@ -1,0 +1,32 @@
+#!/bin/bash
+cache='/tmp/jira_all'
+assignee=""
+timeout=3600 # 60m * 60s = 1hr
+if [[ $1 == "mine" ]]; then
+    cache='/tmp/jira_mine'
+    assignee="-a $(jira me)"
+fi
+function refresh_cache() {
+    jira issue list $assignee --plain  --columns id,summary,status,type > $cache
+}
+
+if [[ -f $cache ]]; then
+    age=$(($(date +%s)-$(date -r $cache +%s)))
+    if [[ $age -gt $timeout ]]; then
+        echo "Cache $cache timeout ($age seconds) - Refreshing"
+        refresh_cache
+    else
+        echo "Using cache $(ls -l $cache)"
+    fi
+else
+    echo "Cache $cache missing - Refreshing"
+    refresh_cache
+fi
+cat $cache | fzf \
+  --layout=reverse \
+  --header-lines=1 \
+  --preview-label 'Enter = View in browser,  Alt-Enter = Edit in terminal' \
+  --color 'label:bold:red' \
+  --preview 'jira issue view {1}' \
+  --bind 'alt-enter:execute(jira issue edit {1})'\
+  --bind 'enter:execute(jira open {1})'
