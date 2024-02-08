@@ -34,7 +34,6 @@ export HOMEBREW_BUNDLE_FILE=~/.config/brew/Brewfile
 export HOMEBREW_FORCE_BREWED_CURL=1
 brew update --auto-update
 brew bundle install
-yabai --start-service
 
 echo "Setting up fish …"
 echo $(which fish) | sudo tee -a /etc/shells
