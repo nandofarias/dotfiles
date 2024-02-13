@@ -41,7 +41,6 @@ space_creator=(
   padding_right=8
   label.drawing=off
   display=active
-  click_script='yabai -m space --create'
   script="$PLUGIN_DIR/space_windows.sh"
   icon.color=$WHITE
 )
