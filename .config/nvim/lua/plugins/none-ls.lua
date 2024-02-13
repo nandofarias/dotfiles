@@ -29,11 +29,7 @@ return {
             "handlebars",
           },
         }),
-        null_ls.builtins.diagnostics.credo.with({
-          condition = function(utils)
-            return utils.root_has_file('.credo.exs')
-          end
-        }),
+        null_ls.builtins.diagnostics.credo,
         null_ls.builtins.formatting.erlfmt,
         null_ls.builtins.diagnostics.fish,
         null_ls.builtins.formatting.fish_indent,
