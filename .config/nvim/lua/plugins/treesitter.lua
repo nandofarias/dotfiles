@@ -9,14 +9,13 @@ return {
     'IndianBoy42/tree-sitter-just',
   },
   config = function()
-    require "nvim-treesitter.install".compilers = { "gcc-11" }
     require('tree-sitter-just').setup {}
     require('nvim-treesitter.configs').setup({
       ensure_installed = { 'angular', 'arduino', 'astro', 'awk', 'bash', 'c', 'clojure', 'cmake', 'comment',
         'commonlisp', 'cpp', 'css', 'csv', 'dart', 'diff', 'dockerfile', 'dot', 'eex', 'elixir', 'elm', 'erlang',
         'fennel', 'fish', 'git_config', 'git_rebase', 'gitattributes', 'gitcommit', 'gitignore', 'gleam', 'go', 'gomod',
         'gosum', 'gowork', 'gpg', 'graphql', 'hack', 'haskell', 'hcl', 'heex', 'http', 'html', 'ini',
-        'java', 'javascript', 'jsdoc', 'json', 'json5', 'jsonc', 'jsonnet', 'julia', 'kotlin', 'latex',
+        'java', 'javascript', 'jsdoc', 'json', 'json5', 'jsonc', 'jsonnet', 'julia', 'just', 'kotlin', 'latex',
         'ledger', 'lua', 'make', 'markdown', 'markdown_inline', 'mermaid', 'nix', 'ocaml', 'ocaml_interface',
         'ocamllex', 'pascal', 'passwd', 'pem', 'perl', 'php', 'phpdoc', 'po', 'prisma', 'properties', 'proto', 'prql',
         'psv', 'pug', 'puppet', 'pymanifest', 'python', 'query', 'r', 'regex', 'requirements', 'robot', 'ruby', 'rust',
