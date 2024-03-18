@@ -78,7 +78,7 @@
   "plenary.nvim": { "branch": "master", "commit": "f7adfc4b3f4f91aab6caebf42b3682945fbc35be" },
   "presence.nvim": { "branch": "main", "commit": "87c857a56b7703f976d3a5ef15967d80508df6e6" },
   "registers.nvim": { "branch": "main", "commit": "22bb98f93a423252fffeb3531f7bc12a3e07b63f" },
-  "rest.nvim": { "branch": "main", "commit": "abfc4b24270bb10e1468e14d73cadd16570de2f3" },
+  "rest.nvim": { "branch": "main", "commit": "eff6f1bef97e983f09abc1bb0b22a53c9298db9f" },
   "sad.nvim": { "branch": "master", "commit": "869c7f3ca3dcd28fd78023db6a7e1bf8af0f4714" },
   "silicon.nvim": { "branch": "main", "commit": "3e51b261de5854c5d9e09df1a0fc8d30d1c01d34" },
   "speedtyper.nvim": { "branch": "main", "commit": "2d158eed4c753995b0501a3a7a72464fbb213e3d" },

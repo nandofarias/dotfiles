@@ -1,5 +1,7 @@
 return {
   'rest-nvim/rest.nvim',
+  ft = 'http',
+  dependencies = { 'luarocks.nvim' },
   config = true,
   keys = {
     { '<leader>rf', '<Plug>RestNvim<CR>',        desc = "HTTP Request" },
