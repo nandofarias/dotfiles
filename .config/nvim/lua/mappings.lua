@@ -44,3 +44,6 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.keymap.set('n', '<esc>', ':q <CR>', { silent = true, buffer = true })
   end
 })
+
+-- Surround
+vim.keymap.set('n', '<Leader>sq', function() vim.cmd [[%s/^\(.*\)$/"\1",/]] end, { silent = true })
