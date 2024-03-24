@@ -1,11 +1,19 @@
 return {
   'rest-nvim/rest.nvim',
   ft = 'http',
-  dependencies = { 'luarocks.nvim' },
-  config = true,
+  dependencies = {
+    {
+      "vhyrro/luarocks.nvim",
+      opts = {
+        rocks = { "nvim-nio", "mimetypes", "xml2lua", "lua-curl" }
+      }
+    },
+  },
+  config = function()
+    require("rest-nvim").setup()
+  end,
   keys = {
-    { '<leader>rf', '<Plug>RestNvim<CR>',        desc = "HTTP Request" },
-    { '<leader>rl', '<Plug>RestNvimLast<CR>',    desc = "HTTP Last Request" },
-    { '<leader>rp', '<Plug>RestNvimPreview<CR>', desc = "HTTP Preview" },
+    { "<leader>hr", "<cmd>Rest run<cr>",      desc = "Run request under the cursor" },
+    { "<leader>hl", "<cmd>Rest run last<cr>", desc = "Re-run latest request" },
   }
 }
