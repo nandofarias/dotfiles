@@ -4,7 +4,6 @@ return {
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
     'jose-elias-alvarez/nvim-lsp-ts-utils',
-    'folke/lsp-colors.nvim',
     {
       'glepnir/lspsaga.nvim',
       config = function()
