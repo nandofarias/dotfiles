@@ -46,4 +46,7 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 -- Surround
-vim.keymap.set('n', '<Leader>sq', function() vim.cmd [[%s/^\(.*\)$/"\1",/]] end, { silent = true })
+vim.keymap.set('n', '<space>sq', function() vim.cmd [[%s/^\(.*\)$/"\1",/]] end, { silent = true })
+
+-- Relative line number
+vim.api.nvim_set_keymap('n', '<space>rl', ':set relativenumber!<CR>', { noremap = true, silent = true })
