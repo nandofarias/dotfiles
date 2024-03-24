@@ -17,7 +17,7 @@ return {
 
   window_decorations = "RESIZE",
   window_close_confirmation = "NeverPrompt",
-  window_background_opacity = 0.9,
+  window_background_opacity = 1.0,
 
   use_fancy_tab_bar = false,
   force_reverse_video_cursor = true,
