@@ -1,12 +1,16 @@
 local wezterm = require 'wezterm';
 
-wezterm.on('toggle-opacity', function(window, pane)
+wezterm.on('decrease-opacity', function(window, pane)
   local overrides = window:get_config_overrides() or {}
-  if not overrides.window_background_opacity then
-    overrides.window_background_opacity = 0.5
-  else
-    overrides.window_background_opacity = nil
-  end
+  local opacity = overrides.window_background_opacity or 0.9
+  overrides.window_background_opacity = opacity + 0.1
+  window:set_config_overrides(overrides)
+end)
+
+wezterm.on('increase-opacity', function(window, pane)
+  local overrides = window:get_config_overrides() or {}
+  local opacity = overrides.window_background_opacity or 0.9
+  overrides.window_background_opacity = opacity - 0.1
   window:set_config_overrides(overrides)
 end)
 
@@ -17,7 +21,7 @@ return {
 
   window_decorations = "RESIZE",
   window_close_confirmation = "NeverPrompt",
-  window_background_opacity = 1.0,
+  window_background_opacity = 0.9,
 
   use_fancy_tab_bar = false,
   force_reverse_video_cursor = true,
@@ -58,6 +62,7 @@ return {
     { key = "l",     mods = "CMD|SHIFT", action = wezterm.action { SendString = "\x02\x3e" } },
     { key = "k",     mods = "CMD",       action = wezterm.action { SendString = "\x63\x6C\x65\x61\x72\x0A" } },
 
-    { key = "b",     mods = "CMD|CTRL",  action = wezterm.action.EmitEvent "toggle-opacity" },
+    { key = "i",     mods = "CMD|SHIFT",  action = wezterm.action.EmitEvent "decrease-opacity" },
+    { key = "o",     mods = "CMD|SHIFT",  action = wezterm.action.EmitEvent "increase-opacity" },
   },
 }
