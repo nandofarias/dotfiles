@@ -22,7 +22,14 @@ return {
         'scala', 'scheme', 'scss', 'solidity', 'sparql', 'sql', 'ssh_config', 'supercollider', 'surface', 'svelte',
         'swift', 'terraform', 'tsv', 'tsx', 'typescript', 'vim', 'vimdoc', 'vue', 'xml', 'yaml', 'zig' },
       indent = {
-        enable = true
+        enable = true,
+        disable = function(lang, buf)
+          local max_filesize = 10 * 1024 -- 10 KB
+          local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+          if ok and stats and stats.size > max_filesize then
+            return true
+          end
+        end,
       },
       highlight = {
         enable = true,
@@ -32,13 +39,6 @@ return {
       autotag = {
         enable = true,
       },
-      disable = function(lang, buf)
-        local max_filesize = 10 * 1024 -- 10 KB
-        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-        if ok and stats and stats.size > max_filesize then
-          return true
-        end
-      end,
       textobjects = {
         select = {
           enable = true,
