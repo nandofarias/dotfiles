@@ -5,9 +5,9 @@ return {
   },
   config = function()
     require('regexplainer').setup {
-      auto = true,
       mappings = {
-        toggle = 'gR',
+        toggle = '<leader>re',
+        hide = '<leader>rc',
       },
     }
   end
