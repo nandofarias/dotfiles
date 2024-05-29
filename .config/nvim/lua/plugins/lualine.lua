@@ -1,8 +1,5 @@
 return {
   'nvim-lualine/lualine.nvim',
-  dependencies = {
-    'WhoIsSethDaniel/lualine-lsp-progress',
-  },
   config = function()
     local tokyonight = require('lualine.themes.tokyonight')
     tokyonight.normal.c.bg = 'none'
@@ -25,7 +22,7 @@ return {
           { 'mode', separator = { left = '' }, right_padding = 2 },
         },
         lualine_b = { 'branch', 'diff', 'diagnostics' },
-        lualine_c = { 'filename', 'lsp_progress' },
+        lualine_c = { 'filename', function() return require('lsp-progress').progress() end },
         lualine_x = {
           {
             require('lazy.status').updates,
