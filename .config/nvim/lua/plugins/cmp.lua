@@ -26,7 +26,10 @@ return {
       formatting = {
         fields = { 'kind', 'abbr', 'menu' },
         format = lspkind.cmp_format({
-          symbol_map = { Copilot = "" },
+          symbol_map = {
+            Supermaven = "",
+            Copilot = ""
+          },
           before = function(entry, vim_item)
             vim_item.menu = ({
               buffer = ' Buffer',
@@ -57,6 +60,7 @@ return {
         ['<C-p>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
       },
       sources = {
+        { name = 'supermaven' },
         { name = 'copilot' },
         { name = 'nvim_lsp' },
         { name = 'nvim_lsp_signature_help' },
@@ -80,5 +84,7 @@ return {
     -- vim.keymap.set({'i','s'}, '<C-L>',   "vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-L>'",   opts)
     vim.keymap.set({ 'i', 's' }, '<Tab>', "vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'      : '<Tab>'", opts)
     vim.keymap.set({ 'i', 's' }, '<S-Tab>', "vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'", opts)
+
+    vim.api.nvim_set_hl(0, "CmpItemKindSupermaven", {fg ="#6CC644"})
   end
 }
