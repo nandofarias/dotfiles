@@ -10,16 +10,20 @@ return {
         require('lspsaga').setup({
           symbol_in_winbar = {
             enable = true,
-          }
+          },
+          outline = {
+            win_width = 50,
+          },
         })
         vim.keymap.set({ 'n', 't' }, '<leader>to', '<cmd>Lspsaga term_toggle<CR>')
+        vim.keymap.set({ 'n', 't' }, '<leader>so', '<cmd>Lspsaga outline<CR>')
       end
     },
   },
   config = function()
     require("mason").setup()
     require("mason-lspconfig").setup({
-      ensure_installed = { "dockerls", "elixirls", "erlangls", "grammarly", "graphql", "sqlls", "lua_ls",
+      ensure_installed = { "dockerls", "elixirls", "lexical", "erlangls", "grammarly", "graphql", "sqlls", "lua_ls",
         "tsserver", "yamlls", "rust_analyzer", "zls", },
       automatic_installlation = true,
     })
