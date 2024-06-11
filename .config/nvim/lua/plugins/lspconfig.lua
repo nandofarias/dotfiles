@@ -64,29 +64,6 @@ return {
     -- manual lspconfig
     lspconfig.gleam.setup(opts)
 
-    -- local lexical_config = {
-    --   filetypes = { "elixir", "eelixir", },
-    --   cmd = { "/Users/nandofarias/Developer/lexical/_build/dev/rel/lexical/start_lexical.sh" },
-    --   settings = {},
-    -- }
-    --
-    -- if not configs.lexical then
-    --   configs.lexical = {
-    --     default_config = {
-    --       filetypes = lexical_config.filetypes,
-    --       cmd = lexical_config.cmd,
-    --       root_dir = function(fname)
-    --         return lspconfig.util.root_pattern("mix.exs", ".git")(fname) or vim.loop.os_homedir()
-    --       end,
-    --       -- optional settings
-    --       settings = lexical_config.settings,
-    --     },
-    --   }
-    -- end
-    --
-    -- lspconfig.lexical.setup({})
-
-
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('UserLspConfig', {}),
       callback = function(ev)
@@ -125,33 +102,58 @@ return {
 
     -- mason-lspconfig
     require("mason-lspconfig").setup_handlers {
-      ['elixirls'] = function()
-        opts.settings = {
-          elixirLS = {
-            fetchDeps = false,
-            dialyzerEnabled = true,
-            dialyzerFormat = 'dialyxir_short',
-            suggestSpecs = true
-          }
-        }
-        opts.root_dir = function(fname)
-          local path = lspconfig.util.path
-          local child_or_root_path = lspconfig.util.root_pattern({ "mix.exs", ".git" })(fname)
-          local maybe_umbrella_path = lspconfig.util.root_pattern({ "mix.exs" })(
-            vim.loop.fs_realpath(path.join({ child_or_root_path, ".." }))
-          )
+      -- ['elixirls'] = function()
+      --   opts.settings = {
+      --     elixirLS = {
+      --       fetchDeps = false,
+      --       dialyzerEnabled = true,
+      --       dialyzerFormat = 'dialyxir_short',
+      --       suggestSpecs = true
+      --     }
+      --   }
+      --   opts.root_dir = function(fname)
+      --     local path = lspconfig.util.path
+      --     local child_or_root_path = lspconfig.util.root_pattern({ "mix.exs", ".git" })(fname)
+      --     local maybe_umbrella_path = lspconfig.util.root_pattern({ "mix.exs" })(
+      --       vim.loop.fs_realpath(path.join({ child_or_root_path, ".." }))
+      --     )
+      --
+      --     local has_ancestral_mix_exs_path = vim.startswith(child_or_root_path,
+      --       path.join({ maybe_umbrella_path, "apps" }))
+      --     if maybe_umbrella_path and not has_ancestral_mix_exs_path then
+      --       maybe_umbrella_path = nil
+      --     end
+      --
+      --     return maybe_umbrella_path or child_or_root_path or vim.loop.os_homedir()
+      --   end
+      --
+      --
+      --   lspconfig.elixirls.setup(opts)
+      -- end,
 
-          local has_ancestral_mix_exs_path = vim.startswith(child_or_root_path,
-            path.join({ maybe_umbrella_path, "apps" }))
-          if maybe_umbrella_path and not has_ancestral_mix_exs_path then
-            maybe_umbrella_path = nil
-          end
+      ['lexical'] = function()
+        lspconfig.lexical.setup({
+          default_config = {
+            filetypes = { "elixir", "eelixir", "heex" },
+            cmd = { "$HOME/.local/share/nvim/mason/packages/lexical/libexec/lexical/bin/start_lexical.sh" },
+            root_dir = function(fname)
+              local path = lspconfig.util.path
+              local child_or_root_path = lspconfig.util.root_pattern({ "mix.exs", ".git" })(fname)
+              local maybe_umbrella_path = lspconfig.util.root_pattern({ "mix.exs" })(
+                vim.loop.fs_realpath(path.join({ child_or_root_path, ".." }))
+              )
 
-          return maybe_umbrella_path or child_or_root_path or vim.loop.os_homedir()
-        end
+              local has_ancestral_mix_exs_path = vim.startswith(child_or_root_path,
+                path.join({ maybe_umbrella_path, "apps" }))
+              if maybe_umbrella_path and not has_ancestral_mix_exs_path then
+                maybe_umbrella_path = nil
+              end
 
-
-        lspconfig.elixirls.setup(opts)
+              return maybe_umbrella_path or child_or_root_path or vim.loop.os_homedir()
+            end,
+            settings = {}
+          },
+        })
       end,
 
       ['lua_ls'] = function()
