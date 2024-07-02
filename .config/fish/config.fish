@@ -116,7 +116,7 @@ if status is-interactive
   abbr -ag tls "tmux ls"
   abbr -ag tn "tmux new -s"
   abbr -ag ta "tmux attach -t"
-  abbr -ag tc "sesh connect (sesh list | fzf)"
+  abbr -ag tc "sesh connect (sesh list -i | gum filter --limit 1 --placeholder 'Pick a sesh' --height 50 --prompt='⚡')"
 
   abbr -ag ss "cmatrix -C blue"
 
