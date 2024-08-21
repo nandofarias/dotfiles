@@ -1,6 +1,6 @@
 return {
   'simeji/winresizer',
   keys = {
-    { '<C-w>t', ':WinResizerStartResize<cr>', { desc = "Window resizer", silent = true } }
+    { '<Leader>rs', ':WinResizerStartResize<cr>', { desc = "Window resizer", silent = true } }
   }
 }

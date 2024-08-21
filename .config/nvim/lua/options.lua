@@ -19,6 +19,7 @@ vim.opt.laststatus = 3
 vim.opt.matchtime = 1
 vim.opt.mouse = 'a'
 vim.opt.number = true
+vim.opt.sessionoptions = 'buffers,curdir,folds,help,tabpages,winsize'
 vim.opt.shiftwidth = 2
 vim.opt.showcmd = true
 vim.opt.showmatch = true
