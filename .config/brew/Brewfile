@@ -158,7 +158,7 @@ brew "sad"
 brew "sd"
 brew "sesh"
 brew "silicon"
-brew "sketchybar", restart_service: true
+brew "sketchybar", restart_service: false
 brew "slides"
 brew "source-highlight"
 brew "spotify_player"
