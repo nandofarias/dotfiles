@@ -22,7 +22,7 @@ return {
       buffers = {
         new_buffers_position = 'next',
         filter_valid = function(buffer)
-          return buffer.type ~= "terminal" and buffer.type ~= "quickfix"
+          return buffer.type ~= "quickfix"
         end
       },
       fill_hl = 'FloatBorder',
