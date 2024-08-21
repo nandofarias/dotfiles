@@ -56,13 +56,14 @@ return {
     { key = "}",     mods = "CMD|SHIFT", action = wezterm.action { SendString = "\x02\x6e" } },
     { key = "`",     mods = "CTRL",      action = wezterm.action { SendString = "\x02\x7a" } },
     { key = "[",     mods = "CTRL",      action = wezterm.action { SendString = "\x02\x5b" } },
+    { key = "]",     mods = "CTRL",      action = wezterm.action { SendString = "\x02" } },
     { key = "h",     mods = "CMD|SHIFT", action = wezterm.action { SendString = "\x02\x3c" } },
     { key = "j",     mods = "CMD|SHIFT", action = wezterm.action { SendString = "\x02\x2d" } },
     { key = "k",     mods = "CMD|SHIFT", action = wezterm.action { SendString = "\x02\x2b" } },
     { key = "l",     mods = "CMD|SHIFT", action = wezterm.action { SendString = "\x02\x3e" } },
     { key = "k",     mods = "CMD",       action = wezterm.action { SendString = "\x63\x6C\x65\x61\x72\x0A" } },
 
-    { key = "i",     mods = "CMD|SHIFT",  action = wezterm.action.EmitEvent "decrease-opacity" },
-    { key = "o",     mods = "CMD|SHIFT",  action = wezterm.action.EmitEvent "increase-opacity" },
+    { key = "i",     mods = "CMD|SHIFT", action = wezterm.action.EmitEvent "decrease-opacity" },
+    { key = "o",     mods = "CMD|SHIFT", action = wezterm.action.EmitEvent "increase-opacity" },
   },
 }

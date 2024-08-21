@@ -26,8 +26,8 @@ return {
   config = function()
     require("mason").setup()
     require("mason-lspconfig").setup({
-      ensure_installed = { "dockerls", "elixirls", "lexical", "erlangls", "grammarly", "graphql", "sqlls", "lua_ls",
-        "tsserver", "yamlls", "rust_analyzer", "zls", },
+      ensure_installed = { "dockerls", "lexical", "erlangls", "grammarly", "graphql", "sqlls", "lua_ls",
+        "tsserver", "typos_lsp", "yamlls", "rust_analyzer", "zls", },
       automatic_installlation = true,
     })
 
@@ -105,34 +105,37 @@ return {
 
     -- mason-lspconfig
     require("mason-lspconfig").setup_handlers {
-      -- ['elixirls'] = function()
-      --   opts.settings = {
-      --     elixirLS = {
-      --       fetchDeps = false,
-      --       dialyzerEnabled = true,
-      --       dialyzerFormat = 'dialyxir_short',
-      --       suggestSpecs = true
-      --     }
-      --   }
-      --   opts.root_dir = function(fname)
-      --     local path = lspconfig.util.path
-      --     local child_or_root_path = lspconfig.util.root_pattern({ "mix.exs", ".git" })(fname)
-      --     local maybe_umbrella_path = lspconfig.util.root_pattern({ "mix.exs" })(
-      --       vim.loop.fs_realpath(path.join({ child_or_root_path, ".." }))
-      --     )
-      --
-      --     local has_ancestral_mix_exs_path = vim.startswith(child_or_root_path,
-      --       path.join({ maybe_umbrella_path, "apps" }))
-      --     if maybe_umbrella_path and not has_ancestral_mix_exs_path then
-      --       maybe_umbrella_path = nil
-      --     end
-      --
-      --     return maybe_umbrella_path or child_or_root_path or vim.loop.os_homedir()
-      --   end
-      --
-      --
-      --   lspconfig.elixirls.setup(opts)
-      -- end,
+      function(server_name)
+        require("lspconfig")[server_name].setup {}
+      end,
+
+      ['elixirls'] = function()
+        opts.settings = {
+          elixirLS = {
+            fetchDeps = false,
+            dialyzerEnabled = true,
+            dialyzerFormat = 'dialyxir_short',
+            suggestSpecs = true
+          }
+        }
+        opts.root_dir = function(fname)
+          local path = lspconfig.util.path
+          local child_or_root_path = lspconfig.util.root_pattern({ "mix.exs", ".git" })(fname)
+          local maybe_umbrella_path = lspconfig.util.root_pattern({ "mix.exs" })(
+            vim.loop.fs_realpath(path.join({ child_or_root_path, ".." }))
+          )
+
+          local has_ancestral_mix_exs_path = vim.startswith(child_or_root_path,
+            path.join({ maybe_umbrella_path, "apps" }))
+          if maybe_umbrella_path and not has_ancestral_mix_exs_path then
+            maybe_umbrella_path = nil
+          end
+
+          return maybe_umbrella_path or child_or_root_path or vim.loop.os_homedir()
+        end
+
+        lspconfig.elixirls.setup(opts)
+      end,
 
       ['lexical'] = function()
         lspconfig.lexical.setup({
