@@ -74,8 +74,8 @@
 	defaultBranch = main
 
 [commit]
-	template = ~/.commit-conventions
-	gpgsign = true
+  template = ./commit-template
+  gpgsign = true
 
 [gpg]
 	format = ssh
