@@ -7,7 +7,7 @@ return {
     { "ge", function() require('spider').motion('ge') end, desc = "Spider-ge", mode = { "n", "o", "x" } },
     { "w",  function() require('spider').motion('w') end,  mode = { "o" } },
     { "cw", "c<cmd>lua require('spider').motion('e')<CR>" },
-    { "dw", "c<cmd>lua require('spider').motion('e')<CR>" },
+    { "dw", "d<cmd>lua require('spider').motion('e')<CR>" },
   },
   lazy = true,
   config = true
