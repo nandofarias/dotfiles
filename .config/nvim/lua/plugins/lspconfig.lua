@@ -16,6 +16,7 @@ return {
           },
           outline = {
             win_width = 50,
+            auto_preview = false,
           },
         })
         vim.keymap.set({ 'n', 't' }, '<leader>to', '<cmd>Lspsaga term_toggle<CR>')

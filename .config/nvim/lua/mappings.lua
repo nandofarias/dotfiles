@@ -14,6 +14,7 @@ vim.keymap.set('n', '<space>ba', ':%bdelete|edit#|bdelete# <CR>',
   { silent = true, desc = "Delete All Buffers Except Current" })
 vim.keymap.set('n', '<space>ww', ':w <CR>', { silent = true, desc = "Save Buffer" })
 vim.keymap.set('n', '<space>wq', ':wq <CR>', { silent = true, desc = "Save and Quit" })
+vim.keymap.set('n', '<space>qq', ':q <CR>', { silent = true, desc = "Close Window" })
 vim.keymap.set('n', '<space>qa', ':qa <CR>', { silent = true, desc = "Quit" })
 
 -- Move lines
@@ -37,8 +38,11 @@ vim.keymap.set('n', 'k', 'gk')
 vim.keymap.set('n', '<space>vs', ':vs<CR>')
 vim.keymap.set('n', '<space>hs', ':split<CR>')
 
--- yank
+-- Yank
 vim.keymap.set("x", "y", "ygv<Esc>", { noremap = true, silent = true })
+
+-- Terminal
+vim.keymap.set("t", "<C-o>", [[<C-\><C-n>]])
 
 local group = vim.api.nvim_create_augroup('closeWithEsc', { clear = true })
 vim.api.nvim_create_autocmd('FileType', {
