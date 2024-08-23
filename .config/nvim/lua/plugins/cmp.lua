@@ -62,6 +62,7 @@ return {
         { name = "supermaven" },
         { name = "nvim_lsp" },
         { name = "nvim_lsp_signature_help" },
+        { name = "lazydev",                group_index = 0 },
         { name = "nvim_lua" },
         { name = "vsnip" },
         { name = "path" },

@@ -12,10 +12,5 @@ return {
     vim.g['test#strategy'] = 'neovim_sticky'
     vim.g['test#preserve_screen'] = 0
     vim.g['test#neovim#term_position'] = 'vert 80'
-    vim.cmd [[
-      if has('nvim')
-        tmap <C-o> <C-\><C-n>
-      endif
-    ]]
   end
 }
