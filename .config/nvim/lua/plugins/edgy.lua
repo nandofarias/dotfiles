@@ -6,6 +6,9 @@ return {
     vim.opt.splitkeep = "screen"
   end,
   opts = {
+    options = {
+      left = { size = 40 },
+    },
     bottom = {
       {
         ft = "toggleterm",
