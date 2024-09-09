@@ -53,8 +53,11 @@ vim.api.nvim_create_autocmd('FileType', {
   end
 })
 
--- Surround
-vim.keymap.set('n', '<space>sq', function() vim.cmd [[%s/^\(.*\)$/"\1",/]] end, { silent = true })
+-- Surround quotes
+vim.keymap.set('n', '<space>sq', function() vim.cmd [[%s/^\(.*\)$/"\1",/]] end,
+  { silent = true, desc = "Surround text with double quotes" })
+vim.keymap.set('n', '<space>sw', function() vim.cmd [[%s/^\(.*\)$/'\1',/]] end,
+  { silent = true, desc = "Surround text with single quotes" })
 
 -- Relative line number
 vim.api.nvim_set_keymap('n', '<space>rl', ':set relativenumber!<CR>', { noremap = true, silent = true })
