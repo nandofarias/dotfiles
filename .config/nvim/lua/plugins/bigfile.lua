@@ -1,13 +1,3 @@
-local copilot = {
-  name = "copilot",
-  opts = {
-    defer = false,
-  },
-  disable = function()
-    vim.cmd [[Copilot disable]]
-  end,
-}
-
 return {
   'LunarVim/bigfile.nvim',
   event = 'BufReadPre',
@@ -22,8 +12,7 @@ return {
         "syntax",
         "matchparen",
         "vimopts",
-        "filetype",
-        copilot,
+        "filetype"
       },
     })
   end,
