@@ -28,7 +28,7 @@ return {
     require("mason").setup()
     require("mason-lspconfig").setup({
       ensure_installed = { "dockerls", "lexical", "erlangls", "grammarly", "graphql", "sqlls", "lua_ls",
-        "tsserver", "typos_lsp", "yamlls", "rust_analyzer", "zls", },
+        "ts_ls", "typos_lsp", "yamlls", "rust_analyzer", "zls", },
       automatic_installlation = true,
     })
 
@@ -185,7 +185,7 @@ return {
         lspconfig.lua_ls.setup(opts)
       end,
 
-      ['tsserver'] = function()
+      ['ts_ls'] = function()
         opts.on_attach = function(client, bufnr)
           client.server_capabilities.document_formatting = false
           client.server_capabilities.document_range_formatting = false
@@ -198,7 +198,7 @@ return {
           on_attach(client, bufnr)
         end
 
-        lspconfig.tsserver.setup(opts)
+        lspconfig.ts_ls.setup(opts)
       end,
 
       ['grammarly'] = function()
