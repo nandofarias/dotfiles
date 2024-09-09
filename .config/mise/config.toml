@@ -1,7 +1,7 @@
 [tools]
-elixir = "1.16.0-otp-26"
-erlang = "26.2.1"
-gleam = "1.0.0"
+elixir = "1.17.2-otp-27"
+erlang = "27.0.1"
+gleam = "1.4.1"
 nodejs = "16.19.1"
 neovim = "stable"
 rust = "stable"
