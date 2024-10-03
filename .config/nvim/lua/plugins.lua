@@ -15,7 +15,6 @@ return {
       vim.cmd([[colorscheme tokyonight-moon]])
       vim.cmd([[hi TabLine guibg=NONE guifg=NONE]])
       vim.api.nvim_set_hl(0, "FloatBorder", { bg = "none" })
-
     end,
   },
 
@@ -40,11 +39,11 @@ return {
   'Bekaboo/deadcolumn.nvim',
 
   -- Better Git
-  { 'sindrets/diffview.nvim',    dependencies = { 'kyazdani42/nvim-web-devicons' } },
-  { 'ruifm/gitlinker.nvim',      config = true },
+  { 'sindrets/diffview.nvim', dependencies = { 'kyazdani42/nvim-web-devicons' } },
+  { 'ruifm/gitlinker.nvim',   config = true },
 
   -- Earthly, will be removed when tree-sitter is available
-  { 'earthly/earthly.vim',       branch = 'main' },
+  { 'earthly/earthly.vim',    branch = 'main' },
 
   -- Frontend
   'mattn/emmet-vim',
