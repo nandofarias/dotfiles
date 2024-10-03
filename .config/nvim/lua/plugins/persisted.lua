@@ -21,6 +21,7 @@ return {
   config = function()
     require('persisted').setup {
       use_git_branch = true,
+      autoload = true,
     }
 
     require('telescope').load_extension('persisted')
