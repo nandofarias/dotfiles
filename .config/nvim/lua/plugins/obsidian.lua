@@ -3,8 +3,7 @@ local vault_dir = '~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes
 return {
   'epwalsh/obsidian.nvim',
   dependencies = {
-    'nvim-lua/plenary.nvim',
-    'hrsh7th/nvim-cmp'
+    'nvim-lua/plenary.nvim'
   },
   version = '*',
   ft = 'markdown',
