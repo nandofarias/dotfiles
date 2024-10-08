@@ -91,7 +91,7 @@ return {
         vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
         vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
         vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-        vim.keymap.set('n', '<leader>bf', function() vim.lsp.buf.format({ async = true }) end, opts)
+        vim.keymap.set('n', '<leader>fm', function() vim.lsp.buf.format({ async = true }) end, opts)
         vim.api.nvim_create_user_command('Format', function() vim.lsp.buf.format({ async = true }) end, {})
         vim.keymap.set('n', '<leader>cr', vim.lsp.codelens.run, opts)
         vim.keymap.set('n', '<leader>cl', vim.lsp.codelens.refresh, opts)
