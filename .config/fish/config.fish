@@ -98,8 +98,8 @@ if status is-interactive
   # Import GPG keys
   set -gx GPG_TTY (tty)
 
-  # iTerm
-  test -e {$HOME}/.iterm2_shell_integration.fish; and source {$HOME}/.iterm2_shell_integration.fish
+  # Fzf
+  fzf --fish | source
 
   # Abbreviations
   abbr -ag mps "iex -S mix phx.server"
