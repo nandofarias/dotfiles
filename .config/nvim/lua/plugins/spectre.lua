@@ -10,4 +10,16 @@ return {
       desc = "Replace in files (Spectre)",
     },
   },
+  opts = {
+    replace_engine = {
+      ["sed"] = {
+        cmd = "sed",
+        args = {
+          "-i",
+          "",
+          "-E",
+        },
+      },
+    },
+  },
 }
