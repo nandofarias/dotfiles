@@ -4,6 +4,7 @@ return {
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
     'jose-elias-alvarez/nvim-lsp-ts-utils',
+    'saghen/blink.cmp',
     {
       'glepnir/lspsaga.nvim',
       config = function()
@@ -33,9 +34,9 @@ return {
     })
 
     local lspconfig = require('lspconfig')
-    --
-    -- For nvim-cmp
-    local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+    -- For blink.cmp
+    local capabilities = require('blink.cmp').get_lsp_capabilities()
 
     local on_attach = function(client, bufnr)
       if client.supports_method("textDocument/formatting") then
