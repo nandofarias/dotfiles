@@ -1,0 +1,40 @@
+# vim: ft=conf
+
+# Theme
+theme = tokyonight
+background-opacity = 0.8
+
+# Font
+font-family = MonoLisaPlus Nerd Font
+font-size = 14
+adjust-cell-height = 10
+
+# Keybinds
+keybind = super+shift+r=reload_config
+
+keybind = super+d=text:\x02\x76
+keybind = super+shift+d=text:\x02\x73
+keybind = super+t=text:\x02\x63
+keybind = super+w=text:\x02\x78
+keybind = super+shift+o=text:\x02\x70
+keybind = super+shift+p=text:\x02\x6e
+keybind = ctrl+`=text:\x02\x7a
+keybind = ctrl+[=text:\x02\x5b
+keybind = super+shift+h=text:\x02\x3c
+keybind = super+shift+j=text:\x02\x2d
+keybind = super+shift+k=text:\x02\x2b
+keybind = super+shift+l=text:\x02\x3e
+keybind = super+k=text:\x63\x6C\x65\x61\x72\x0A
+
+# Window
+window-decoration = false
+window-padding-x = 15
+window-padding-y = 15
+
+# Shell
+shell-integration = fish
+
+# Misc
+macos-option-as-alt = true
+mouse-hide-while-typing = true
+desktop-notifications = true
