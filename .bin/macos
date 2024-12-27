@@ -59,6 +59,8 @@ defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortedDescending
 defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortOrder" -string "received-date"
 # Drag any window using cmd+ctrl mouse
 defaults write -g NSWindowShouldDragOnGesture YES
+# Disable open animation
+defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
 # Enable ssh
 sudo systemsetup -setremotelogin on
 
