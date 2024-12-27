@@ -1,13 +1,13 @@
 local wezterm = require 'wezterm';
 
-wezterm.on('decrease-opacity', function(window, pane)
+wezterm.on('decrease-opacity', function(window, _)
   local overrides = window:get_config_overrides() or {}
   local opacity = overrides.window_background_opacity or 0.9
   overrides.window_background_opacity = opacity + 0.1
   window:set_config_overrides(overrides)
 end)
 
-wezterm.on('increase-opacity', function(window, pane)
+wezterm.on('increase-opacity', function(window, _)
   local overrides = window:get_config_overrides() or {}
   local opacity = overrides.window_background_opacity or 0.9
   overrides.window_background_opacity = opacity - 0.1
