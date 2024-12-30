@@ -16,8 +16,8 @@ keybind = super+d=text:\x02\x76
 keybind = super+shift+d=text:\x02\x73
 keybind = super+t=text:\x02\x63
 keybind = super+w=text:\x02\x78
-keybind = super+shift+o=text:\x02\x70
-keybind = super+shift+p=text:\x02\x6e
+keybind = super+shift+left_bracket=text:\x02\x70
+keybind = super+shift+right_bracket=text:\x02\x6e
 keybind = ctrl+`=text:\x02\x7a
 keybind = ctrl+[=text:\x02\x5b
 keybind = super+shift+h=text:\x02\x3c
