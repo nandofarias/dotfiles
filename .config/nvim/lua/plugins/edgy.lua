@@ -36,7 +36,7 @@ return {
           return vim.bo[buf].buftype == "help"
         end,
       },
-      { ft = "spectre_panel", size = { height = 0.4 } },
+      { ft = "spectre_panel", title = "Search and Replace", size = { height = 0.4 } },
     },
     left = {
       {
