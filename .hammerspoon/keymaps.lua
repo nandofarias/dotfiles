@@ -9,7 +9,7 @@ local function open_app(appName, appPath)
   end
 end
 
-hs.hotkey.bind({ "command" }, ".", open_app("WezTerm", "/Applications/WezTerm.app"))
+hs.hotkey.bind({ "command" }, ".", open_app("Ghostty", "/Applications/Ghostty.app"))
 hs.hotkey.bind({ "command", "ctrl", "alt" }, "4", open_app("Arc", "/Applications/Arc.app"))
 hs.hotkey.bind({ "command", "ctrl", "alt" }, "5", open_app("Dash", "/Applications/Dash.app"))
 hs.hotkey.bind({ "command", "ctrl", "alt" }, "6", open_app("Slack", "/Applications/Slack.app"))
