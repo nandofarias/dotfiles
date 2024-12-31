@@ -23,3 +23,7 @@ Swipe:start(3, function(direction, distance, id)
     threshold = 0.04 -- swipe distance > 4% of trackpad
   end
 end)
+
+
+hs.hotkey.bind({ "ctrl" }, "right", function() aerospaceExec("workspace --wrap-around next") end)
+hs.hotkey.bind({ "ctrl" }, "left", function() aerospaceExec("workspace --wrap-around prev") end)
