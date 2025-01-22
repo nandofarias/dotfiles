@@ -111,24 +111,14 @@ return {
         require("lspconfig")[server_name].setup {}
       end,
 
-      ['elixirls'] = function()
-        opts.settings = {
-          elixirLS = {
-            fetchDeps = false,
-            dialyzerEnabled = true,
-            dialyzerFormat = 'dialyxir_short',
-            suggestSpecs = true
-          }
-        }
-
-        lspconfig.elixirls.setup(opts)
-      end,
-
       ['lexical'] = function()
         lspconfig.lexical.setup({
           default_config = {
             filetypes = { "elixir", "eelixir", "heex" },
             cmd = { "$HOME/.local/share/nvim/mason/packages/lexical/libexec/lexical/bin/start_lexical.sh" },
+            root_dir = function(fname)
+              return util.root_pattern("mix.exs", ".git")(fname) or vim.loop.cwd()
+            end,
             settings = {}
           },
         })
