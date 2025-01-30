@@ -1,13 +1,18 @@
 #!/bin/bash
 cache='/tmp/jira_all'
-assignee=""
+command="issue list"
 timeout=3600 # 60m * 60s = 1hr
+
 if [[ $1 == "mine" ]]; then
     cache='/tmp/jira_mine'
-    assignee="-a $(jira me)"
+    command="issue list -a $(jira me)"
+elif [[ $1 == "sprint" ]]; then
+    cache='/tmp/jira_sprint'
+    command="sprint list --current"
 fi
+
 function refresh_cache() {
-    jira issue list $assignee --plain  --columns id,summary,status,type > $cache
+    jira $command --plain --columns assignee,summary,status > $cache
 }
 
 if [[ -f $cache ]]; then
