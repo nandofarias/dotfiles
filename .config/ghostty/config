@@ -2,7 +2,7 @@
 
 # Theme
 theme = tokyonight
-background-opacity = 0.8
+background-opacity = 0.6
 
 # Font
 font-family = MonoLisaPlus Nerd Font
@@ -25,6 +25,7 @@ keybind = super+shift+j=text:\x02\x2d
 keybind = super+shift+k=text:\x02\x2b
 keybind = super+shift+l=text:\x02\x3e
 keybind = super+k=text:\x63\x6C\x65\x61\x72\x0A
+keybind = global:cmd+grave_accent=toggle_quick_terminal
 
 # Window
 window-decoration = false
