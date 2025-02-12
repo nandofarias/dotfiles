@@ -24,3 +24,6 @@ for file in ${files[*]}
 do
     [[ -f "$XDG_CONFIG_HOME/zsh/${file}" ]] && source "$XDG_CONFIG_HOME/zsh/${file}"
 done
+
+# added by Snowflake SnowSQL installer v1.2
+export PATH=/Applications/SnowSQL.app/Contents/MacOS:$PATH
