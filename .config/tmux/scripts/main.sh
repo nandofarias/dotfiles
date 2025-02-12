@@ -23,7 +23,7 @@ main()
   show_refresh=$(get_tmux_option "@show-refresh-rate" 5)
   IFS=' ' read -r -a plugins <<< $(get_tmux_option "@info-list" "battery network weather")
 
-  # Tokyonight Moon Color Pallette
+  # Tokyonight Moon Color Palette
   white='#c8d3f5'
   grey='#222436'
   dark_grey='#1e2030'
