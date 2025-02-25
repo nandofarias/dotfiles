@@ -114,12 +114,16 @@ return {
       ['lexical'] = function()
         lspconfig.lexical.setup({
           default_config = {
-            filetypes = { "elixir", "eelixir", "heex" },
-            cmd = { "$HOME/.local/share/nvim/mason/packages/lexical/libexec/lexical/bin/start_lexical.sh" },
+            -- cmd = { "$HOME/.local/share/nvim/mason/packages/lexical/libexec/lexical/bin/start_lexical.sh" },
+            filetypes = { 'elixir', 'eelixir', 'heex', 'surface' },
             root_dir = function(fname)
-              return util.root_pattern("mix.exs", ".git")(fname) or vim.loop.cwd()
+              local matches = vim.fs.find({ 'mix.exs' }, { upward = true, limit = 2, path = fname })
+              local child_or_root_path, maybe_umbrella_path = unpack(matches)
+              local root_dir = vim.fs.dirname(maybe_umbrella_path or child_or_root_path)
+
+              return root_dir
             end,
-            settings = {}
+            single_file_support = true,
           },
         })
       end,
