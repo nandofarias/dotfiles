@@ -25,10 +25,10 @@ return {
       -- See the full 'keymap' documentation for information on defining your own keymap.
       keymap = { preset = 'enter' },
       enabled = function()
-        return vim.bo.buftype ~= "prompt" and
-            vim.bo.buftype ~= "NvimTree" and
-            vim.bo.buftype ~= "TelescopePrompt" and
-            vim.bo.filetype ~= "DressingInput" and
+        return (vim.bo.buftype ~= "prompt" and
+              vim.bo.buftype ~= "NvimTree" and
+              vim.bo.buftype ~= "TelescopePrompt" and
+              vim.bo.filetype ~= "DressingInput") or
             vim.b.completion ~= false
       end,
       signature = {
@@ -95,6 +95,7 @@ return {
         },
       },
       cmdline = {
+        enabled = false,
         sources = function() return {} end,
       },
       sources = {
