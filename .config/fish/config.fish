@@ -187,4 +187,7 @@ if status is-interactive
 
   # atuin
   atuin init fish --disable-up-arrow | source
+
+  # .local/bin
+  fish_add_path $HOME/.local/bin
 end
