@@ -1,8 +1,20 @@
 return {
   "yetone/avante.nvim",
-  event = "VeryLazy",
+  keys = {
+    { "<leader>aa", "<cmd>AvanteAsk<cr>",    desc = "Avante Ask" },
+    { "<leader>at", "<cmd>AvanteToggle<cr>", desc = "Avante Toggle" },
+    { "<leader>ac", "<cmd>AvanteChat<cr>",   desc = "Avante Chat" }
+  },
   opts = {
-    provider = "claude",
+    provider = "openai",
+    openai = {
+      endpoint = "https://api.openai.com/v1",
+      model = "gpt-4o-mini",
+      timeout = 30000,
+      max_tokens = 4096,
+      api_key_name =
+      "cmd:op read op://Private/52xxch3fqpsxvitcl6kuokjdoe/api_key --no-newline --account familia-farias.1password.com",
+    },
     mappings = {
       ask = "<leader>aa",     -- ask
       edit = "<leader>ae",    -- edit
