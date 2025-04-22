@@ -19,7 +19,11 @@ return {
           end,
         }),
         null_ls.builtins.formatting.prettierd,
-        null_ls.builtins.diagnostics.credo,
+        null_ls.builtins.diagnostics.credo.with({
+          condition = function(utils)
+            return utils.root_has_file({ ".credo.exs" }) -- only enable if root has a credo file
+          end
+        }),
         null_ls.builtins.formatting.erlfmt,
         null_ls.builtins.diagnostics.fish,
         null_ls.builtins.formatting.fish_indent,
