@@ -1,8 +1,8 @@
 return {
   'neovim/nvim-lspconfig',
   dependencies = {
-    "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason.nvim",
+    "mason-org/mason-lspconfig.nvim",
     'jose-elias-alvarez/nvim-lsp-ts-utils',
     'saghen/blink.cmp',
     {
@@ -31,6 +31,7 @@ return {
       ensure_installed = { "dockerls", "lexical", "erlangls", "grammarly", "graphql", "sqlls", "lua_ls",
         "ts_ls", "typos_lsp", "yamlls", "rust_analyzer", "zls", },
       automatic_installlation = true,
+      automatic_enable = true,
     })
 
     local lspconfig = require('lspconfig')
@@ -61,13 +62,67 @@ return {
       end
     end
 
-    local opts = {
+    lspconfig.gleam.setup({
       capabilities = capabilities,
       on_attach = on_attach,
-    }
+    })
 
-    -- manual lspconfig
-    lspconfig.gleam.setup(opts)
+    lspconfig.lexical.setup({
+      on_attach = on_attach,
+      capabilities = capabilities,
+      cmd = { "$HOME/.local/share/nvim/mason/packages/lexical/libexec/lexical/bin/start_lexical.sh" },
+      filetypes = { 'elixir', 'eelixir', 'heex', 'surface' },
+      root_dir = function(fname)
+        local matches = vim.fs.find({ 'mix.exs' }, { upward = true, limit = 2, path = fname })
+        local child_or_root_path, maybe_umbrella_path = unpack(matches)
+        local root_dir = vim.fs.dirname(maybe_umbrella_path or child_or_root_path)
+
+        return root_dir
+      end,
+      single_file_support = true,
+      dialyzer_enabled = true
+    })
+
+    lspconfig.lua_ls.setup({
+      on_attach = on_attach,
+      capabilities = capabilities,
+      settings = {
+        Lua = {
+          runtime = {
+            version = 'LuaJIT',
+          },
+          diagnostics = {
+            globals = { 'vim', 'hs' }
+          },
+          workspace = {
+            library = {
+              [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+              [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+              ['/Users/nandofarias/.hammerspoon/Spoons/EmmyLua.spoon/annotations'] = true,
+            },
+          },
+        },
+      }
+    })
+
+    lspconfig.ts_ls.setup({
+      capabilities = capabilities,
+      on_attach = function(client, bufnr)
+        client.server_capabilities.document_formatting = false
+        client.server_capabilities.document_range_formatting = false
+        local ts_utils = require('nvim-lsp-ts-utils')
+        ts_utils.setup({})
+        ts_utils.setup_client(client)
+        vim.keymap.set('n', '<leader>gs', ':TSLspOrganize<CR>', { silent = true, buffer = bufnr })
+        vim.keymap.set('n', '<leader>gr', ':TSLspRenameFile<CR>', { silent = true, buffer = bufnr })
+        vim.keymap.set('n', '<leader>ga', ':TSLspImportAll<CR>', { silent = true, buffer = bufnr })
+        on_attach(client, bufnr)
+      end
+    })
+
+    lspconfig.grammarly.setup({
+      init_options = { clientId = 'client_BaDkMgx4X19X9UxxYRCXZo', },
+    })
 
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -104,71 +159,5 @@ return {
         vim.keymap.set('x', '<leader>ca', ':<c-u>Lspsaga range_code_action<cr>', opts)
       end,
     })
-
-    -- mason-lspconfig
-    require("mason-lspconfig").setup_handlers {
-      function(server_name)
-        require("lspconfig")[server_name].setup {}
-      end,
-
-      ['lexical'] = function()
-        lspconfig.lexical.setup({
-          -- cmd = { "$HOME/.local/share/nvim/mason/packages/lexical/libexec/lexical/bin/start_lexical.sh" },
-          filetypes = { 'elixir', 'eelixir', 'heex', 'surface' },
-          root_dir = function(fname)
-            local matches = vim.fs.find({ 'mix.exs' }, { upward = true, limit = 2, path = fname })
-            local child_or_root_path, maybe_umbrella_path = unpack(matches)
-            local root_dir = vim.fs.dirname(maybe_umbrella_path or child_or_root_path)
-
-            return root_dir
-          end,
-          single_file_support = true,
-          dialyzer_enabled = true
-        })
-      end,
-
-      ['lua_ls'] = function()
-        opts.settings = {
-          Lua = {
-            runtime = {
-              version = 'LuaJIT',
-            },
-            diagnostics = {
-              globals = { 'vim', 'hs' }
-            },
-            workspace = {
-              library = {
-                [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-                [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-                ['/Users/nandofarias/.hammerspoon/Spoons/EmmyLua.spoon/annotations'] = true,
-              },
-            },
-          },
-        }
-
-        lspconfig.lua_ls.setup(opts)
-      end,
-
-      ['ts_ls'] = function()
-        opts.on_attach = function(client, bufnr)
-          client.server_capabilities.document_formatting = false
-          client.server_capabilities.document_range_formatting = false
-          local ts_utils = require('nvim-lsp-ts-utils')
-          ts_utils.setup({})
-          ts_utils.setup_client(client)
-          vim.keymap.set('n', '<leader>gs', ':TSLspOrganize<CR>', { silent = true, buffer = bufnr })
-          vim.keymap.set('n', '<leader>gr', ':TSLspRenameFile<CR>', { silent = true, buffer = bufnr })
-          vim.keymap.set('n', '<leader>ga', ':TSLspImportAll<CR>', { silent = true, buffer = bufnr })
-          on_attach(client, bufnr)
-        end
-
-        lspconfig.ts_ls.setup(opts)
-      end,
-
-      ['grammarly'] = function()
-        opts.init_options = { clientId = 'client_BaDkMgx4X19X9UxxYRCXZo', }
-        lspconfig.grammarly.setup(opts)
-      end
-    }
   end
 }
