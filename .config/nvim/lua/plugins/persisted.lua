@@ -3,20 +3,20 @@ return {
   event = 'BufReadPre',
   keys = {
     {
-      '<Leader>sl',
+      '<Leader>pl',
       function()
         require('persisted').load()
       end,
       desc = 'Load Session'
     },
     {
-      '<Leader>ss',
+      '<Leader>ps',
       function()
         require('persisted').save()
       end,
       desc = 'Save Session'
     },
-    { '<Leader>st', ':Telescope persisted<CR>', desc = "Telescope Sessions" }
+    { '<Leader>pt', ':Telescope persisted<CR>', desc = "Telescope Sessions" }
   },
   config = function()
     require('persisted').setup {

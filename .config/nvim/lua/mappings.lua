@@ -7,7 +7,6 @@ vim.keymap.set('o', 'ip', 'i(')
 vim.keymap.set('n', '<space>no', ':nohlsearch <CR>', { silent = true })
 vim.keymap.set('n', 'gs', ':set spell! <CR>', { silent = true })
 vim.keymap.set('n', '<space>cc', ':cclose <CR>', { silent = true })
-vim.keymap.set('n', '<space>bd', ':Bdelete <CR>', { silent = true, desc = "Buffer Delete" })
 vim.keymap.set('n', '<Tab>', ':bnext <CR>', { silent = true, desc = "Next Buffer" })
 vim.keymap.set('n', '<S-Tab>', ':bprev <CR>', { silent = true, desc = "Previous Buffer" })
 vim.keymap.set('n', '<space>ba', ':%bdelete|edit#|bdelete# <CR>',

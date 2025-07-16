@@ -24,18 +24,18 @@ return {
       -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
       -- See the full 'keymap' documentation for information on defining your own keymap.
       keymap = {
-        preset = 'enter',
-        ["<CR>"] = {
-          function(cmp)
-            local ok, supermaven = pcall(require, "supermaven-nvim.completion_preview")
-            if ok and supermaven.has_suggestion() then
-              vim.schedule(supermaven.on_accept_suggestion)
-              return true
-            end
-          end,
-          "accept",
-          "fallback",
-        },
+        preset = 'super-tab',
+        -- ["<CR>"] = {
+        --   function(cmp)
+        --     local ok, supermaven = pcall(require, "supermaven-nvim.completion_preview")
+        --     if ok and supermaven.has_suggestion() then
+        --       vim.schedule(supermaven.on_accept_suggestion)
+        --       return true
+        --     end
+        --   end,
+        --   "accept",
+        --   "fallback",
+        -- },
       },
       enabled = function()
         return vim.bo.buftype ~= "prompt" and

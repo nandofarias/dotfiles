@@ -63,14 +63,14 @@ return {
     end
 
     lspconfig.gleam.setup({
-      capabilities = capabilities,
       on_attach = on_attach,
+      capabilities = capabilities,
     })
 
     lspconfig.lexical.setup({
       on_attach = on_attach,
       capabilities = capabilities,
-      cmd = { "$HOME/.local/share/nvim/mason/packages/lexical/libexec/lexical/bin/start_lexical.sh" },
+      cmd = { "lexical" },
       filetypes = { 'elixir', 'eelixir', 'heex', 'surface' },
       root_dir = function(fname)
         local matches = vim.fs.find({ 'mix.exs' }, { upward = true, limit = 2, path = fname })
