@@ -9,3 +9,4 @@ packer_compiled.lua
 .env
 .envrc
 claude.md
+.claude/
