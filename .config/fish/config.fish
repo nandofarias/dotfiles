@@ -176,13 +176,11 @@ if status is-interactive
   set -gx DIRENV_LOG_FORMAT ""
   direnv hook fish | source
 
-  # global npm
-  fish_add_path -g ~/.npmbin/node_modules/.bin
-
   # jira
   jira completion fish | source
 
-  # op plugins
+  # 1password
+  op daemon -d
   source ~/.config/op/plugins.sh
 
   # atuin
@@ -191,3 +189,7 @@ if status is-interactive
   # .local/bin
   fish_add_path $HOME/.local/bin
 end
+
+# Added by OrbStack: command-line tools and integration
+# This won't be added again if you remove it.
+source ~/.orbstack/shell/init2.fish 2>/dev/null || :
