@@ -2,7 +2,7 @@
 
 # Theme
 theme = tokyonight
-background-opacity = 0.6
+background-opacity = 0.8
 
 # Font
 font-family = MonoLisaPlus Nerd Font
