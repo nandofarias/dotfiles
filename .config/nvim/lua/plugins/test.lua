@@ -1,6 +1,8 @@
 return {
   'vim-test/vim-test',
-  dependencies = {},
+  dependencies = {
+    'preservim/vimux'
+  },
   keys = {
     { '<leader>tn', ':TestNearest<CR>', desc = 'Test Nearest' },
     { '<leader>tf', ':TestFile<CR>',    desc = 'Test File' },
@@ -9,7 +11,7 @@ return {
     { '<leader>tg', ':TestVisit<CR>',   desc = 'Test Visit' },
   },
   config = function()
-    vim.g['test#strategy'] = 'neovim_sticky'
+    vim.g['test#strategy'] = 'vimux'
     vim.g['test#preserve_screen'] = 0
     vim.g['test#neovim#term_position'] = 'vert 80'
   end

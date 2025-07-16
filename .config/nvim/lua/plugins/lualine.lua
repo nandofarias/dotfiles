@@ -33,6 +33,7 @@ return {
             require("lazy.status").updates,
             cond = require("lazy.status").has_updates,
             color = { bg = "none", fg = "#ff966c" },
+            { require('mcphub.extensions.lualine') },
           },
         },
         lualine_y = { "filetype", "progress" },
