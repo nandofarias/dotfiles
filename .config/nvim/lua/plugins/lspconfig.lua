@@ -20,7 +20,6 @@ return {
             auto_preview = false,
           },
         })
-        vim.keymap.set({ 'n', 't' }, '<leader>to', '<cmd>Lspsaga term_toggle<CR>')
         vim.keymap.set({ 'n', 't' }, '<leader>so', '<cmd>Lspsaga outline<CR>')
       end
     },
@@ -28,7 +27,7 @@ return {
   config = function()
     require("mason").setup()
     require("mason-lspconfig").setup({
-      ensure_installed = { "dockerls", "lexical", "erlangls", "grammarly", "graphql", "sqlls", "lua_ls",
+      ensure_installed = { "dockerls", "lexical", "erlangls", "graphql", "sqlls", "lua_ls",
         "ts_ls", "typos_lsp", "yamlls", "rust_analyzer", "zls", },
       automatic_installlation = true,
       automatic_enable = true,
@@ -120,10 +119,6 @@ return {
       end
     })
 
-    lspconfig.grammarly.setup({
-      init_options = { clientId = 'client_BaDkMgx4X19X9UxxYRCXZo', },
-    })
-
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('UserLspConfig', {}),
       callback = function(ev)
@@ -145,8 +140,8 @@ return {
         -- vim.keymap.set('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
         -- vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
         vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
-        vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-        vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+        vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1, float = true }) end, opts)
+        vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1, float = true }) end, opts)
         vim.keymap.set('n', '<leader>fm', function() vim.lsp.buf.format({ async = true }) end, opts)
         vim.api.nvim_create_user_command('Format', function() vim.lsp.buf.format({ async = true }) end, {})
         vim.keymap.set('n', '<leader>cr', vim.lsp.codelens.run, opts)

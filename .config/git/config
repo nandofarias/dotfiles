@@ -62,7 +62,7 @@
   review = diff --staged
 
 [core]
-	excludesfile = /Users/nandofarias/.gitignore
+	excludesfile = ~/.config/git/ignore
 	autocrlf = input
 	editor = nvim +16 +startinsert
 
