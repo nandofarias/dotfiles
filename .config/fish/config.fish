@@ -176,12 +176,12 @@ if status is-interactive
   set -gx DIRENV_LOG_FORMAT ""
   direnv hook fish | source
 
-  # jira
-  jira completion fish | source
+  # jira (commented out — hangs on mosh, auth broken)
+  # jira completion fish | source
 
-  # 1password
-  op daemon -d
-  source ~/.config/op/plugins.sh
+  # 1password (commented out — hangs on mosh)
+  # op daemon -d
+  # source ~/.config/op/plugins.sh
 
   # atuin
   atuin init fish --disable-up-arrow | source
