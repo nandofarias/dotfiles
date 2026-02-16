@@ -8,7 +8,7 @@ return {
   },
   config = function()
     require('silicon').setup({
-      font = 'MonoLisa',
+      font = 'Maple Mono NF',
       theme = 'tokyonight_moon',
       background = '#636da6',
       output = {

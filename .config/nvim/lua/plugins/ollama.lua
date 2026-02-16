@@ -6,7 +6,7 @@ return {
   cmd = { "Ollama", "OllamaModel", "OllamaServe", "OllamaServeStop" },
   keys = {
     {
-      "<leader>oo",
+      "<leader>ol",
       ":<c-u>lua require('ollama').prompt()<cr>",
       desc = "ollama prompt",
       mode = { "n", "v" },
