@@ -41,12 +41,24 @@ vim.keymap.set('n', '<space>hs', ':split<CR>')
 vim.keymap.set("x", "y", "ygv<Esc>", { noremap = true, silent = true })
 
 -- Terminal
-vim.keymap.set("t", "<C-o>", [[<C-\><C-n>]])
+vim.keymap.set("t", "<C-o>", [[<C-\><C-n>]], { noremap = true, silent = true })
 
-local group = vim.api.nvim_create_augroup('closeWithEsc', { clear = true })
+local terminal_group = vim.api.nvim_create_augroup('terminal', { clear = true })
+vim.api.nvim_create_autocmd('TermOpen', {
+  pattern = { 'terminal' },
+  group = terminal_group,
+  callback = function(buffer)
+    if vim.bo[buffer.id].buftype == 'terminal' then
+      vim.cmd([[startinsert]])
+    end
+  end
+})
+
+
+local quickfix_group = vim.api.nvim_create_augroup('quickfix', { clear = true })
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'qf' },
-  group = group,
+  group = quickfix_group,
   callback = function()
     vim.keymap.set('n', '<esc>', ':q <CR>', { silent = true, buffer = true })
   end
@@ -59,4 +71,5 @@ vim.keymap.set('n', '<space>sw', function() vim.cmd [[%s/^\(.*\)$/'\1',/]] end,
   { silent = true, desc = "Surround text with single quotes" })
 
 -- Relative line number
-vim.api.nvim_set_keymap('n', '<space>rl', ':set relativenumber!<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space>lr', ':set relativenumber!<CR>',
+  { desc = "Toggle relative lines", noremap = true, silent = true })

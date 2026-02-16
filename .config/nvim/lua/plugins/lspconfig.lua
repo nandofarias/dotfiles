@@ -27,7 +27,7 @@ return {
   config = function()
     require("mason").setup()
     require("mason-lspconfig").setup({
-      ensure_installed = { "dockerls", "lexical", "erlangls", "graphql", "sqlls", "lua_ls",
+      ensure_installed = { "dockerls", "erlangls", "expert", "graphql", "sqlls", "lua_ls",
         "ts_ls", "typos_lsp", "yamlls", "rust_analyzer", "zls", },
       automatic_installlation = true,
       automatic_enable = true,
@@ -61,28 +61,12 @@ return {
       end
     end
 
-    lspconfig.gleam.setup({
+    vim.lsp.config('gleam', {
       on_attach = on_attach,
       capabilities = capabilities,
     })
 
-    lspconfig.lexical.setup({
-      on_attach = on_attach,
-      capabilities = capabilities,
-      cmd = { "lexical" },
-      filetypes = { 'elixir', 'eelixir', 'heex', 'surface' },
-      root_dir = function(fname)
-        local matches = vim.fs.find({ 'mix.exs' }, { upward = true, limit = 2, path = fname })
-        local child_or_root_path, maybe_umbrella_path = unpack(matches)
-        local root_dir = vim.fs.dirname(maybe_umbrella_path or child_or_root_path)
-
-        return root_dir
-      end,
-      single_file_support = true,
-      dialyzer_enabled = true
-    })
-
-    lspconfig.lua_ls.setup({
+    vim.lsp.config('lua_ls', {
       on_attach = on_attach,
       capabilities = capabilities,
       settings = {
@@ -104,7 +88,7 @@ return {
       }
     })
 
-    lspconfig.ts_ls.setup({
+    vim.lsp.config('ts_ls', {
       capabilities = capabilities,
       on_attach = function(client, bufnr)
         client.server_capabilities.document_formatting = false
@@ -119,8 +103,16 @@ return {
       end
     })
 
+    vim.lsp.config('expert', {
+      root_markers = { 'mix.exs', '.git' },
+      filetypes = { 'elixir', 'eelixir', 'heex' },
+    })
+
+    vim.lsp.enable 'expert'
+
+    local lsp_group = vim.api.nvim_create_augroup('UserLspConfig', {})
     vim.api.nvim_create_autocmd('LspAttach', {
-      group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+      group = lsp_group,
       callback = function(ev)
         -- Enable completion triggered by <c-x><c-o>
         vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
