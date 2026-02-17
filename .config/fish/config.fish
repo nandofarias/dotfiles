@@ -130,7 +130,7 @@ if status is-interactive
   abbr -ag barenvim "nvim -u NONE"
 
   abbr -ag icat "kitty icat"
-  abbr -ag frieren 'openclaw ask'
+  abbr -ag frieren 'openclaw agent --message'
 
   # aliases
   alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
