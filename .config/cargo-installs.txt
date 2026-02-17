@@ -1,0 +1,3 @@
+# Cargo installs — tracked outside Brewfile
+# Install all: cat ~/.config/cargo-installs.txt | grep -v '^#' | grep -v '^$' | xargs -I{} cargo install {}
+git-stack
