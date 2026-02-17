@@ -132,6 +132,9 @@ if status is-interactive
   abbr -ag icat "kitty icat"
   alias frieren='openclaw agent --message'
 
+  # Fix ctrl-n in hybrid (vi) mode
+  bind -M insert ctrl-n down-or-search
+
   # aliases
   alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
   alias ic='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs'
