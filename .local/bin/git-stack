@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
+  echo "Usage: git stack"
+  echo "Show the current branch stack between develop and HEAD."
+  echo "Branches marked with * are current. Colors: green=pushed, yellow=unpushed."
+  exit 0
+fi
+
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+RESET='\033[0m'
+
+current=$(git rev-parse --abbrev-ref HEAD)
+merge_base=$(git merge-base develop HEAD 2>/dev/null) || { echo "Error: cannot find merge-base with develop"; exit 1; }
+
+# Collect all local branch names and their commit SHAs
+declare -A branch_at_commit
+while IFS= read -r line; do
+  sha="${line%% *}"
+  name="${line#* }"
+  branch_at_commit["$sha"]+="$name "
+done < <(git for-each-ref --format='%(objectname:short) %(refname:short)' refs/heads/ 2>/dev/null)
+
+# Walk commits from HEAD to merge_base, collect branches in stack order
+stack=()
+while IFS= read -r sha; do
+  if [[ -n "${branch_at_commit[$sha]:-}" ]]; then
+    for b in ${branch_at_commit[$sha]}; do
+      [[ "$b" == "develop" ]] && continue
+      stack+=("$b")
+    done
+  fi
+done < <(git log --format='%h' --ancestry-path "$merge_base..HEAD" 2>/dev/null)
+
+if [[ ${#stack[@]} -eq 0 ]]; then
+  echo "No branches in stack (on develop or no branches between develop and HEAD)"
+  exit 0
+fi
+
+# Reverse so bottom of stack (closest to develop) is first
+reversed=()
+for ((i=${#stack[@]}-1; i>=0; i--)); do
+  reversed+=("${stack[$i]}")
+done
+
+echo -e "${BOLD}Branch stack:${RESET}"
+for i in "${!reversed[@]}"; do
+  b="${reversed[$i]}"
+  local_sha=$(git rev-parse "$b" 2>/dev/null)
+  remote_sha=$(git rev-parse "origin/$b" 2>/dev/null 2>&1) || remote_sha=""
+
+  if [[ "$local_sha" == "$remote_sha" ]]; then
+    color="$GREEN"
+    status="✓"
+  else
+    color="$YELLOW"
+    status="↑"
+  fi
+
+  marker="  "
+  [[ "$b" == "$current" ]] && marker="▸ "
+
+  echo -e "  ${marker}${color}${b}${RESET} ${color}${status}${RESET}"
+done
