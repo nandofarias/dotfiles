@@ -1,5 +1,11 @@
 return {
   'Vigemus/iron.nvim',
+  cmd = { "IronRepl", "IronFocus", "IronRestart" },
+  keys = {
+    { "<space>ir", desc = "Toggle REPL" },
+    { "<space>rf", "<cmd>IronFocus<cr>", desc = "REPL Focus" },
+    { "<space>rh", "<cmd>IronHide<cr>", desc = "REPL Hide" },
+  },
   config = function()
     local iron = require("iron.core")
     local view = require("iron.view")

@@ -1,10 +1,10 @@
 return {
   'uga-rosa/ccc.nvim',
-  config = function()
-    require('ccc').setup {
-      highlighter = {
-        auto_enable = true,
-      }
-    }
-  end
+  cmd = { "CccPick", "CccHighlighterToggle", "CccHighlighterEnable" },
+  event = { "BufReadPost", "BufNewFile" },
+  opts = {
+    highlighter = {
+      auto_enable = true,
+    },
+  },
 }

@@ -12,7 +12,7 @@ return {
       theme = 'tokyonight_moon',
       background = '#636da6',
       output = {
-        path = "/Users/nandofarias/Pictures/Screenshots",
+        path = vim.fn.expand("~/Pictures/Screenshots"),
         format = "silicon_[year][month][day]_[hour][minute][second].png",
       },
     })

@@ -122,5 +122,94 @@
     "prefix": "gf",
     "body": ["field :$1, type: $2 do", "  $3", "  resolve &4", "end"],
     "description": "Inserts a new graphql field"
+  },
+  "setup_block": {
+    "prefix": "setup",
+    "body": ["setup do", "  $1", "  {:ok, %{$2}}", "end"],
+    "description": "Test setup block"
+  },
+  "genserver": {
+    "prefix": "genserver",
+    "body": [
+      "defmodule $1 do",
+      "  use GenServer\n",
+      "  # Client API\n",
+      "  def start_link(opts) do",
+      "    GenServer.start_link(__MODULE__, opts, name: __MODULE__)",
+      "  end\n",
+      "  # Server Callbacks\n",
+      "  @impl true",
+      "  def init(state) do",
+      "    {:ok, state}",
+      "  end\n",
+      "  @impl true",
+      "  def handle_call($2, _from, state) do",
+      "    {:reply, $3, state}",
+      "  end\n",
+      "  @impl true",
+      "  def handle_cast($4, state) do",
+      "    {:noreply, state}",
+      "  end",
+      "end"
+    ],
+    "description": "GenServer module template"
+  },
+  "liveview": {
+    "prefix": "liveview",
+    "body": [
+      "defmodule $1Live do",
+      "  use $2, :live_view\n",
+      "  @impl true",
+      "  def mount(_params, _session, socket) do",
+      "    {:ok, socket}",
+      "  end\n",
+      "  @impl true",
+      "  def handle_event($3, _params, socket) do",
+      "    {:noreply, socket}",
+      "  end\n",
+      "  @impl true",
+      "  def render(assigns) do",
+      "    ~H\"\"\"",
+      "    $4",
+      "    \"\"\"",
+      "  end",
+      "end"
+    ],
+    "description": "LiveView module template"
+  },
+  "schema": {
+    "prefix": "schema",
+    "body": [
+      "schema \"$1\" do",
+      "  field :$2, $3\n",
+      "  timestamps()",
+      "end"
+    ],
+    "description": "Ecto schema block"
+  },
+  "changeset": {
+    "prefix": "changeset",
+    "body": [
+      "def changeset(%__MODULE__{} = $1, attrs) do",
+      "  $1",
+      "  |> cast(attrs, [$2])",
+      "  |> validate_required([$3])",
+      "end"
+    ],
+    "description": "Ecto changeset function"
+  },
+  "pipe": {
+    "prefix": "pp",
+    "body": "|> $1",
+    "description": "Pipe operator"
+  },
+  "defp_function": {
+    "prefix": "defp",
+    "body": [
+      "defp $1($2) do",
+      "  $3",
+      "end"
+    ],
+    "description": "Private function"
   }
 }

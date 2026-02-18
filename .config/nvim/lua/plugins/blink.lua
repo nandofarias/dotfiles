@@ -11,7 +11,6 @@ return {
     'saghen/blink.cmp',
     dependencies = {
       'rafamadriz/friendly-snippets',
-      'hrsh7th/cmp-nvim-lua',
       { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true },
     },
     version = '*',
@@ -39,7 +38,6 @@ return {
       },
       enabled = function()
         return vim.bo.buftype ~= "prompt" and
-            vim.bo.buftype ~= "NvimTree" and
             vim.bo.buftype ~= "TelescopePrompt" and
             vim.bo.filetype ~= "DressingInput" and
             vim.b.completion ~= false
@@ -112,7 +110,10 @@ return {
         sources = function() return {} end,
       },
       sources = {
-        default = { 'supermaven', 'lsp', 'path', 'snippets', 'buffer', 'nvim_lua', 'obsidian', 'obsidian_new', 'obsidian_tags', 'dadbod' },
+        default = { 'supermaven', 'lsp', 'path', 'snippets', 'buffer', 'dadbod' },
+        per_filetype = {
+          markdown = { 'supermaven', 'lsp', 'path', 'snippets', 'buffer', 'obsidian', 'obsidian_new', 'obsidian_tags' },
+        },
         providers = {
           supermaven = {
             name = 'supermaven',
@@ -126,10 +127,6 @@ return {
               end
               return items
             end,
-          },
-          nvim_lua = {
-            name = 'nvim_lua',
-            module = 'blink.compat.source',
           },
           obsidian = {
             name = "obsidian",

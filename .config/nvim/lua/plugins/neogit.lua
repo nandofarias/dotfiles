@@ -1,5 +1,5 @@
 return {
-  'TimUntersberger/neogit',
+  'NeogitOrg/neogit',
   cmd = "Neogit",
   keys = {
     { '<leader>gg', ':Neogit<cr>' }

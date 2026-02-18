@@ -3,8 +3,6 @@ return {
   dependencies = {
     'nvim-lua/plenary.nvim',
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
-    'nvim-telescope/telescope-file-browser.nvim',
-    'debugloop/telescope-undo.nvim',
   },
   config = function()
     require('telescope').setup {
@@ -32,8 +30,6 @@ return {
     }
 
     require('telescope').load_extension('fzf')
-    require("telescope").load_extension('file_browser')
-    require("telescope").load_extension('undo')
     vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "none" })
     vim.api.nvim_set_hl(0, "TelescopeBorder", { bg = "none" })
   end,
@@ -43,6 +39,11 @@ return {
     { '<leader>bb', function() require('telescope.builtin').buffers() end,      desc = "Find Buffers" },
     { '<leader>fh', function() require('telescope.builtin').help_tags() end,    desc = "Find Tags" },
     { '<leader>ft', function() require('telescope.builtin').treesitter() end,   desc = "Find Treesitter" },
-    { '<leader>tu', function() require('telescope').extensions.undo.undo() end, desc = "Telescope undo" },
+    { '<leader>fd', function() require('telescope.builtin').diagnostics() end,   desc = "Find Diagnostics" },
+    { '<leader>fr', function() require('telescope.builtin').resume() end,       desc = "Resume Last Search" },
+    { '<leader>fo', function() require('telescope.builtin').oldfiles() end,     desc = "Recent Files" },
+    { '<leader>fw', function() require('telescope.builtin').grep_string() end,  desc = "Find Word Under Cursor" },
+    { '<leader>gc', function() require('telescope.builtin').git_commits() end,  desc = "Git Commits" },
+    { '<leader>gs', function() require('telescope.builtin').git_status() end,   desc = "Git Status" },
   }
 }
