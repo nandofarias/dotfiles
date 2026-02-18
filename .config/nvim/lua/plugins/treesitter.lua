@@ -2,7 +2,6 @@ return {
   'nvim-treesitter/nvim-treesitter',
   dependencies = {
     'nvim-treesitter/nvim-treesitter-textobjects',
-    'nvim-treesitter/playground',
     'RRethy/nvim-treesitter-textsubjects',
     'windwp/nvim-ts-autotag',
     'JoosepAlviste/nvim-ts-context-commentstring',
@@ -11,21 +10,19 @@ return {
   config = function()
     require('tree-sitter-just').setup {}
     require('nvim-treesitter.configs').setup({
-      ensure_installed = { 'angular', 'arduino', 'astro', 'awk', 'bash', 'c', 'clojure', 'cmake', 'comment',
-        'commonlisp', 'cpp', 'css', 'csv', 'dart', 'diff', 'dockerfile', 'dot', 'eex', 'elixir', 'elm', 'erlang',
-        'fennel', 'fish', 'git_config', 'git_rebase', 'gitattributes', 'gitcommit', 'gitignore', 'gleam', 'go', 'gomod',
-        'gosum', 'gowork', 'gpg', 'graphql', 'hack', 'haskell', 'hcl', 'heex', 'hurl', 'http', 'html', 'ini',
-        'java', 'javascript', 'jsdoc', 'json', 'json5', 'jsonc', 'jsonnet', 'julia', 'just', 'kotlin', 'latex',
-        'ledger', 'lua', 'make', 'markdown', 'markdown_inline', 'mermaid', 'nix', 'ocaml', 'ocaml_interface',
-        'ocamllex', 'pascal', 'passwd', 'pem', 'perl', 'php', 'phpdoc', 'po', 'prisma', 'properties', 'proto', 'prql',
-        'psv', 'pug', 'puppet', 'pymanifest', 'python', 'query', 'r', 'regex', 'requirements', 'robot', 'ruby', 'rust',
-        'scala', 'scheme', 'scss', 'solidity', 'sparql', 'sql', 'ssh_config', 'supercollider', 'surface', 'svelte',
-        'swift', 'terraform', 'tsv', 'tsx', 'typescript', 'vim', 'vimdoc', 'vue', 'xml', 'yaml', 'zig' },
+      ensure_installed = {
+        'bash', 'c', 'comment', 'css', 'csv', 'diff', 'dockerfile', 'eex', 'elixir', 'erlang',
+        'fish', 'git_config', 'git_rebase', 'gitattributes', 'gitcommit', 'gitignore', 'gleam',
+        'go', 'gomod', 'graphql', 'heex', 'html', 'http', 'hurl', 'javascript', 'jsdoc', 'json',
+        'json5', 'jsonc', 'just', 'lua', 'make', 'markdown', 'markdown_inline', 'nix', 'query',
+        'regex', 'ruby', 'rust', 'scss', 'sql', 'ssh_config', 'surface', 'terraform', 'toml',
+        'tsx', 'typescript', 'vim', 'vimdoc', 'xml', 'yaml', 'zig',
+      },
       indent = {
         enable = true,
         disable = function(_, buf)
           local max_filesize = 10 * 1024 -- 10 KB
-          local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+          local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
           if ok and stats and stats.size > max_filesize then
             return true
           end

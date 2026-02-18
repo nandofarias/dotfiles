@@ -7,8 +7,7 @@ vim.keymap.set('o', 'ip', 'i(')
 vim.keymap.set('n', '<space>no', ':nohlsearch <CR>', { silent = true })
 vim.keymap.set('n', 'gs', ':set spell! <CR>', { silent = true })
 vim.keymap.set('n', '<space>cc', ':cclose <CR>', { silent = true })
-vim.keymap.set('n', '<Tab>', ':bnext <CR>', { silent = true, desc = "Next Buffer" })
-vim.keymap.set('n', '<S-Tab>', ':bprev <CR>', { silent = true, desc = "Previous Buffer" })
+-- Tab/S-Tab handled by cokeline
 vim.keymap.set('n', '<space>ba', ':%bdelete|edit#|bdelete# <CR>',
   { silent = true, desc = "Delete All Buffers Except Current" })
 vim.keymap.set('n', '<space>ww', ':w <CR>', { silent = true, desc = "Save Buffer" })
@@ -26,7 +25,7 @@ vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv")
 vim.keymap.set('n', '<space>ov', ':e ~/.config/nvim/ <CR>', { desc = "Open init.lua" })
 vim.keymap.set('n', '<space>ot', ':e ~/.config/tmux/tmux.conf <CR>', { desc = "Open tmux.conf" })
 vim.keymap.set('n', '<space>of', ':e ~/.config/fish/config.fish <CR>', { desc = "Open config.fish" })
-vim.keymap.set('n', '<space>ow', ':e ~/.config/wezterm/wezterm.lua <CR>', { desc = "Open wezterm.lua" })
+vim.keymap.set('n', '<space>og', ':e ~/.config/ghostty/config <CR>', { desc = "Open Ghostty config" })
 vim.keymap.set('n', '<space>ob', ':e ~/.config/brew/Brewfile <CR>', { desc = "Open brewfile" })
 
 -- Navigate wrapped lines

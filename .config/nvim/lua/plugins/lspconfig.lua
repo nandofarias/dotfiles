@@ -3,7 +3,6 @@ return {
   dependencies = {
     "mason-org/mason.nvim",
     "mason-org/mason-lspconfig.nvim",
-    'jose-elias-alvarez/nvim-lsp-ts-utils',
     'saghen/blink.cmp',
     {
       'glepnir/lspsaga.nvim',
@@ -29,7 +28,7 @@ return {
     require("mason-lspconfig").setup({
       ensure_installed = { "dockerls", "erlangls", "expert", "graphql", "sqlls", "lua_ls",
         "ts_ls", "typos_lsp", "yamlls", "rust_analyzer", "zls", },
-      automatic_installlation = true,
+      automatic_installation = true,
       automatic_enable = true,
     })
 
@@ -81,7 +80,7 @@ return {
             library = {
               [vim.fn.expand('$VIMRUNTIME/lua')] = true,
               [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-              ['/Users/nandofarias/.hammerspoon/Spoons/EmmyLua.spoon/annotations'] = true,
+              [vim.fn.expand('~/.hammerspoon/Spoons/EmmyLua.spoon/annotations')] = true,
             },
           },
         },
@@ -91,21 +90,24 @@ return {
     vim.lsp.config('ts_ls', {
       capabilities = capabilities,
       on_attach = function(client, bufnr)
-        client.server_capabilities.document_formatting = false
-        client.server_capabilities.document_range_formatting = false
-        local ts_utils = require('nvim-lsp-ts-utils')
-        ts_utils.setup({})
-        ts_utils.setup_client(client)
-        vim.keymap.set('n', '<leader>gs', ':TSLspOrganize<CR>', { silent = true, buffer = bufnr })
-        vim.keymap.set('n', '<leader>gr', ':TSLspRenameFile<CR>', { silent = true, buffer = bufnr })
-        vim.keymap.set('n', '<leader>ga', ':TSLspImportAll<CR>', { silent = true, buffer = bufnr })
+        client.server_capabilities.documentFormattingProvider = false
+        client.server_capabilities.documentRangeFormattingProvider = false
         on_attach(client, bufnr)
       end
     })
 
     vim.lsp.config('expert', {
-      root_markers = { 'mix.exs', '.git' },
-      filetypes = { 'elixir', 'eelixir', 'heex' },
+      on_attach = on_attach,
+      capabilities = capabilities,
+      filetypes = { 'elixir', 'eelixir', 'heex', 'surface' },
+      root_dir = function(bufnr, on_dir)
+        local fname = vim.api.nvim_buf_get_name(bufnr)
+        -- Walk up to find mix.exs files; if 2 found, use the higher one (umbrella root)
+        local matches = vim.fs.find({ 'mix.exs' }, { upward = true, limit = 2, path = fname })
+        local child_or_root_path, maybe_umbrella_path = unpack(matches)
+        local root = vim.fs.dirname(maybe_umbrella_path or child_or_root_path)
+        on_dir(root)
+      end,
     })
 
     vim.lsp.enable 'expert'

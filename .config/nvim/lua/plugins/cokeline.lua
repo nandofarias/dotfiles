@@ -2,7 +2,7 @@ return {
   'willothy/nvim-cokeline',
   lazy = false,
   dependencies = {
-    'kyazdani42/nvim-web-devicons',
+    'nvim-tree/nvim-web-devicons',
   },
   keys = {
     { '<S-Tab>',   '<Plug>(cokeline-focus-prev)',  { silent = true, desc = "Prev Buffer" } },

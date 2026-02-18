@@ -1,25 +1,24 @@
 return {
-  "nvim-pack/nvim-spectre",
-  cmd = "Spectre",
+  "MagicDuck/grug-far.nvim",
+  cmd = "GrugFar",
   keys = {
     {
       "<leader>sr",
       function()
-        require("spectre").open()
+        require("grug-far").open()
       end,
-      desc = "Replace in files (Spectre)",
+      desc = "Search and Replace (grug-far)",
+    },
+    {
+      "<leader>sr",
+      function()
+        require("grug-far").open({ prefills = { search = vim.fn.expand("<cword>") } })
+      end,
+      mode = "v",
+      desc = "Search selection (grug-far)",
     },
   },
   opts = {
-    replace_engine = {
-      ["sed"] = {
-        cmd = "sed",
-        args = {
-          "-i",
-          "",
-          "-E",
-        },
-      },
-    },
+    engine = "ripgrep",
   },
 }

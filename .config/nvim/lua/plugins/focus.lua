@@ -5,5 +5,5 @@ return {
   keys = {
     { '<leader>sn', function() require('focus').split_nicely() end, { desc = 'split nicely' } }
   },
-  setup = true,
+  config = true,
 }

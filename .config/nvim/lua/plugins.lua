@@ -28,13 +28,12 @@ return {
   { 'folke/todo-comments.nvim', config = true },
   { 'numToStr/Comment.nvim',    config = true },
   'benizi/vim-automkdir',
-  'gpanders/editorconfig.nvim',
   'mong8se/actually.nvim',
   'superhawk610/ascii-blocks.nvim',
   'Bekaboo/deadcolumn.nvim',
 
   -- Better Git
-  { 'sindrets/diffview.nvim', dependencies = { 'kyazdani42/nvim-web-devicons' } },
+  { 'sindrets/diffview.nvim', dependencies = { 'nvim-tree/nvim-web-devicons' } },
 
   -- Frontend
   'mattn/emmet-vim',
@@ -42,9 +41,27 @@ return {
   -- Better quickfix
   { 'kevinhwang91/nvim-bqf',  ft = 'qf' },
 
-  -- Better wildmenu
-  { 'gelguy/wilder.nvim',     config = function() require('wilder').setup({ modes = { ':', '/', '?' } }) end },
-
   -- Which key
-  { 'folke/which-key.nvim',   config = true },
+  { 'folke/which-key.nvim',
+    opts = {
+      spec = {
+        { "<leader>a", group = "AI/Claude" },
+        { "<leader>b", group = "Buffers" },
+        { "<leader>d", group = "Database" },
+        { "<leader>f", group = "Find" },
+        { "<leader>g", group = "Git" },
+        { "<leader>h", group = "Git Hunks" },
+        { "<leader>i", group = "Iron REPL" },
+        { "<leader>j", group = "JSON" },
+        { "<leader>o", group = "Open Config" },
+        { "<leader>p", group = "Sessions" },
+        { "<leader>r", group = "HTTP/Run" },
+        { "<leader>s", group = "Search/Split" },
+        { "<leader>t", group = "Test" },
+        { "<leader>w", group = "Save" },
+        { "<leader>c", group = "Conflicts" },
+        { "<leader>x", group = "Trouble" },
+      },
+    },
+  },
 }

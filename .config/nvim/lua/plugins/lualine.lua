@@ -9,7 +9,6 @@ return {
         theme = tokyonight,
         disabled_filetypes = {
           "dashboard",
-          "NvimTree",
           "TelescopePrompt",
           "TelescopeResults",
         },
@@ -33,8 +32,8 @@ return {
             require("lazy.status").updates,
             cond = require("lazy.status").has_updates,
             color = { bg = "none", fg = "#ff966c" },
-            { require('mcphub.extensions.lualine') },
           },
+          { require('mcphub.extensions.lualine') },
         },
         lualine_y = { "filetype", "progress" },
         lualine_z = {
