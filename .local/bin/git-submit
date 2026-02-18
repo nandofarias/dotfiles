@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
+  echo "Usage: git submit"
+  echo "Force push (--force-with-lease) all branches in the current stack to origin."
+  exit 0
+fi
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+RESET='\033[0m'
+
+merge_base=$(git merge-base develop HEAD 2>/dev/null) || { echo -e "${RED}Cannot find merge-base with develop${RESET}"; exit 1; }
+
+declare -A branch_at_commit
+while IFS= read -r line; do
+  sha="${line%% *}"
+  name="${line#* }"
+  branch_at_commit["$sha"]+="$name "
+done < <(git for-each-ref --format='%(objectname:short) %(refname:short)' refs/heads/ 2>/dev/null)
+
+stack=()
+while IFS= read -r sha; do
+  if [[ -n "${branch_at_commit[$sha]:-}" ]]; then
+    for b in ${branch_at_commit[$sha]}; do
+      [[ "$b" == "develop" ]] && continue
+      stack+=("$b")
+    done
+  fi
+done < <(git log --format='%h' --ancestry-path "$merge_base..HEAD" 2>/dev/null)
+
+if [[ ${#stack[@]} -eq 0 ]]; then
+  echo "No branches in stack to push."
+  exit 0
+fi
+
+echo -e "${CYAN}Pushing stack branches...${RESET}"
+for b in "${stack[@]}"; do
+  echo -e "  Pushing ${b}..."
+  git push --force-with-lease origin "$b" || { echo -e "${RED}Failed to push $b${RESET}"; exit 1; }
+  echo -e "  ${GREEN}✓ ${b}${RESET}"
+done
+echo -e "${GREEN}All stack branches pushed.${RESET}"

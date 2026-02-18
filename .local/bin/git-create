@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" || "${1:-}" == "-h" || $# -eq 0 ]]; then
+  echo "Usage: git create <branch-name>"
+  echo "Create and switch to a new branch from the current HEAD."
+  [[ $# -eq 0 && "${1:-}" != "--help" && "${1:-}" != "-h" ]] && exit 1
+  exit 0
+fi
+
+git switch -c "$1"

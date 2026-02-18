@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
+  echo "Usage: git sync"
+  echo "Fetch origin, update local develop ref, and rebase current stack onto develop."
+  exit 0
+fi
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+RESET='\033[0m'
+
+current=$(git rev-parse --abbrev-ref HEAD)
+
+echo -e "${CYAN}Fetching origin...${RESET}"
+git fetch origin || { echo -e "${RED}Failed to fetch origin${RESET}"; exit 1; }
+
+echo -e "${CYAN}Updating local develop ref...${RESET}"
+git update-ref refs/heads/develop origin/develop || { echo -e "${RED}Failed to update develop ref${RESET}"; exit 1; }
+
+# Find stack branches (bottom to top)
+merge_base=$(git merge-base develop HEAD 2>/dev/null) || { echo -e "${RED}Cannot find merge-base with develop${RESET}"; exit 1; }
+
+declare -A branch_at_commit
+while IFS= read -r line; do
+  sha="${line%% *}"
+  name="${line#* }"
+  branch_at_commit["$sha"]+="$name "
+done < <(git for-each-ref --format='%(objectname:short) %(refname:short)' refs/heads/ 2>/dev/null)
+
+stack=()
+while IFS= read -r sha; do
+  if [[ -n "${branch_at_commit[$sha]:-}" ]]; then
+    for b in ${branch_at_commit[$sha]}; do
+      [[ "$b" == "develop" ]] && continue
+      stack+=("$b")
+    done
+  fi
+done < <(git log --format='%h' --ancestry-path "$merge_base..HEAD" 2>/dev/null)
+
+# Reverse to bottom-up order
+reversed=()
+for ((i=${#stack[@]}-1; i>=0; i--)); do
+  reversed+=("${stack[$i]}")
+done
+
+if [[ ${#reversed[@]} -eq 0 ]]; then
+  echo -e "${GREEN}Nothing to rebase.${RESET}"
+  exit 0
+fi
+
+echo -e "${CYAN}Rebasing stack onto develop...${RESET}"
+prev="develop"
+for b in "${reversed[@]}"; do
+  echo -e "  Rebasing ${b} onto ${prev}..."
+  git rebase --onto "$prev" "$(git merge-base "$prev" "$b")" "$b" || {
+    echo -e "${RED}Rebase failed for $b. Resolve conflicts and run 'git rebase --continue'.${RESET}"
+    exit 1
+  }
+  prev="$b"
+done
+
+git switch "$current" 2>/dev/null || true
+echo -e "${GREEN}Stack synced with develop.${RESET}"
