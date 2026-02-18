@@ -55,7 +55,7 @@
 
 	amend-to = "!f() { SHA=$1; git commit --fixup \"$SHA\" && git rebase --interactive --autosquash \"$SHA^\"; }; f"
   untrack = "!f() { git rm --cached $@; }; f"
-  edit = !$EDITOR $(git status --short | awk '$1 ~ /^M|A|U/ {print $2}' )
+  editor = !$EDITOR $(git status --short | awk '$1 ~ /^M|A|U/ {print $2}' )
 
   dft = difftool
   dlog = "!f() { GIT_EXTERNAL_DIFF=difft git log -p --ext-diff $@; }; f"
