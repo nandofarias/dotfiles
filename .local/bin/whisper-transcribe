@@ -1,10 +1,10 @@
 #!/bin/bash
 # Wrapper for OpenClaw audio transcription via whisper
-# OpenClaw expects transcript on stdout only
+# Uses full paths since LaunchAgent has a limited PATH
 FILE="$1"
 BASENAME=$(basename "$FILE")
 NOEXT="${BASENAME%.*}"
 TMPDIR=$(mktemp -d)
-whisper "$FILE" --model base --output_format txt --output_dir "$TMPDIR" >/dev/null 2>&1
+/opt/homebrew/bin/whisper "$FILE" --model base --output_format txt --output_dir "$TMPDIR" >/dev/null 2>&1
 cat "$TMPDIR/$NOEXT.txt"
 rm -rf "$TMPDIR"
