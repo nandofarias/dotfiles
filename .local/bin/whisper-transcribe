@@ -1,10 +1,15 @@
 #!/bin/bash
-# Wrapper for OpenClaw audio transcription via whisper
+# Wrapper for OpenClaw audio transcription via mlx_whisper
 # Uses full paths since LaunchAgent has a limited PATH
 FILE="$1"
 BASENAME=$(basename "$FILE")
 NOEXT="${BASENAME%.*}"
 TMPDIR=$(mktemp -d)
-/opt/homebrew/bin/whisper "$FILE" --model base --output_format txt --output_dir "$TMPDIR" >/dev/null 2>&1
-cat "$TMPDIR/$NOEXT.txt"
+/Users/ffarias/.local/share/mise/shims/mlx_whisper "$FILE" \
+  --model mlx-community/whisper-large-v3-turbo \
+  --output-format txt \
+  --output-dir "$TMPDIR" \
+  --verbose False \
+  >/dev/null 2>&1
+cat "$TMPDIR/$NOEXT.txt" 2>/dev/null
 rm -rf "$TMPDIR"
