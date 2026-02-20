@@ -1,0 +1,189 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# git-stack-reorder: Reorder branches in a git stack (linear chain between develop/main and HEAD)
+
+DRY_RUN=false
+[[ "${1:-}" == "--dry-run" ]] && DRY_RUN=true
+[[ "${1:-}" == "--help" || "${1:-}" == "-h" ]] && {
+  echo "Usage: git stack-reorder [--dry-run]"
+  echo "Reorder branches in the current git stack interactively."
+  echo ""
+  echo "Options:"
+  echo "  --dry-run   Show what would happen without making changes"
+  echo "  --help      Show this help"
+  exit 0
+}
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+RESET='\033[0m'
+
+die() { echo -e "${RED}Error: $*${RESET}" >&2; exit 1; }
+
+# Check clean working directory
+[[ -z "$(git status --porcelain 2>/dev/null)" ]] || die "Working directory is dirty. Commit or stash changes first."
+
+# Detect base branch
+base_branch=""
+for candidate in develop main master; do
+  git rev-parse --verify "$candidate" &>/dev/null && { base_branch="$candidate"; break; }
+done
+[[ -n "$base_branch" ]] || die "Cannot find develop, main, or master branch."
+
+current=$(git rev-parse --abbrev-ref HEAD)
+merge_base=$(git merge-base "$base_branch" HEAD 2>/dev/null) || die "Cannot find merge-base with $base_branch"
+
+# Collect branch names at each commit
+declare -A branch_at_commit
+while IFS= read -r line; do
+  sha="${line%% *}"
+  name="${line#* }"
+  branch_at_commit["$sha"]+="$name "
+done < <(git for-each-ref --format='%(objectname:short) %(refname:short)' refs/heads/)
+
+# Walk commits HEAD→merge_base, collect stack branches (top-first)
+stack_reversed=()
+while IFS= read -r sha; do
+  for b in ${branch_at_commit[$sha]:-}; do
+    [[ "$b" == "$base_branch" ]] && continue
+    stack_reversed+=("$b")
+  done
+done < <(git log --format='%h' --ancestry-path "$merge_base..HEAD")
+
+# Reverse to bottom-first order
+stack=()
+for ((i=${#stack_reversed[@]}-1; i>=0; i--)); do
+  stack+=("${stack_reversed[$i]}")
+done
+
+[[ ${#stack[@]} -ge 2 ]] || die "Need at least 2 branches in the stack to reorder (found ${#stack[@]})."
+
+# Compute commit ranges for each branch
+# Branch i spans from (parent branch tip or merge_base) to branch tip
+declare -A branch_base branch_tip branch_count
+prev_tip="$merge_base"
+for b in "${stack[@]}"; do
+  tip=$(git rev-parse "$b")
+  count=$(git rev-list --count "$prev_tip..$tip")
+  branch_base["$b"]="$prev_tip"
+  branch_tip["$b"]="$tip"
+  branch_count["$b"]="$count"
+  prev_tip="$tip"
+done
+
+# Show current order
+echo -e "${BOLD}Current stack (bottom → top):${RESET}"
+for i in "${!stack[@]}"; do
+  b="${stack[$i]}"
+  echo -e "  $((i+1)). ${CYAN}${b}${RESET} (${branch_count[$b]} commits)"
+done
+echo ""
+
+# Create temp file for editor
+tmpfile=$(mktemp /tmp/git-stack-reorder.XXXXXX)
+trap 'rm -f "$tmpfile"' EXIT
+for b in "${stack[@]}"; do
+  echo "$b"
+done > "$tmpfile"
+
+# Open editor
+${EDITOR:-vim} "$tmpfile"
+
+# Read new order
+new_order=()
+while IFS= read -r line; do
+  line="${line## }"; line="${line%% }"
+  [[ -z "$line" || "$line" == \#* ]] && continue
+  new_order+=("$line")
+done < "$tmpfile"
+
+# Validate
+[[ ${#new_order[@]} -eq ${#stack[@]} ]] || die "Expected ${#stack[@]} branches, got ${#new_order[@]}."
+for b in "${new_order[@]}"; do
+  [[ -n "${branch_tip[$b]:-}" ]] || die "Unknown branch: $b"
+done
+# Check for duplicates
+declare -A seen
+for b in "${new_order[@]}"; do
+  [[ -z "${seen[$b]:-}" ]] || die "Duplicate branch: $b"
+  seen["$b"]=1
+done
+
+# Check if order changed
+order_changed=false
+for i in "${!stack[@]}"; do
+  [[ "${stack[$i]}" != "${new_order[$i]}" ]] && { order_changed=true; break; }
+done
+$order_changed || { echo "Order unchanged. Nothing to do."; exit 0; }
+
+# Show new order and confirm
+echo -e "${BOLD}New stack order (bottom → top):${RESET}"
+for i in "${!new_order[@]}"; do
+  b="${new_order[$i]}"
+  echo -e "  $((i+1)). ${CYAN}${b}${RESET} (${branch_count[$b]} commits)"
+done
+echo ""
+
+if $DRY_RUN; then
+  echo -e "${YELLOW}Dry run — no changes made.${RESET}"
+  exit 0
+fi
+
+read -r -p "Proceed with reorder? [y/N] " confirm
+[[ "$confirm" =~ ^[Yy]$ ]] || { echo "Aborted."; exit 0; }
+
+# Create backup refs
+echo -e "${CYAN}Creating backup refs...${RESET}"
+git update-ref refs/stack-reorder-backup/HEAD HEAD
+for b in "${stack[@]}"; do
+  git update-ref "refs/stack-reorder-backup/$b" "$b"
+done
+
+restore_backup() {
+  echo -e "${RED}Restoring from backup...${RESET}"
+  git rebase --abort 2>/dev/null || true
+  for b in "${stack[@]}"; do
+    git update-ref "refs/heads/$b" "refs/stack-reorder-backup/$b" 2>/dev/null || true
+  done
+  git checkout "$current" 2>/dev/null || true
+  echo -e "${RED}Backup restored. Stack is back to original state.${RESET}"
+}
+
+cleanup_backup() {
+  git update-ref -d refs/stack-reorder-backup/HEAD 2>/dev/null || true
+  for b in "${stack[@]}"; do
+    git update-ref -d "refs/stack-reorder-backup/$b" 2>/dev/null || true
+  done
+}
+
+# Rebuild the stack in new order
+echo -e "${CYAN}Reordering stack...${RESET}"
+onto="$merge_base"
+for b in "${new_order[@]}"; do
+  old_base="${branch_base[$b]}"
+  old_tip="${branch_tip[$b]}"
+  
+  echo -e "  Rebasing ${BOLD}$b${RESET} (${branch_count[$b]} commits) onto $(git log -1 --format='%h' "$onto")..."
+  
+  if ! git rebase --onto "$onto" "$old_base" "$b" 2>/dev/null; then
+    echo -e "${RED}Conflict while rebasing $b!${RESET}"
+    restore_backup
+    exit 1
+  fi
+  
+  onto=$(git rev-parse HEAD)
+done
+
+# Return to original branch (or the branch that was current)
+git checkout "$current" 2>/dev/null || git checkout "${new_order[-1]}" 2>/dev/null
+
+# Cleanup backup
+cleanup_backup
+
+echo ""
+echo -e "${GREEN}${BOLD}Stack reordered successfully!${RESET}"
+echo -e "Run ${CYAN}git stack${RESET} to see the new order."
