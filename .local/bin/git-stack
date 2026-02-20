@@ -2,10 +2,22 @@
 set -euo pipefail
 
 if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
-  echo "Usage: git stack"
+  echo "Usage: git stack [-i]"
   echo "Show the current branch stack between develop and HEAD."
   echo "Branches marked with * are current. Colors: green=pushed, yellow=unpushed."
+  echo ""
+  echo "Options:"
+  echo "  -i, --interactive   Pick a branch to checkout (requires fzf)"
   exit 0
+fi
+
+INTERACTIVE=false
+if [[ "${1:-}" == "-i" || "${1:-}" == "--interactive" ]]; then
+  INTERACTIVE=true
+  if ! command -v fzf &>/dev/null; then
+    echo "Error: fzf is required for interactive mode"
+    exit 1
+  fi
 fi
 
 GREEN='\033[0;32m'
@@ -47,22 +59,38 @@ for ((i=${#stack[@]}-1; i>=0; i--)); do
   reversed+=("${stack[$i]}")
 done
 
-echo -e "${BOLD}Branch stack:${RESET}"
-for i in "${!reversed[@]}"; do
-  b="${reversed[$i]}"
-  local_sha=$(git rev-parse "$b" 2>/dev/null)
-  remote_sha=$(git rev-parse "origin/$b" 2>/dev/null 2>&1) || remote_sha=""
+if [[ "$INTERACTIVE" == true ]]; then
+  # Build plain list for fzf
+  selected=$(for i in "${!reversed[@]}"; do
+    b="${reversed[$i]}"
+    local_sha=$(git rev-parse "$b" 2>/dev/null)
+    remote_sha=$(git rev-parse "origin/$b" 2>/dev/null 2>&1) || remote_sha=""
+    [[ "$local_sha" == "$remote_sha" ]] && status="✓" || status="↑"
+    [[ "$b" == "$current" ]] && marker="▸" || marker=" "
+    echo "$marker $b $status"
+  done | fzf --ansi --prompt="checkout> " --header="Stack branches (▸ = current)" --no-multi | awk '{print $2}')
 
-  if [[ "$local_sha" == "$remote_sha" ]]; then
-    color="$GREEN"
-    status="✓"
-  else
-    color="$YELLOW"
-    status="↑"
+  if [[ -n "$selected" ]]; then
+    git checkout "$selected"
   fi
+else
+  echo -e "${BOLD}Branch stack:${RESET}"
+  for i in "${!reversed[@]}"; do
+    b="${reversed[$i]}"
+    local_sha=$(git rev-parse "$b" 2>/dev/null)
+    remote_sha=$(git rev-parse "origin/$b" 2>/dev/null 2>&1) || remote_sha=""
 
-  marker="  "
-  [[ "$b" == "$current" ]] && marker="▸ "
+    if [[ "$local_sha" == "$remote_sha" ]]; then
+      color="$GREEN"
+      status="✓"
+    else
+      color="$YELLOW"
+      status="↑"
+    fi
 
-  echo -e "  ${marker}${color}${b}${RESET} ${color}${status}${RESET}"
-done
+    marker="  "
+    [[ "$b" == "$current" ]] && marker="▸ "
+
+    echo -e "  ${marker}${color}${b}${RESET} ${color}${status}${RESET}"
+  done
+fi
