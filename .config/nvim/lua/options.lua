@@ -39,6 +39,7 @@ vim.opt.undofile = true
 vim.opt.updatetime = 50
 vim.opt.viewdir = cache_dir .. 'view/'
 vim.opt.wrap = true
+vim.opt.equalalways = false -- prevent auto-resize when switching windows (keeps Claude Code split fixed)
 -- vim.opt if for things you would set in vimscript. vim.g is for things you'd let.
 vim.g.mapleader = ' '
 vim.g.loaded_netrw = 1
