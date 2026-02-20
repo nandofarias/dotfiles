@@ -1,0 +1,185 @@
+#!/usr/bin/env node
+// openclaw-openai-proxy — OpenAI-compatible HTTP proxy for OpenClaw agent
+// Usage: openclaw-openai-proxy [--port 5123] [--agent main] [--session-id <id>]
+
+const http = require('http');
+const { spawn } = require('child_process');
+const crypto = require('crypto');
+
+// Parse CLI args
+const args = process.argv.slice(2);
+function flag(name, fallback) {
+  const i = args.indexOf('--' + name);
+  return i >= 0 && i + 1 < args.length ? args[i + 1] : fallback;
+}
+
+const PORT = parseInt(flag('port', '5123'), 10);
+const AGENT = flag('agent', 'main');
+const SESSION_ID = flag('session-id', null);
+const THINKING = flag('thinking', null);
+
+function makeId() { return 'chatcmpl-' + crypto.randomBytes(12).toString('hex'); }
+function now() { return Math.floor(Date.now() / 1000); }
+
+function runAgent(message) {
+  return new Promise((resolve, reject) => {
+    const cmdArgs = ['agent', '--agent', AGENT, '--message', message, '--json'];
+    if (SESSION_ID) cmdArgs.push('--session-id', SESSION_ID);
+    if (THINKING) cmdArgs.push('--thinking', THINKING);
+
+    const child = spawn('openclaw', cmdArgs, { stdio: ['ignore', 'pipe', 'pipe'] });
+    let stdout = '', stderr = '';
+    child.stdout.on('data', d => stdout += d);
+    child.stderr.on('data', d => stderr += d);
+    child.on('close', code => {
+      if (code !== 0) return reject(new Error(stderr || `openclaw exited ${code}`));
+      try {
+        const json = JSON.parse(stdout);
+        const text = (json.payloads || []).map(p => p.text).filter(Boolean).join('\n');
+        resolve({ text, usage: json.meta?.agentMeta?.usage });
+      } catch (e) {
+        reject(new Error('Failed to parse openclaw output: ' + e.message));
+      }
+    });
+    child.on('error', reject);
+  });
+}
+
+function json(res, status, body) {
+  const b = JSON.stringify(body);
+  res.writeHead(status, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+  res.end(b);
+}
+
+function errorResp(res, status, msg) {
+  json(res, status, { error: { message: msg, type: 'invalid_request_error', code: null } });
+}
+
+function readBody(req) {
+  return new Promise((resolve, reject) => {
+    let d = '';
+    req.on('data', c => d += c);
+    req.on('end', () => resolve(d));
+    req.on('error', reject);
+  });
+}
+
+const server = http.createServer(async (req, res) => {
+  // CORS preflight
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204, {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    });
+    return res.end();
+  }
+
+  const url = new URL(req.url, `http://localhost:${PORT}`);
+
+  // GET /v1/models
+  if (req.method === 'GET' && url.pathname === '/v1/models') {
+    return json(res, 200, {
+      object: 'list',
+      data: [
+        { id: 'frieren', object: 'model', created: now(), owned_by: 'openclaw' },
+        { id: 'openclaw', object: 'model', created: now(), owned_by: 'openclaw' },
+      ]
+    });
+  }
+
+  // POST /v1/chat/completions
+  if (req.method === 'POST' && url.pathname === '/v1/chat/completions') {
+    let body;
+    try {
+      body = JSON.parse(await readBody(req));
+    } catch {
+      return errorResp(res, 400, 'Invalid JSON body');
+    }
+
+    const messages = body.messages || [];
+    // Find last user message
+    let userMsg = '';
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].role === 'user') {
+        userMsg = typeof messages[i].content === 'string'
+          ? messages[i].content
+          : JSON.stringify(messages[i].content);
+        break;
+      }
+    }
+    if (!userMsg) return errorResp(res, 400, 'No user message found');
+
+    const id = makeId();
+    const stream = body.stream === true;
+
+    if (stream) {
+      res.writeHead(200, {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+        'Access-Control-Allow-Origin': '*',
+      });
+
+      try {
+        const result = await runAgent(userMsg);
+        // Send a single content chunk then done
+        const chunk = {
+          id, object: 'chat.completion.chunk', created: now(),
+          model: body.model || 'frieren',
+          choices: [{ index: 0, delta: { role: 'assistant', content: result.text }, finish_reason: null }]
+        };
+        res.write(`data: ${JSON.stringify(chunk)}\n\n`);
+        const done = {
+          id, object: 'chat.completion.chunk', created: now(),
+          model: body.model || 'frieren',
+          choices: [{ index: 0, delta: {}, finish_reason: 'stop' }]
+        };
+        res.write(`data: ${JSON.stringify(done)}\n\n`);
+        res.write('data: [DONE]\n\n');
+      } catch (e) {
+        const errChunk = {
+          id, object: 'chat.completion.chunk', created: now(),
+          model: body.model || 'frieren',
+          choices: [{ index: 0, delta: { content: `Error: ${e.message}` }, finish_reason: 'stop' }]
+        };
+        res.write(`data: ${JSON.stringify(errChunk)}\n\n`);
+        res.write('data: [DONE]\n\n');
+      }
+      return res.end();
+    }
+
+    // Non-streaming
+    try {
+      const result = await runAgent(userMsg);
+      return json(res, 200, {
+        id, object: 'chat.completion', created: now(),
+        model: body.model || 'frieren',
+        choices: [{
+          index: 0,
+          message: { role: 'assistant', content: result.text },
+          finish_reason: 'stop'
+        }],
+        usage: {
+          prompt_tokens: result.usage?.input || 0,
+          completion_tokens: result.usage?.output || 0,
+          total_tokens: result.usage?.total || 0,
+        }
+      });
+    } catch (e) {
+      return errorResp(res, 500, e.message);
+    }
+  }
+
+  // Health check
+  if (req.method === 'GET' && (url.pathname === '/' || url.pathname === '/health')) {
+    return json(res, 200, { status: 'ok', agent: AGENT });
+  }
+
+  errorResp(res, 404, 'Not found');
+});
+
+server.listen(PORT, '127.0.0.1', () => {
+  console.log(`openclaw-openai-proxy listening on http://127.0.0.1:${PORT}`);
+  console.log(`Agent: ${AGENT}${SESSION_ID ? `, Session: ${SESSION_ID}` : ''}`);
+});
