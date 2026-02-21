@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
+  echo "Usage: git reword"
+  echo "Change the commit message of the current branch's tip (opens editor), then rebase children."
+  exit 0
+fi
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+RESET='\033[0m'
+
+current=$(git rev-parse --abbrev-ref HEAD)
+old_sha=$(git rev-parse HEAD)
+
+echo -e "${CYAN}Rewording...${RESET}"
+git commit --amend || { echo -e "${RED}Reword failed${RESET}"; exit 1; }
+
+new_sha=$(git rev-parse HEAD)
+if [[ "$old_sha" == "$new_sha" ]]; then
+  echo -e "${GREEN}Nothing changed.${RESET}"
+  exit 0
+fi
+
+# Find and rebase children (same logic as git-amend)
+children=()
+while IFS= read -r line; do
+  sha="${line%% *}"
+  name="${line#* }"
+  [[ "$name" == "develop" || "$name" == "$current" ]] && continue
+  mb=$(git merge-base "$old_sha" "$sha" 2>/dev/null) || continue
+  if [[ "$mb" == "$old_sha" ]]; then
+    dist=$(git rev-list --count "$old_sha..$sha" 2>/dev/null) || continue
+    children+=("$dist:$name")
+  fi
+done < <(git for-each-ref --format='%(objectname) %(refname:short)' refs/heads/)
+
+IFS=$'\n' sorted=($(printf '%s\n' "${children[@]}" | sort -t: -k1 -n)); unset IFS
+
+if [[ ${#sorted[@]} -gt 0 ]]; then
+  echo -e "${CYAN}Rebasing children...${RESET}"
+  for entry in "${sorted[@]}"; do
+    child="${entry#*:}"
+    echo -e "  Rebasing ${child}..."
+    git rebase --onto "$new_sha" "$old_sha" "$child" || {
+      echo -e "${RED}Rebase failed for $child. Resolve and run 'git rebase --continue'.${RESET}"
+      exit 1
+    }
+  done
+fi
+
+git switch "$current" 2>/dev/null
+echo -e "${GREEN}Reworded and rebased.${RESET}"

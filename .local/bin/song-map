@@ -1,0 +1,431 @@
+#!/usr/bin/env python3
+"""
+song-map — Nashville Number System chart generator for worship/CCM songs.
+
+Usage:
+  song-map "Vida aos Sepulcros" --artist "Gabriela Rocha" --key G#
+  song-map "Firme Fundamento" --key G#
+  song-map --chords "E C#m A B" --key E --title "Test Song"
+"""
+
+import argparse
+import re
+import sys
+
+try:
+    import requests
+    from bs4 import BeautifulSoup
+    HAS_REQUESTS = True
+except ImportError:
+    HAS_REQUESTS = False
+
+# ── Chromatic scale ──────────────────────────────────────────────────────────
+
+CHROMATIC = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+
+ENHARMONIC = {
+    "Db": "C#", "Eb": "D#", "Fb": "E", "Gb": "F#",
+    "Ab": "G#", "Bb": "A#", "Cb": "B",
+    "E#": "F", "B#": "C",
+}
+
+def normalize_root(root: str) -> str:
+    """Normalize a root note to its sharp equivalent."""
+    root = root.strip()
+    if root in ENHARMONIC:
+        return ENHARMONIC[root]
+    return root
+
+def note_index(note: str) -> int:
+    note = normalize_root(note)
+    return CHROMATIC.index(note)
+
+def interval(root: str, note: str) -> int:
+    """Semitone distance from root to note (0–11)."""
+    return (note_index(note) - note_index(root)) % 12
+
+# Semitone → scale degree in major key
+SEMITONE_TO_DEGREE = {
+    0:  (1,  ""),    # I
+    2:  (2,  "m"),   # ii
+    4:  (3,  "m"),   # iii
+    5:  (4,  ""),    # IV
+    7:  (5,  ""),    # V
+    9:  (6,  "m"),   # vi
+    11: (7,  "dim"), # vii°
+}
+
+# Borrowed / outside key
+BORROWED = {
+    1:  "b2",
+    3:  "b3",
+    6:  "#4/b5",
+    8:  "b6",
+    10: "b7",
+}
+
+# ── Chord parser ─────────────────────────────────────────────────────────────
+
+CHORD_RE = re.compile(
+    r"^([A-G][#b]?)"          # root
+    r"(m|maj|M|min|dim|aug)?"  # quality
+    r"(\d+)?"                  # extension (7, 9, 11, 13...)
+    r"(sus\d?)?"               # sus
+    r"([Mm]aj\d?)?"            # maj7 / maj9
+    r"(\([^)]*\))?"            # parenthesised extras (5+), (11)
+    r"(?:/([A-G][#b]?))?"      # slash chord
+    r"$"
+)
+
+def parse_chord(chord_str: str):
+    """
+    Returns dict with keys: root, quality, ext, sus, slash_note, original
+    quality: '', 'm', 'dim', 'aug', 'maj'
+    """
+    s = chord_str.strip()
+    # Normalise "4" suffix (sus4 shorthand used in Brazilian cifras)
+    s = re.sub(r"([A-G][#b]?)4\b", r"\1sus4", s)
+    m = CHORD_RE.match(s)
+    if not m:
+        return None
+    root, qual, ext, sus, majq, paren, slash = m.groups()
+
+    quality = ""
+    if qual in ("m", "min"):
+        quality = "m"
+    elif qual in ("M", "maj", "Maj"):
+        quality = "maj"
+    elif qual == "dim":
+        quality = "dim"
+    elif qual == "aug":
+        quality = "aug"
+
+    # "m" before extension like "m7" — already caught
+    # handle add9 → just ext=9
+    return {
+        "root": root,
+        "quality": quality,
+        "ext": ext or "",
+        "sus": sus or "",
+        "slash": slash,
+        "original": chord_str,
+    }
+
+def chord_to_nashville(chord_str: str, key: str) -> str:
+    """Convert a chord string to its Nashville Number System equivalent in key."""
+    parsed = parse_chord(chord_str)
+    if not parsed:
+        return f"[{chord_str}]"
+
+    root = normalize_root(parsed["root"])
+    key_norm = normalize_root(key)
+
+    semi = interval(key_norm, root)
+    degree_info = SEMITONE_TO_DEGREE.get(semi)
+
+    if degree_info:
+        num, default_quality = degree_info
+        quality = parsed["quality"] if parsed["quality"] else default_quality
+        # If scale tone is normally major but chord is minor, mark it
+        if default_quality == "" and parsed["quality"] == "m":
+            quality = "m"
+        elif default_quality == "m" and parsed["quality"] == "":
+            quality = ""  # major borrow
+    else:
+        borrowed = BORROWED.get(semi, f"?{semi}")
+        num = borrowed
+        quality = parsed["quality"]
+
+    # Build NNS string
+    nns = f"{num}"
+    if quality == "m":
+        nns += "m"
+    elif quality == "dim":
+        nns += "°"
+    elif quality == "aug":
+        nns += "+"
+    elif quality == "maj":
+        nns += "maj"
+
+    if parsed["sus"]:
+        nns += parsed["sus"]
+    if parsed["ext"] and parsed["ext"] not in ("", "2", "6"):
+        # Keep 7, 9, 11, 13 as superscripts
+        nns += parsed["ext"]
+    elif parsed["ext"] == "9":
+        nns += "9"
+
+    # Slash chord
+    if parsed["slash"]:
+        slash_semi = interval(key_norm, normalize_root(parsed["slash"]))
+        slash_info = SEMITONE_TO_DEGREE.get(slash_semi)
+        if slash_info:
+            slash_num = slash_info[0]
+        else:
+            slash_num = BORROWED.get(slash_semi, f"?{slash_semi}")
+        nns += f"/{slash_num}"
+
+    return nns
+
+# ── Chord reference line ─────────────────────────────────────────────────────
+
+def chord_reference(key: str, chords: list[str]) -> str:
+    """Build 'Chords in X: 1=C  4=F  6m=Am' reference."""
+    seen = {}
+    key_norm = normalize_root(key)
+    for c in chords:
+        p = parse_chord(c)
+        if not p:
+            continue
+        root = normalize_root(p["root"])
+        semi = interval(key_norm, root)
+        degree_info = SEMITONE_TO_DEGREE.get(semi)
+        if degree_info:
+            num, dq = degree_info
+            qual = p["quality"] if p["quality"] else dq
+            nns = f"{num}{'m' if qual == 'm' else ''}"
+            actual = root
+            if nns not in seen:
+                seen[nns] = actual
+    parts = [f"{k}={v}" for k, v in sorted(seen.items(), key=lambda x: str(x[0]))]
+    return f"Chords in {key}:  " + "  ".join(parts)
+
+# ── Cifra Club scraper ───────────────────────────────────────────────────────
+
+def slugify(text: str) -> str:
+    text = text.lower().strip()
+    text = re.sub(r"[áàãâä]", "a", text)
+    text = re.sub(r"[éèêë]", "e", text)
+    text = re.sub(r"[íìîï]", "i", text)
+    text = re.sub(r"[óòõôö]", "o", text)
+    text = re.sub(r"[úùûü]", "u", text)
+    text = re.sub(r"[ç]", "c", text)
+    text = re.sub(r"[^a-z0-9\s-]", "", text)
+    text = re.sub(r"[\s]+", "-", text)
+    return text.strip("-")
+
+def search_cifraclub(song: str, artist: str = "") -> dict | None:
+    """Search Cifra Club and return {original_key, sections} or None."""
+    if not HAS_REQUESTS:
+        return None
+
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                      "AppleWebKit/537.36 (KHTML, like Gecko) "
+                      "Chrome/121.0.0.0 Safari/537.36"
+    }
+
+    # Try direct URL first
+    if artist:
+        url = f"https://www.cifraclub.com.br/{slugify(artist)}/{slugify(song)}/"
+        try:
+            r = requests.get(url, headers=headers, timeout=8)
+            if r.status_code == 200:
+                return parse_cifraclub_page(r.text, url)
+        except Exception:
+            pass
+
+    # Try search
+    try:
+        q = f"{song} {artist}".strip()
+        search_url = f"https://www.cifraclub.com.br/busca/?q={requests.utils.quote(q)}&type=cifra"
+        r = requests.get(search_url, headers=headers, timeout=8)
+        if r.status_code == 200:
+            soup = BeautifulSoup(r.text, "html.parser")
+            # Find first result link
+            link = soup.select_one("ul.js-search-results a[href]")
+            if link:
+                href = link["href"]
+                if not href.startswith("http"):
+                    href = "https://www.cifraclub.com.br" + href
+                r2 = requests.get(href, headers=headers, timeout=8)
+                if r2.status_code == 200:
+                    return parse_cifraclub_page(r2.text, href)
+    except Exception:
+        pass
+
+    return None
+
+def parse_cifraclub_page(html: str, url: str) -> dict | None:
+    """Parse a Cifra Club page, extract key and chords per section."""
+    soup = BeautifulSoup(html, "html.parser")
+
+    # Extract original key
+    original_key = None
+    key_el = soup.select_one("a.cifra_tom")
+    if key_el:
+        original_key = key_el.get_text(strip=True)
+
+    # Extract title and artist
+    title = ""
+    title_el = soup.select_one("h1.t1")
+    if title_el:
+        title = title_el.get_text(strip=True)
+    artist_name = ""
+    artist_el = soup.select_one("h2.t3 a")
+    if artist_el:
+        artist_name = artist_el.get_text(strip=True)
+
+    # Parse chord content
+    pre = soup.select_one("pre#cifra_preload") or soup.select_one("div#cifra")
+    if not pre:
+        return None
+
+    text = pre.get_text()
+    sections = parse_chord_text(text)
+
+    return {
+        "title": title,
+        "artist": artist_name,
+        "original_key": original_key,
+        "sections": sections,
+        "url": url,
+    }
+
+def parse_chord_text(text: str) -> list[dict]:
+    """
+    Parse raw cifra text into sections with chord lists.
+    Returns list of {name, chords}.
+    """
+    sections = []
+    current_section = "INTRO"
+    current_chords = []
+    all_chords_seen = set()
+
+    SECTION_RE = re.compile(r"^\[(.+?)\]")
+    CHORD_LINE_RE = re.compile(r"^(?:\s*[A-G][#b]?(?:m|maj|M|dim|aug)?[\d()/#\w]*\s*)+$")
+
+    for line in text.splitlines():
+        line = line.rstrip()
+        sm = SECTION_RE.match(line)
+        if sm:
+            if current_chords:
+                sections.append({"name": current_section, "chords": list(current_chords)})
+            current_section = sm.group(1).strip()
+            current_chords = []
+            continue
+
+        # Check if line is (mostly) chords
+        # Extract all chord tokens from the line
+        tokens = re.findall(r"[A-G][#b]?(?:m(?:aj)?|M|dim|aug)?[\d]*(?:sus\d?)?(?:\([^)]*\))?(?:/[A-G][#b]?)?", line)
+        if tokens:
+            # Verify at least one token parses as a chord
+            valid = [t for t in tokens if parse_chord(t) is not None]
+            if valid and len(valid) / max(len(tokens), 1) > 0.5:
+                for t in valid:
+                    if t not in all_chords_seen:
+                        current_chords.append(t)
+                        all_chords_seen.add(t)
+
+    if current_chords:
+        sections.append({"name": current_section, "chords": list(current_chords)})
+
+    return sections
+
+# ── Manual chord list ────────────────────────────────────────────────────────
+
+def parse_manual_chords(chord_str: str) -> list[dict]:
+    """Parse a space-separated chord list into a single section."""
+    chords = chord_str.strip().split()
+    return [{"name": "CHORDS", "chords": chords}]
+
+# ── Formatting ───────────────────────────────────────────────────────────────
+
+def format_chart(title: str, artist: str, key: str, original_key: str,
+                 sections: list[dict], url: str = "") -> str:
+    width = 55
+    lines = []
+    lines.append("═" * width)
+
+    header = f" {title}  |  Key: {key}  |  4/4"
+    lines.append(header)
+    if artist:
+        lines.append(f" {artist}")
+    if original_key and original_key != key:
+        lines.append(f" (orig. key: {original_key})")
+    if url:
+        lines.append(f" {url}")
+    lines.append("═" * width)
+    lines.append("")
+
+    all_chords = []
+    for section in sections:
+        name = section["name"].upper()
+        chords = section["chords"]
+        if not chords:
+            continue
+        all_chords.extend(chords)
+
+        nns_chords = [chord_to_nashville(c, key) for c in chords]
+        chord_line = "  ".join(nns_chords)
+
+        label = f"[{name}]"
+        lines.append(f"{label:<12}{chord_line}")
+
+    lines.append("")
+    lines.append("─" * width)
+
+    # Deduplicate for reference
+    unique = list(dict.fromkeys(all_chords))
+    lines.append(chord_reference(key, unique))
+    lines.append("═" * width)
+
+    return "\n".join(lines)
+
+# ── Main ─────────────────────────────────────────────────────────────────────
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Generate Nashville Number System charts for worship songs."
+    )
+    parser.add_argument("song", nargs="?", help="Song title to search")
+    parser.add_argument("--artist", "-a", default="", help="Artist name")
+    parser.add_argument("--key", "-k", required=True, help="Target key (e.g. G#, C, E)")
+    parser.add_argument("--title", "-t", default="", help="Title override (for --chords mode)")
+    parser.add_argument("--chords", "-c", default="",
+                        help="Manual chord list (space-separated, skips search)")
+
+    args = parser.parse_args()
+
+    key = args.key.strip()
+    # Validate key
+    key_norm = normalize_root(key)
+    if key_norm not in CHROMATIC:
+        print(f"❌ Unknown key: {key}", file=sys.stderr)
+        sys.exit(1)
+
+    # Manual mode
+    if args.chords:
+        sections = parse_manual_chords(args.chords)
+        title = args.title or "Song"
+        print(format_chart(title, args.artist, key, "", sections))
+        return
+
+    if not args.song:
+        parser.print_help()
+        sys.exit(1)
+
+    if not HAS_REQUESTS:
+        print("⚠️  requests/beautifulsoup4 not installed. Use --chords for manual mode.")
+        print("   pip install requests beautifulsoup4")
+        sys.exit(1)
+
+    print(f"🔍 Searching for '{args.song}'{' by ' + args.artist if args.artist else ''}...",
+          file=sys.stderr)
+
+    result = search_cifraclub(args.song, args.artist)
+
+    if not result or not result.get("sections"):
+        print(f"⚠️  Could not find chords online. Use --chords mode:", file=sys.stderr)
+        print(f"   song-map --chords \"E C#m A B\" --key {key} --title \"{args.song}\"",
+              file=sys.stderr)
+        sys.exit(1)
+
+    title = args.title or result.get("title") or args.song
+    artist = args.artist or result.get("artist", "")
+    original_key = result.get("original_key", "")
+
+    print(format_chart(title, artist, key, original_key, result["sections"], result.get("url", "")))
+
+if __name__ == "__main__":
+    main()
