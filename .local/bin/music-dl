@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# music-dl — Search YouTube and download best quality audio as FLAC
+# Usage: music-dl "Artist - Song Name"
+#        music-dl "Laufey - From The Start" --mp3
+#        music-dl "query" --dir ~/Music/Snowsky
+
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+RESET='\033[0m'
+
+FORMAT="flac"
+OUTPUT_DIR="$HOME/Music/Downloads"
+QUERY=""
+
+usage() {
+  echo "Usage: music-dl [options] <search query>"
+  echo ""
+  echo "Search YouTube for a song and download the best quality audio."
+  echo ""
+  echo "Options:"
+  echo "  --flac         Download as FLAC (default)"
+  echo "  --mp3          Download as MP3 320kbps"
+  echo "  --m4a          Download as M4A (AAC)"
+  echo "  --wav          Download as WAV"
+  echo "  --dir <path>   Output directory (default: ~/Music/Downloads)"
+  echo "  -h, --help     Show this help"
+  echo ""
+  echo "Examples:"
+  echo "  music-dl \"Laufey - From The Start\""
+  echo "  music-dl \"Hillsong - Oceans\" --mp3"
+  echo "  music-dl \"Kind of Blue Miles Davis\" --dir ~/Music/Snowsky"
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --flac) FORMAT="flac"; shift ;;
+    --mp3)  FORMAT="mp3"; shift ;;
+    --m4a)  FORMAT="m4a"; shift ;;
+    --wav)  FORMAT="wav"; shift ;;
+    --dir)  OUTPUT_DIR="$2"; shift 2 ;;
+    -h|--help) usage; exit 0 ;;
+    *) QUERY="$QUERY $1"; shift ;;
+  esac
+done
+
+QUERY="${QUERY## }"
+
+if [[ -z "$QUERY" ]]; then
+  usage
+  exit 1
+fi
+
+mkdir -p "$OUTPUT_DIR"
+
+echo -e "${CYAN}🔍 Searching:${RESET} $QUERY"
+echo -e "${CYAN}📁 Output:${RESET}    $OUTPUT_DIR"
+echo -e "${CYAN}🎵 Format:${RESET}    $FORMAT"
+echo ""
+
+# Search YouTube, show top 5 results, let user pick
+echo -e "${BOLD}Results:${RESET}"
+results=$(yt-dlp "ytsearch5:$QUERY" --print "%(id)s|%(title)s|%(duration_string)s|%(channel)s" --no-download 2>/dev/null)
+
+if [[ -z "$results" ]]; then
+  echo "❌ No results found."
+  exit 1
+fi
+
+i=1
+declare -a ids
+while IFS='|' read -r id title duration channel; do
+  ids+=("$id")
+  echo -e "  ${GREEN}$i)${RESET} $title ${YELLOW}[$duration]${RESET} — $channel"
+  ((i++))
+done <<< "$results"
+
+echo ""
+read -r -p "Pick a number (1-5, or Enter for 1): " choice
+choice="${choice:-1}"
+
+if [[ "$choice" -lt 1 || "$choice" -gt "${#ids[@]}" ]]; then
+  echo "❌ Invalid choice."
+  exit 1
+fi
+
+video_id="${ids[$((choice-1))]}"
+url="https://www.youtube.com/watch?v=$video_id"
+
+echo ""
+echo -e "${CYAN}⬇️  Downloading...${RESET}"
+
+yt-dlp \
+  --ignore-errors \
+  --output "$OUTPUT_DIR/%(title)s.%(ext)s" \
+  --extract-audio \
+  --audio-format "$FORMAT" \
+  --audio-quality 0 \
+  --embed-thumbnail \
+  --embed-metadata \
+  --no-playlist \
+  "$url"
+
+echo ""
+echo -e "${GREEN}✅ Done!${RESET} Check: $OUTPUT_DIR"
+ls -lh "$OUTPUT_DIR"/*.${FORMAT} 2>/dev/null | tail -5

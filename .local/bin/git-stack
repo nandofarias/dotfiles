@@ -1,96 +1,258 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
-  echo "Usage: git stack [-i]"
-  echo "Show the current branch stack between develop and HEAD."
-  echo "Branches marked with * are current. Colors: green=pushed, yellow=unpushed."
-  echo ""
-  echo "Options:"
-  echo "  -i, --interactive   Pick a branch to checkout (requires fzf)"
-  exit 0
-fi
-
-INTERACTIVE=false
-if [[ "${1:-}" == "-i" || "${1:-}" == "--interactive" ]]; then
-  INTERACTIVE=true
-  if ! command -v fzf &>/dev/null; then
-    echo "Error: fzf is required for interactive mode"
-    exit 1
-  fi
-fi
-
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
+RED='\033[0;31m'
 CYAN='\033[0;36m'
 BOLD='\033[1m'
 RESET='\033[0m'
 
-current=$(git rev-parse --abbrev-ref HEAD)
-merge_base=$(git merge-base develop HEAD 2>/dev/null) || { echo "Error: cannot find merge-base with develop"; exit 1; }
+usage() {
+  echo "Usage: git stack [command] [options]"
+  echo ""
+  echo "Commands:"
+  echo "  (none)       Show the current branch stack"
+  echo "  sync         Rebase the entire stack in cascade"
+  echo "  push         Force-push all branches in the stack"
+  echo "  reorder      Interactively reorder branches in the stack"
+  echo "  next         Move up the stack (switch to child branch)"
+  echo "  prev         Move down the stack (switch to parent branch)"
+  echo "  amend        Amend current commit + rebase children"
+  echo "  reword       Change commit message + rebase children"
+  echo "  edit [sha]   Interactive rebase (edit commit or full)"
+  echo "  help         Show this help"
+  echo ""
+  echo "Options:"
+  echo "  -i, --interactive   Pick a branch to checkout (requires fzf)"
+  echo "  -h, --help          Show this help"
+  echo ""
+  echo "Config:"
+  echo "  git config stack.base <branch>   Set base branch (default: auto-detect develop/main/master)"
+}
 
-# Collect all local branch names and their commit SHAs
-declare -A branch_at_commit
-while IFS= read -r line; do
-  sha="${line%% *}"
-  name="${line#* }"
-  branch_at_commit["$sha"]+="$name "
-done < <(git for-each-ref --format='%(objectname:short) %(refname:short)' refs/heads/ 2>/dev/null)
+# ── Detect base branch ──────────────────────────────────────────
+detect_base() {
+  # 1. Check git config stack.base
+  local configured
+  configured=$(git config --get stack.base 2>/dev/null) || true
+  if [[ -n "$configured" ]] && git rev-parse --verify "$configured" &>/dev/null; then
+    echo "$configured"
+    return
+  fi
+  # 2. Auto-detect: develop > main > master
+  for candidate in develop main master; do
+    if git rev-parse --verify "$candidate" &>/dev/null; then
+      echo "$candidate"
+      return
+    fi
+  done
+  echo "Error: cannot detect base branch. Set one with: git config stack.base <branch>" >&2
+  exit 1
+}
 
-# Walk commits from HEAD to merge_base, collect branches in stack order
-stack=()
-while IFS= read -r sha; do
-  if [[ -n "${branch_at_commit[$sha]:-}" ]]; then
-    for b in ${branch_at_commit[$sha]}; do
-      [[ "$b" == "develop" ]] && continue
-      stack+=("$b")
+# ── Discover stack ──────────────────────────────────────────────
+discover_stack() {
+  local base_branch
+  base_branch=$(detect_base)
+  local current
+  current=$(git rev-parse --abbrev-ref HEAD)
+
+  local merge_base
+  merge_base=$(git merge-base "$base_branch" HEAD 2>/dev/null) || { echo "Error: cannot find merge-base with $base_branch"; exit 1; }
+
+  # Collect all local branch names and their commit SHAs (full hash for reliability)
+  declare -A branch_at_commit
+  while IFS= read -r line; do
+    sha="${line%% *}"
+    name="${line#* }"
+    branch_at_commit["$sha"]+="$name "
+  done < <(git for-each-ref --format='%(objectname) %(refname:short)' refs/heads/ 2>/dev/null)
+
+  # Walk commits from HEAD to merge_base, collect branches in stack order (top-first)
+  local stack=()
+  while IFS= read -r sha; do
+    if [[ -n "${branch_at_commit[$sha]:-}" ]]; then
+      for b in ${branch_at_commit[$sha]}; do
+        [[ "$b" == "$base_branch" ]] && continue
+        stack+=("$b")
+      done
+    fi
+  done < <(git log --format='%H' --ancestry-path "$merge_base..HEAD" 2>/dev/null)
+
+  # Reverse so bottom of stack (closest to develop) is first
+  for ((i=${#stack[@]}-1; i>=0; i--)); do
+    echo "${stack[$i]}"
+  done
+}
+
+# ── Show stack ──────────────────────────────────────────────────
+show_stack() {
+  local interactive="${1:-false}"
+  local current
+  current=$(git rev-parse --abbrev-ref HEAD)
+
+  mapfile -t branches < <(discover_stack)
+
+  if [[ ${#branches[@]} -eq 0 ]]; then
+    echo "No branches in stack (on base branch or no branches between base and HEAD)"
+    return
+  fi
+
+  if [[ "$interactive" == true ]]; then
+    if ! command -v fzf &>/dev/null; then
+      echo "Error: fzf is required for interactive mode"
+      exit 1
+    fi
+
+    selected=$(for b in "${branches[@]}"; do
+      local_sha=$(git rev-parse "$b" 2>/dev/null)
+      remote_sha=$(git rev-parse "origin/$b" 2>/dev/null 2>&1) || remote_sha=""
+      [[ "$local_sha" == "$remote_sha" ]] && status="✓" || status="↑"
+      [[ "$b" == "$current" ]] && marker="▸" || marker=" "
+      echo "$marker $b $status"
+    done | fzf --ansi --prompt="checkout> " --header="Stack branches (▸ = current)" --no-multi \
+         | awk '{for(i=1;i<=NF;i++){if($i!="▸" && $i!="✓" && $i!="↑"){print $i; exit}}}')
+
+    if [[ -n "$selected" ]]; then
+      git checkout "$selected"
+    fi
+  else
+    echo -e "${BOLD}Branch stack:${RESET}"
+    for b in "${branches[@]}"; do
+      local_sha=$(git rev-parse "$b" 2>/dev/null)
+      remote_sha=$(git rev-parse "origin/$b" 2>/dev/null 2>&1) || remote_sha=""
+
+      if [[ "$local_sha" == "$remote_sha" ]]; then
+        color="$GREEN"; status="✓"
+      else
+        color="$YELLOW"; status="↑"
+      fi
+
+      marker="  "
+      [[ "$b" == "$current" ]] && marker="▸ "
+
+      echo -e "  ${marker}${color}${b}${RESET} ${color}${status}${RESET}"
     done
   fi
-done < <(git log --format='%h' --ancestry-path "$merge_base..HEAD" 2>/dev/null)
+}
 
-if [[ ${#stack[@]} -eq 0 ]]; then
-  echo "No branches in stack (on develop or no branches between develop and HEAD)"
-  exit 0
-fi
+# ── Sync stack ──────────────────────────────────────────────────
+sync_stack() {
+  local current
+  current=$(git rev-parse --abbrev-ref HEAD)
 
-# Reverse so bottom of stack (closest to develop) is first
-reversed=()
-for ((i=${#stack[@]}-1; i>=0; i--)); do
-  reversed+=("${stack[$i]}")
-done
+  mapfile -t branches < <(discover_stack)
 
-if [[ "$INTERACTIVE" == true ]]; then
-  # Build plain list for fzf
-  selected=$(for i in "${!reversed[@]}"; do
-    b="${reversed[$i]}"
-    local_sha=$(git rev-parse "$b" 2>/dev/null)
-    remote_sha=$(git rev-parse "origin/$b" 2>/dev/null 2>&1) || remote_sha=""
-    [[ "$local_sha" == "$remote_sha" ]] && status="✓" || status="↑"
-    [[ "$b" == "$current" ]] && marker="▸" || marker=" "
-    echo "$marker $b $status"
-  done | fzf --ansi --prompt="checkout> " --header="Stack branches (▸ = current)" --no-multi | awk '{print $2}')
-
-  if [[ -n "$selected" ]]; then
-    git checkout "$selected"
+  if [[ ${#branches[@]} -eq 0 ]]; then
+    echo "No branches in stack"
+    return
   fi
-else
-  echo -e "${BOLD}Branch stack:${RESET}"
-  for i in "${!reversed[@]}"; do
-    b="${reversed[$i]}"
+
+  echo -e "${BOLD}Syncing stack (${#branches[@]} branches)...${RESET}"
+
+  local prev
+  prev=$(detect_base)
+  local rebased=0
+
+  for b in "${branches[@]}"; do
+    # Check if prev is already an ancestor of b
+    if git merge-base --is-ancestor "$prev" "$b" 2>/dev/null; then
+      echo -e "  ${GREEN}✓${RESET} $b (already on top of $prev)"
+    else
+      # Find the fork point between prev and b
+      local fork
+      fork=$(git merge-base "$prev" "$b" 2>/dev/null) || fork=$(git merge-base "$(detect_base)" "$b" 2>/dev/null)
+
+      echo -e "  ${YELLOW}↻${RESET} $b → rebasing onto $prev..."
+      if git rebase --onto "$prev" "$fork" "$b" 2>&1 | sed 's/^/    /'; then
+        ((rebased++))
+      else
+        echo -e "  ${RED}✗${RESET} Rebase conflict on $b! Resolve and run ${BOLD}git stack sync${RESET} again."
+        return 1
+      fi
+    fi
+    prev="$b"
+  done
+
+  # Return to original branch
+  git checkout "$current" 2>/dev/null
+
+  if [[ $rebased -eq 0 ]]; then
+    echo -e "\n${GREEN}Stack is already in sync.${RESET}"
+  else
+    echo -e "\n${GREEN}Rebased $rebased branch(es). Stack is synced.${RESET}"
+    echo -e "${YELLOW}Run ${BOLD}git stack push${YELLOW} to force-push all.${RESET}"
+  fi
+}
+
+# ── Push stack ──────────────────────────────────────────────────
+push_stack() {
+  mapfile -t branches < <(discover_stack)
+
+  if [[ ${#branches[@]} -eq 0 ]]; then
+    echo "No branches in stack"
+    return
+  fi
+
+  echo -e "${BOLD}Force-pushing stack...${RESET}"
+  for b in "${branches[@]}"; do
     local_sha=$(git rev-parse "$b" 2>/dev/null)
     remote_sha=$(git rev-parse "origin/$b" 2>/dev/null 2>&1) || remote_sha=""
 
     if [[ "$local_sha" == "$remote_sha" ]]; then
-      color="$GREEN"
-      status="✓"
+      echo -e "  ${GREEN}✓${RESET} $b (up to date)"
     else
-      color="$YELLOW"
-      status="↑"
+      echo -ne "  ${YELLOW}↑${RESET} $b..."
+      if git push --force-with-lease origin "$b" 2>/dev/null; then
+        echo -e " ${GREEN}done${RESET}"
+      else
+        echo -e " ${RED}failed${RESET}"
+      fi
     fi
-
-    marker="  "
-    [[ "$b" == "$current" ]] && marker="▸ "
-
-    echo -e "  ${marker}${color}${b}${RESET} ${color}${status}${RESET}"
   done
-fi
+}
+
+# ── Main ────────────────────────────────────────────────────────
+case "${1:-}" in
+  -h|--help|help)
+    usage
+    ;;
+  sync)
+    sync_stack
+    ;;
+  push)
+    push_stack
+    ;;
+  reorder)
+    shift
+    exec git-stack-reorder "$@"
+    ;;
+  next)
+    exec git-stack-next
+    ;;
+  prev)
+    exec git-stack-prev
+    ;;
+  amend)
+    exec git-stack-amend
+    ;;
+  reword)
+    exec git-stack-reword
+    ;;
+  edit)
+    shift
+    exec git-stack-edit "$@"
+    ;;
+  -i|--interactive)
+    show_stack true
+    ;;
+  "")
+    show_stack false
+    ;;
+  *)
+    echo "Unknown command: $1"
+    usage
+    exit 1
+    ;;
+esac
