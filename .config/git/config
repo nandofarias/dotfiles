@@ -60,6 +60,7 @@
   dft = difftool
   dlog = "!f() { GIT_EXTERNAL_DIFF=difft git log -p --ext-diff $@; }; f"
   review = diff --staged
+	create = switch -c
 
 [core]
 	excludesfile = ~/.config/git/ignore

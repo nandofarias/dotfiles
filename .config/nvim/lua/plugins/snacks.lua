@@ -79,12 +79,10 @@ return {
     -- scroll = { enabled = true },
     statuscolumn = { enabled = true },
     words = { enabled = true },
-    lazygit = { enabled = true },
+    lazygit = { enabled = false },
     terminal = { enabled = true },
   },
   keys = {
-    { "<leader>gg", function() Snacks.lazygit() end,            desc = "Lazygit" },
-    { "<leader>gl", function() Snacks.lazygit.log() end,        desc = "Lazygit Log" },
     -- Top Pickers & Explorer
     { "<leader>bd", function() Snacks.bufdelete() end,          desc = "Buffer delete" },
     { "<leader>fa", function() Snacks.explorer() end,           desc = "File Explorer" },
