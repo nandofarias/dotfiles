@@ -1,15 +1,18 @@
 #!/bin/bash
-# Wrapper for OpenClaw audio transcription via mlx_whisper
+# Wrapper for OpenClaw audio transcription via openai-whisper
 # Uses full paths since LaunchAgent has a limited PATH
+# stdout = plain transcript (required by OpenClaw)
 FILE="$1"
+echo "[whisper-transcribe] called with: $FILE" >> /tmp/whisper-transcribe.log 2>&1
 BASENAME=$(basename "$FILE")
 NOEXT="${BASENAME%.*}"
 TMPDIR=$(mktemp -d)
-/Users/ffarias/.local/share/mise/shims/mlx_whisper "$FILE" \
-  --model mlx-community/whisper-large-v3-turbo \
-  --output-format txt \
-  --output-dir "$TMPDIR" \
-  --verbose False \
+/opt/homebrew/bin/whisper "$FILE" \
+  --model base \
+  --output_format txt \
+  --output_dir "$TMPDIR" \
   >/dev/null 2>&1
-cat "$TMPDIR/$NOEXT.txt" 2>/dev/null
+RESULT=$(cat "$TMPDIR/$NOEXT.txt" 2>/dev/null)
+echo "[whisper-transcribe] result: $RESULT" >> /tmp/whisper-transcribe.log 2>&1
+echo "$RESULT"
 rm -rf "$TMPDIR"
