@@ -174,7 +174,7 @@ run = ['move-node-to-workspace 3']
 [[on-window-detected]]
 if.app-id = 'com.granola.app'
 if.window-title-regex-substring = '^Granola$'
-run = ['move-node-to-workspace 4']
+run = ['move-node-to-workspace 4', 'exec-and-forget sleep 1 && aerospace resize smart -600']
 
 [[on-window-detected]]
 if.app-id = 'us.zoom.xos'
