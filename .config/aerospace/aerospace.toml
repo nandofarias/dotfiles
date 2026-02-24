@@ -178,7 +178,13 @@ run = ['move-node-to-workspace 4', 'exec-and-forget sleep 1 && aerospace resize 
 
 [[on-window-detected]]
 if.app-id = 'us.zoom.xos'
+if.window-title-regex-substring = 'Meeting'
 run = ['move-node-to-workspace 4']
+
+[[on-window-detected]]
+if.app-id = 'us.zoom.xos'
+if.window-title-regex-substring = 'Workplace'
+run = ['layout floating']
 
 [[on-window-detected]]
 if.app-id = 'com.figma.Desktop'
