@@ -49,14 +49,30 @@ defaults:
   refetchIntervalMinutes: 30
 keybindings:
   issues: []
-  keybindings:
   prs:
-    - key: C
+    - key: enter
       command: >
-        tmux new-window -c {{.RepoPath}} '
-        nvim -c ":Octo pr edit {{.PrNumber}}" .
+        tmux new-window -n "pr-{{.PrNumber}}" -c {{.RepoPath}} '
+        nvim -c ":Octo pr edit {{.PrNumber}}"
         '
+    - key: d
+      command: >
+        tmux new-window -n "diff-{{.PrNumber}}" -c {{.RepoPath}} '
+        gh pr diff {{.PrNumber}} --repo {{.RepoName}} | delta
+        '
+    - key: x
+      command: >
+        tmux new-window -n "claude-{{.PrNumber}}" -c {{.RepoPath}} '
+        gh pr diff {{.PrNumber}} --repo {{.RepoName}} > /tmp/pr-review-{{.PrNumber}}.md &&
+        echo "# PR #{{.PrNumber}} - {{.RepoName}}" | cat - /tmp/pr-review-{{.PrNumber}}.md > /tmp/pr-review-{{.PrNumber}}-full.md &&
+        mv /tmp/pr-review-{{.PrNumber}}-full.md /tmp/pr-review-{{.PrNumber}}.md &&
+        nvim /tmp/pr-review-{{.PrNumber}}.md
+        '
+    - key: b
+      command: >
+        gh pr view {{.PrNumber}} --repo {{.RepoName}} --web
 repoPaths:
+  Boulevard/sched: ~/Developer/Boulevard/sched/develop
   Boulevard/*: ~/Developer/Boulevard/*
 theme:
   ui:
