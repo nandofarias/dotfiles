@@ -3,17 +3,40 @@ set -euo pipefail
 
 if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
   echo "Usage: git amend"
-  echo "Stage all changes, amend the current commit (no-edit), then rebase children on top."
+  echo "Stage all changes, amend the current commit (no-edit), then sync the stack."
   exit 0
 fi
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
+YELLOW='\033[0;33m'
 RESET='\033[0m'
 
 current=$(git rev-parse --abbrev-ref HEAD)
 old_sha=$(git rev-parse HEAD)
+
+# Discover descendants BEFORE the amend (while ancestry is intact)
+descendants=()
+while IFS= read -r line; do
+  sha="${line%% *}"
+  name="${line#* }"
+  [[ "$name" == "$current" ]] && continue
+  base=$(git config stack.base 2>/dev/null || echo "")
+  [[ -z "$base" ]] && base="develop"
+  [[ "$name" == "$base" ]] && continue
+  if git merge-base --is-ancestor HEAD "$name" 2>/dev/null; then
+    dist=$(git rev-list --count "HEAD..$name" 2>/dev/null) || continue
+    descendants+=("$dist:$name")
+  fi
+done < <(git for-each-ref --format='%(objectname) %(refname:short)' refs/heads/)
+
+# Sort by distance
+if [[ ${#descendants[@]} -gt 0 ]]; then
+  IFS=$'\n' sorted=($(printf '%s\n' "${descendants[@]}" | sort -t: -k1 -n)); unset IFS
+else
+  sorted=()
+fi
 
 echo -e "${CYAN}Amending...${RESET}"
 git add -A
@@ -25,34 +48,30 @@ if [[ "$old_sha" == "$new_sha" ]]; then
   exit 0
 fi
 
-# Find child branches to rebase
-current_full_sha="$old_sha"
-children=()
-while IFS= read -r line; do
-  sha="${line%% *}"
-  name="${line#* }"
-  [[ "$name" == "develop" || "$name" == "$current" ]] && continue
-  mb=$(git merge-base "$current_full_sha" "$sha" 2>/dev/null) || continue
-  if [[ "$mb" == "$current_full_sha" ]]; then
-    dist=$(git rev-list --count "$current_full_sha..$sha" 2>/dev/null) || continue
-    children+=("$dist:$name")
-  fi
-done < <(git for-each-ref --format='%(objectname) %(refname:short)' refs/heads/)
+echo -e "${GREEN}Amended.${RESET}"
 
-# Sort children by distance (closest first) for cascading rebase
-IFS=$'\n' sorted=($(printf '%s\n' "${children[@]}" | sort -t: -k1 -n)); unset IFS
-
+# Cascade rebase through descendants
 if [[ ${#sorted[@]} -gt 0 ]]; then
-  echo -e "${CYAN}Rebasing children...${RESET}"
+  echo -e "${CYAN}Rebasing stack (${#sorted[@]} branches)...${RESET}"
+  local_prev="$new_sha"
+  local_prev_old="$old_sha"
+
   for entry in "${sorted[@]}"; do
     child="${entry#*:}"
-    echo -e "  Rebasing ${child}..."
-    git rebase --onto "$new_sha" "$old_sha" "$child" || {
-      echo -e "${RED}Rebase failed for $child. Resolve and run 'git rebase --continue'.${RESET}"
+    child_old_sha=$(git rev-parse "$child")
+
+    echo -e "  ${YELLOW}↻${RESET} $child → rebasing onto $local_prev..."
+    if git rebase --onto "$local_prev" "$local_prev_old" "$child" 2>&1 | sed 's/^/    /'; then
+      true
+    else
+      echo -e "  ${RED}✗${RESET} Rebase conflict on $child! Resolve and run ${BOLD}git stack sync${RESET} again."
       exit 1
-    }
+    fi
+
+    local_prev="$child"
+    local_prev_old="$child_old_sha"
   done
 fi
 
-git switch "$current" 2>/dev/null
-echo -e "${GREEN}Amended and rebased.${RESET}"
+git checkout "$current" 2>/dev/null
+echo -e "${GREEN}Done. Stack synced.${RESET}"

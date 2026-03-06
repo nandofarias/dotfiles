@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+GIT_STACK_VERSION="1.2.0"
+
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 RED='\033[0;31m'
@@ -26,6 +28,7 @@ usage() {
   echo "Options:"
   echo "  -i, --interactive   Pick a branch to checkout (requires fzf)"
   echo "  -h, --help          Show this help"
+  echo "  -v, --version       Show version"
   echo ""
   echo "Config:"
   echo "  git config stack.base <branch>   Set base branch (default: auto-detect develop/main/master)"
@@ -53,6 +56,7 @@ detect_base() {
 
 # ── Discover stack ──────────────────────────────────────────────
 discover_stack() {
+  local mode="${1:-head}"  # "head" = only ancestors of HEAD, "full" = include descendants
   local base_branch
   base_branch=$(detect_base)
   local current
@@ -81,9 +85,81 @@ discover_stack() {
   done < <(git log --format='%H' --ancestry-path "$merge_base..HEAD" 2>/dev/null)
 
   # Reverse so bottom of stack (closest to develop) is first
+  local ordered=()
   for ((i=${#stack[@]}-1; i>=0; i--)); do
-    echo "${stack[$i]}"
+    ordered+=("${stack[$i]}")
   done
+
+  # In full mode, walk up the chain: find direct child, then its child, etc.
+  # Skip when on the base branch (ambiguous: multiple stacks may exist)
+  if [[ "$mode" == "full" && "$current" != "$base_branch" ]]; then
+    local tip
+    if [[ ${#ordered[@]} -gt 0 ]]; then
+      tip="${ordered[-1]}"
+    else
+      tip="$current"
+    fi
+
+    while true; do
+      local tip_sha
+      tip_sha=$(git rev-parse "$tip")
+      local best_name=""
+      local best_dist=999999
+
+      for sha in "${!branch_at_commit[@]}"; do
+        for b in ${branch_at_commit[$sha]}; do
+          [[ "$b" == "$base_branch" || "$b" == "$tip" ]] && continue
+          # Skip branches already in the stack
+          local already=false
+          for s in "${ordered[@]}"; do
+            [[ "$s" == "$b" ]] && { already=true; break; }
+          done
+          $already && continue
+
+          # Check if this branch is a child of tip.
+          if git merge-base --is-ancestor "$tip_sha" "$sha" 2>/dev/null; then
+            # Direct ancestor: tip is in candidate's history
+            local dist
+            dist=$(git rev-list --count "$tip_sha..$sha" 2>/dev/null) || continue
+            if [[ $dist -lt $best_dist ]]; then
+              best_dist=$dist
+              best_name="$b"
+            fi
+          else
+            # Diverged case: tip has new commits not in candidate.
+            # Use merge-base heuristic: find where candidate forked from the stack line.
+            local mb
+            mb=$(git merge-base "$tip_sha" "$sha" 2>/dev/null) || continue
+
+            # mb must be strictly between merge_base (develop diverge point) and tip_sha:
+            #   - mb != merge_base: candidate shares stack commits beyond the base branch
+            #     (unrelated branches only share develop's history, so mb == merge_base)
+            #   - mb is a descendant of merge_base: it's on the stack ancestry
+            #   - mb is an ancestor of tip_sha: it's on the line between develop and tip
+            if [[ "$mb" != "$merge_base" ]] \
+              && git merge-base --is-ancestor "$merge_base" "$mb" 2>/dev/null \
+              && git merge-base --is-ancestor "$mb" "$tip_sha" 2>/dev/null; then
+              # Count unique commits in candidate beyond the fork point
+              local dist
+              dist=$(git rev-list --count "$mb..$sha" 2>/dev/null) || continue
+              if [[ $dist -gt 0 && $dist -lt $best_dist ]]; then
+                best_dist=$dist
+                best_name="$b"
+              fi
+            fi
+          fi
+        done
+      done
+
+      if [[ -z "$best_name" ]]; then
+        break
+      fi
+      ordered+=("$best_name")
+      tip="$best_name"
+    done
+  fi
+
+  printf '%s\n' "${ordered[@]}"
 }
 
 # ── Show stack ──────────────────────────────────────────────────
@@ -92,7 +168,7 @@ show_stack() {
   local current
   current=$(git rev-parse --abbrev-ref HEAD)
 
-  mapfile -t branches < <(discover_stack)
+  mapfile -t branches < <(discover_stack full)
 
   if [[ ${#branches[@]} -eq 0 ]]; then
     echo "No branches in stack (on base branch or no branches between base and HEAD)"
@@ -118,12 +194,30 @@ show_stack() {
       git checkout "$selected"
     fi
   else
+    local base_branch
+    base_branch=$(detect_base)
     echo -e "${BOLD}Branch stack:${RESET}"
+    local on_base=false
+    [[ "$current" == "$base_branch" ]] && on_base=true
+    if $on_base; then
+      echo -e "  ▸ ${CYAN}${base_branch}${RESET} (base)"
+    else
+      echo -e "    ${CYAN}${base_branch}${RESET} (base)"
+    fi
+    local prev_in_stack="$base_branch"
     for b in "${branches[@]}"; do
       local_sha=$(git rev-parse "$b" 2>/dev/null)
       remote_sha=$(git rev-parse "origin/$b" 2>/dev/null 2>&1) || remote_sha=""
 
-      if [[ "$local_sha" == "$remote_sha" ]]; then
+      # Check if parent is still an ancestor (stack is in sync)
+      local diverged=false
+      if ! git merge-base --is-ancestor "$prev_in_stack" "$b" 2>/dev/null; then
+        diverged=true
+      fi
+
+      if $diverged; then
+        color="$RED"; status="⚡"
+      elif [[ "$local_sha" == "$remote_sha" ]]; then
         color="$GREEN"; status="✓"
       else
         color="$YELLOW"; status="↑"
@@ -133,6 +227,7 @@ show_stack() {
       [[ "$b" == "$current" ]] && marker="▸ "
 
       echo -e "  ${marker}${color}${b}${RESET} ${color}${status}${RESET}"
+      prev_in_stack="$b"
     done
   fi
 }
@@ -142,7 +237,7 @@ sync_stack() {
   local current
   current=$(git rev-parse --abbrev-ref HEAD)
 
-  mapfile -t branches < <(discover_stack)
+  mapfile -t branches < <(discover_stack full)
 
   if [[ ${#branches[@]} -eq 0 ]]; then
     echo "No branches in stack"
@@ -153,26 +248,40 @@ sync_stack() {
 
   local prev
   prev=$(detect_base)
+  local prev_old_sha=""
   local rebased=0
 
   for b in "${branches[@]}"; do
+    local old_sha
+    old_sha=$(git rev-parse "$b")
+
     # Check if prev is already an ancestor of b
     if git merge-base --is-ancestor "$prev" "$b" 2>/dev/null; then
       echo -e "  ${GREEN}✓${RESET} $b (already on top of $prev)"
     else
-      # Find the fork point between prev and b
+      # Use the previous branch's pre-rebase SHA as the fork point.
+      # After rebasing branch A, its commits have new SHAs. If we used
+      # merge-base between the new A and old B, it would find the wrong
+      # fork point (way back on the base branch), causing A's commits to
+      # be replayed into B. Using A's old SHA correctly identifies where
+      # B's unique commits begin.
       local fork
-      fork=$(git merge-base "$prev" "$b" 2>/dev/null) || fork=$(git merge-base "$(detect_base)" "$b" 2>/dev/null)
+      if [[ -n "$prev_old_sha" ]]; then
+        fork="$prev_old_sha"
+      else
+        fork=$(git merge-base "$prev" "$b" 2>/dev/null) || fork=$(git merge-base "$(detect_base)" "$b" 2>/dev/null)
+      fi
 
       echo -e "  ${YELLOW}↻${RESET} $b → rebasing onto $prev..."
       if git rebase --onto "$prev" "$fork" "$b" 2>&1 | sed 's/^/    /'; then
-        ((rebased++))
+        rebased=$((rebased + 1))
       else
         echo -e "  ${RED}✗${RESET} Rebase conflict on $b! Resolve and run ${BOLD}git stack sync${RESET} again."
         return 1
       fi
     fi
     prev="$b"
+    prev_old_sha="$old_sha"
   done
 
   # Return to original branch
@@ -188,7 +297,7 @@ sync_stack() {
 
 # ── Push stack ──────────────────────────────────────────────────
 push_stack() {
-  mapfile -t branches < <(discover_stack)
+  mapfile -t branches < <(discover_stack full)
 
   if [[ ${#branches[@]} -eq 0 ]]; then
     echo "No branches in stack"
@@ -215,6 +324,10 @@ push_stack() {
 
 # ── Main ────────────────────────────────────────────────────────
 case "${1:-}" in
+  -v|--version)
+    echo "git-stack $GIT_STACK_VERSION"
+    exit 0
+    ;;
   -h|--help|help)
     usage
     ;;
