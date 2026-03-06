@@ -27,3 +27,5 @@ done
 
 # added by Snowflake SnowSQL installer v1.2
 export PATH=/Applications/SnowSQL.app/Contents/MacOS:$PATH
+
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
