@@ -58,9 +58,9 @@ keybindings:
     - key: d
       command: >
         tmux new-window -n "diff-{{.PrNumber}}" -c {{.RepoPath}} '
-        gh pr diff {{.PrNumber}} --repo {{.RepoName}} | delta
+        gh pr diff {{.PrNumber}} --repo {{.RepoName}} | delta --paging=always
         '
-    - key: x
+    - key: X
       command: >
         tmux new-window -n "claude-{{.PrNumber}}" -c {{.RepoPath}} '
         gh pr diff {{.PrNumber}} --repo {{.RepoName}} > /tmp/pr-review-{{.PrNumber}}.md &&
@@ -68,6 +68,23 @@ keybindings:
         mv /tmp/pr-review-{{.PrNumber}}-full.md /tmp/pr-review-{{.PrNumber}}.md &&
         nvim /tmp/pr-review-{{.PrNumber}}.md
         '
+    - key: c
+      name: Comment
+      command: >
+        gh pr review --repo {{.RepoName}} --comment
+        --body "$(gum write --placeholder='Leave a comment...')"
+        {{.PrNumber}}
+    - key: x
+      name: Request changes
+      command: >
+        gh pr review --repo {{.RepoName}} --request-changes
+        --body "$(gum write --placeholder='Describe requested changes...')"
+        {{.PrNumber}}
+    - key: U
+      name: Remove me as reviewer
+      command: >
+        gh api -X DELETE "repos/{{.RepoName}}/pulls/{{.PrNumber}}/requested_reviewers"
+        -f 'reviewers[]=nandofarias' --silent
     - key: b
       command: >
         gh pr view {{.PrNumber}} --repo {{.RepoName}} --web
