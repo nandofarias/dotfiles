@@ -5,5 +5,9 @@ return {
   keys = {
     { '<leader>sn', function() require('focus').split_nicely() end, { desc = 'split nicely' } }
   },
-  config = true,
+  config = function()
+    require('focus').setup({
+      autoresize = { enable = false },
+    })
+  end,
 }

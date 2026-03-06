@@ -69,7 +69,18 @@ return {
         { section = "startup" },
       },
     },
-    explorer = { enabled = true },
+    explorer = {
+      enabled = true,
+      replace_netrw = true,
+    },
+    picker = {
+      sources = {
+        explorer = {
+          hidden = false,
+          ignored = false,
+        },
+      },
+    },
     image = { enabled = true },
     indent = { enabled = true },
     input = { enabled = true },
