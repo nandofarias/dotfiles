@@ -4,36 +4,79 @@ set -euo pipefail
 if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
   echo "Usage: git next"
   echo "Switch to the child branch (one step up the stack)."
+  echo "If multiple children exist, opens fzf to pick one."
   exit 0
 fi
 
 current=$(git rev-parse --abbrev-ref HEAD)
-merge_base=$(git merge-base develop HEAD 2>/dev/null) || { echo "Error: cannot find merge-base with develop"; exit 1; }
-
-# We need to find branches that point to commits ABOVE current in the full stack
-# First, find all branches pointing to descendants of current (children)
 current_sha=$(git rev-parse HEAD)
 
-# Find branches whose merge-base with current equals current's SHA (i.e., they're descendants)
-child=""
+base=$(git config --get stack.base 2>/dev/null || true)
+if [[ -z "$base" ]]; then
+  for candidate in develop main master; do
+    git rev-parse --verify "$candidate" &>/dev/null && { base="$candidate"; break; }
+  done
+fi
+
+# Find direct children: branches where current is an ancestor,
+# or (for rewritten branches) git cherry shows shared patches.
+descendants=()
 while IFS= read -r line; do
   sha="${line%% *}"
   name="${line#* }"
-  [[ "$name" == "develop" || "$name" == "$current" ]] && continue
-  mb=$(git merge-base "$current_sha" "$sha" 2>/dev/null) || continue
-  if [[ "$mb" == "$current_sha" ]]; then
-    # This branch is a descendant; pick the closest one (fewest commits ahead)
+  [[ "$name" == "$base" || "$name" == "$current" ]] && continue
+
+  if git merge-base --is-ancestor "$current_sha" "$sha" 2>/dev/null; then
+    # Direct ancestor
     dist=$(git rev-list --count "$current_sha..$sha" 2>/dev/null) || continue
-    if [[ -z "$child" || "$dist" -lt "$best_dist" ]]; then
-      child="$name"
-      best_dist="$dist"
+    [[ "$dist" -eq 0 ]] && continue
+    descendants+=("$dist:$name")
+  else
+    # Check for rewritten parent via git cherry (patch-id matching)
+    shared=$(git cherry "$current" "$name" 2>/dev/null | grep -c '^-' || true)
+    unique=$(git cherry "$current" "$name" 2>/dev/null | grep -c '^+' || true)
+    if [[ $shared -gt 0 && $unique -gt 0 ]]; then
+      descendants+=("$unique:$name")
     fi
   fi
 done < <(git for-each-ref --format='%(objectname) %(refname:short)' refs/heads/)
 
-if [[ -z "$child" ]]; then
+if [[ ${#descendants[@]} -eq 0 ]]; then
   echo "No child branch found (already at top of stack)."
   exit 1
 fi
 
-git switch "$child"
+# Sort by distance (fewest first)
+IFS=$'\n' sorted=($(printf '%s\n' "${descendants[@]}" | sort -t: -k1 -n)); unset IFS
+
+# A direct child is one where no other descendant sits between it and current.
+direct=()
+for entry in "${sorted[@]}"; do
+  name="${entry#*:}"
+  is_direct=true
+  for prev_name in "${direct[@]}"; do
+    if git merge-base --is-ancestor "$prev_name" "$name" 2>/dev/null; then
+      is_direct=false
+      break
+    fi
+  done
+  $is_direct && direct+=("$name")
+done
+
+if [[ ${#direct[@]} -eq 1 ]]; then
+  git switch "${direct[0]}"
+elif [[ ${#direct[@]} -gt 1 ]]; then
+  if ! command -v fzf &>/dev/null; then
+    echo "Multiple child branches:"
+    for b in "${direct[@]}"; do
+      echo "  $b"
+    done
+    echo "Install fzf for interactive selection, or: git switch <branch>"
+    exit 1
+  fi
+
+  selected=$(printf '%s\n' "${direct[@]}" | fzf --prompt="next branch> " --header="Pick a stack to enter" --no-multi)
+  if [[ -n "$selected" ]]; then
+    git switch "$selected"
+  fi
+fi

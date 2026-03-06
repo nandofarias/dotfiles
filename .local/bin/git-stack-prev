@@ -8,24 +8,40 @@ if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
 fi
 
 current=$(git rev-parse --abbrev-ref HEAD)
-merge_base=$(git merge-base develop HEAD 2>/dev/null) || { echo "Error: cannot find merge-base with develop"; exit 1; }
+base=$(git config --get stack.base 2>/dev/null || true)
+if [[ -z "$base" ]]; then
+  for candidate in develop main master; do
+    git rev-parse --verify "$candidate" &>/dev/null && { base="$candidate"; break; }
+  done
+fi
 
-current_sha=$(git rev-parse HEAD)
+merge_base=$(git merge-base "$base" HEAD 2>/dev/null) || { echo "Error: cannot find merge-base with $base"; exit 1; }
 
-# Walk commits from current back to merge_base, find the first branch that isn't current
+# Build SHA → branch map once
+declare -A branch_at
+while IFS= read -r line; do
+  sha="${line%% *}"
+  name="${line#* }"
+  branch_at["$sha"]="${branch_at[$sha]:-}$name "
+done < <(git for-each-ref --format='%(objectname) %(refname:short)' refs/heads/)
+
+# Walk commits from HEAD back, find first branch that isn't current
 parent=""
 while IFS= read -r sha; do
-  branches=$(git for-each-ref --points-at="$sha" --format='%(refname:short)' refs/heads/ 2>/dev/null)
-  for b in $branches; do
-    [[ "$b" == "$current" ]] && continue
-    parent="$b"
-    break 2
-  done
+  if [[ -n "${branch_at[$sha]:-}" ]]; then
+    for b in ${branch_at[$sha]}; do
+      [[ "$b" == "$current" ]] && continue
+      parent="$b"
+      break 2
+    done
+  fi
 done < <(git log --format='%H' --ancestry-path "$merge_base..HEAD" | tail -n +2)
 
 if [[ -z "$parent" ]]; then
-  echo "No parent branch found (already at bottom of stack). Switching to develop."
-  git switch develop 2>/dev/null || echo "Cannot switch to develop (likely checked out in another worktree)."
+  git switch "$base" 2>/dev/null || {
+    echo "Can't switch to $base (checked out in another worktree)."
+    exit 1
+  }
   exit 0
 fi
 
