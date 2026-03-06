@@ -1,6 +1,14 @@
 #!/usr/bin/env node
 // openclaw-openai-proxy — OpenAI-compatible HTTP proxy for OpenClaw agent
 // Usage: openclaw-openai-proxy [--port 5123] [--agent vtuber]
+//
+// Latency improvements (2026-02-24):
+//   #2/#3 — Filler response: immediately streams a short Frieren-style filler
+//           ("Hmm.", "Mm.", etc.) before awaiting the real agent response.
+//           The VTuber TTSs the filler while openclaw agent runs, masking the gap.
+//   #4     — Sentence streaming: the real response is split into sentences and
+//           streamed chunk-by-chunk so the VTuber's pysbd segmenter + TTS pipeline
+//           can begin speaking sentence 1 while later sentences are still arriving.
 
 const http = require('http');
 const { spawn } = require('child_process');
@@ -16,14 +24,44 @@ const PORT = parseInt(flag('port', '5123'), 10);
 const AGENT = flag('agent', 'vtuber');
 
 function makeId() { return 'chatcmpl-' + crypto.randomBytes(12).toString('hex'); }
-function now() { return Math.floor(Date.now() / 1000); }
+function now()    { return Math.floor(Date.now() / 1000); }
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
 
+// ── Idle patterns ────────────────────────────────────────────────────────────
 const IDLE_PATTERNS = [
   'idle prompt from the vtuber',
   'please say something that would be engaging',
   'please say something.',
 ];
 
+// ── Filler phrases (#2/#3) ────────────────────────────────────────────────────
+// Short, Frieren-appropriate acknowledgment sounds spoken immediately while
+// the real agent response is being fetched.  They are intentionally brief so
+// TTS finishes quickly (or even before the agent returns).
+const FILLERS = [
+  'Hmm.',
+  'Mm.',
+  'Let me think.',
+  'Ah.',
+  'I see.',
+];
+function pickFiller() {
+  return FILLERS[Math.floor(Math.random() * FILLERS.length)];
+}
+
+// ── Sentence splitter (#4) ────────────────────────────────────────────────────
+// Splits text into sentences so each one can be streamed as its own SSE chunk.
+// The VTuber's pysbd segmenter picks up complete sentences immediately and
+// queues TTS for each one before the next chunk arrives.
+function splitIntoSentences(text) {
+  if (!text || !text.trim()) return [];
+  // Match sequences ending in .  !  ?  (including …) or the final fragment
+  const raw = text.match(/[^.!?…]+(?:[.!?…]+(?:\s|$)|$)/g);
+  if (!raw) return [text.trim()];
+  return raw.map(s => s.trim()).filter(Boolean);
+}
+
+// ── Agent runner ─────────────────────────────────────────────────────────────
 function runAgent(message) {
   return new Promise((resolve, reject) => {
     const cmdArgs = ['agent', '--agent', AGENT, '--message', message, '--json'];
@@ -35,8 +73,9 @@ function runAgent(message) {
       if (code !== 0) return reject(new Error(stderr || `openclaw exited ${code}`));
       try {
         const json = JSON.parse(stdout);
-        const text = (json.payloads || []).map(p => p.text).filter(Boolean).join('\n');
-        resolve({ text, usage: json.meta?.agentMeta?.usage });
+        const payloads = json.result?.payloads || json.payloads || [];
+        const text = payloads.map(p => p.text).filter(Boolean).join('\n');
+        resolve({ text, usage: json.result?.meta?.agentMeta?.usage || json.meta?.agentMeta?.usage });
       } catch (e) {
         reject(new Error('Failed to parse openclaw output: ' + e.message));
       }
@@ -45,29 +84,54 @@ function runAgent(message) {
   });
 }
 
+// ── Response helpers ──────────────────────────────────────────────────────────
 function json(res, status, body) {
   const b = JSON.stringify(body);
   res.writeHead(status, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
   res.end(b);
 }
-
 function errorResp(res, status, msg) {
   json(res, status, { error: { message: msg, type: 'invalid_request_error', code: null } });
 }
-
 function readBody(req) {
   return new Promise((resolve, reject) => {
     let d = '';
     req.on('data', c => d += c);
-    req.on('end', () => resolve(d));
+    req.on('end',  () => resolve(d));
     req.on('error', reject);
   });
 }
 
+// Safe write — returns false if the connection is already closed.
+function safeWrite(res, data) {
+  try {
+    return res.write(data);
+  } catch {
+    return false;
+  }
+}
+
+// Build one SSE data line for a content chunk.
+function sseChunk(id, content, finishReason = null) {
+  return `data: ${JSON.stringify({
+    id,
+    object: 'chat.completion.chunk',
+    created: now(),
+    model: 'frieren',
+    choices: [{
+      index: 0,
+      delta: finishReason ? {} : { content },
+      finish_reason: finishReason,
+    }],
+  })}\n\n`;
+}
+
+// ── HTTP server ───────────────────────────────────────────────────────────────
 const server = http.createServer(async (req, res) => {
+
   if (req.method === 'OPTIONS') {
     res.writeHead(204, {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin':  '*',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     });
@@ -76,13 +140,15 @@ const server = http.createServer(async (req, res) => {
 
   const url = new URL(req.url, `http://localhost:${PORT}`);
 
+  // ── GET /v1/models ──────────────────────────────────────────────────────────
   if (req.method === 'GET' && url.pathname === '/v1/models') {
     return json(res, 200, {
       object: 'list',
-      data: [{ id: 'frieren', object: 'model', created: now(), owned_by: 'openclaw' }]
+      data: [{ id: 'frieren', object: 'model', created: now(), owned_by: 'openclaw' }],
     });
   }
 
+  // ── POST /v1/chat/completions ───────────────────────────────────────────────
   if (req.method === 'POST' && url.pathname === '/v1/chat/completions') {
     let body;
     try { body = JSON.parse(await readBody(req)); } catch { return errorResp(res, 400, 'Invalid JSON'); }
@@ -99,51 +165,94 @@ const server = http.createServer(async (req, res) => {
     }
     if (!userMsg) return errorResp(res, 400, 'No user message');
 
-    // Filter idle prompts
     const lowerMsg = userMsg.toLowerCase();
-    if (IDLE_PATTERNS.some(p => lowerMsg.includes(p))) {
-      const id = makeId();
-      if (body.stream) {
+    const isIdle  = IDLE_PATTERNS.some(p => lowerMsg.includes(p));
+    const stream  = body.stream === true;
+    const id      = makeId();
+
+    // ── Idle: return empty response quickly ───────────────────────────────────
+    if (isIdle) {
+      if (stream) {
         res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Access-Control-Allow-Origin': '*' });
-        res.write(`data: ${JSON.stringify({ id, object: 'chat.completion.chunk', created: now(), model: 'frieren', choices: [{ index: 0, delta: { role: 'assistant', content: '' }, finish_reason: 'stop' }] })}\n\n`);
+        res.write(sseChunk(id, '', 'stop'));
         res.write('data: [DONE]\n\n');
         return res.end();
       }
       return json(res, 200, {
         id, object: 'chat.completion', created: now(), model: 'frieren',
         choices: [{ index: 0, message: { role: 'assistant', content: '' }, finish_reason: 'stop' }],
-        usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 }
+        usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
       });
     }
 
-    const id = makeId();
-    const stream = body.stream === true;
+    // ── Real message — streaming path (#2 filler + #4 sentence streaming) ─────
+    if (stream) {
+      res.writeHead(200, {
+        'Content-Type':  'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection':    'keep-alive',
+        'Access-Control-Allow-Origin': '*',
+      });
 
-    try {
-      const result = await runAgent(userMsg);
+      // #2/#3 — Send filler immediately so TTS starts before agent returns.
+      const filler = pickFiller();
+      safeWrite(res, `data: ${JSON.stringify({
+        id,
+        object: 'chat.completion.chunk',
+        created: now(),
+        model: 'frieren',
+        choices: [{ index: 0, delta: { role: 'assistant', content: filler + ' ' }, finish_reason: null }],
+      })}\n\n`);
 
-      if (stream) {
-        res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', 'Access-Control-Allow-Origin': '*' });
-        res.write(`data: ${JSON.stringify({ id, object: 'chat.completion.chunk', created: now(), model: 'frieren', choices: [{ index: 0, delta: { role: 'assistant', content: result.text }, finish_reason: null }] })}\n\n`);
-        res.write(`data: ${JSON.stringify({ id, object: 'chat.completion.chunk', created: now(), model: 'frieren', choices: [{ index: 0, delta: {}, finish_reason: 'stop' }] })}\n\n`);
-        res.write('data: [DONE]\n\n');
-        return res.end();
+      // Fetch real response while TTS is already running on the filler.
+      let result;
+      try {
+        result = await runAgent(userMsg);
+      } catch (e) {
+        safeWrite(res, sseChunk(id, `Error: ${e.message}`, null));
+        safeWrite(res, sseChunk(id, '', 'stop'));
+        safeWrite(res, 'data: [DONE]\n\n');
+        try { res.end(); } catch {}
+        return;
       }
 
+      // #4 — Stream the real response sentence-by-sentence.
+      // The VTuber's pysbd segmenter fires TTS per sentence, so sentence 1
+      // starts playing while sentences 2+ are still arriving.
+      const sentences = splitIntoSentences(result.text);
+      for (const sentence of sentences) {
+        if (!safeWrite(res, sseChunk(id, sentence + ' ', null))) break;
+        // Small yield so the event loop can flush each chunk individually.
+        await sleep(5);
+      }
+
+      safeWrite(res, sseChunk(id, '', 'stop'));
+      safeWrite(res, 'data: [DONE]\n\n');
+      try { res.end(); } catch {}
+      return;
+    }
+
+    // ── Real message — non-streaming path (fallback) ──────────────────────────
+    try {
+      const result = await runAgent(userMsg);
+      // Prepend filler so the response still acknowledges the user even in
+      // non-stream mode (though the VTuber always uses stream=true in practice).
+      const content = pickFiller() + ' ' + result.text;
       return json(res, 200, {
         id, object: 'chat.completion', created: now(), model: 'frieren',
-        choices: [{ index: 0, message: { role: 'assistant', content: result.text }, finish_reason: 'stop' }],
+        choices: [{ index: 0, message: { role: 'assistant', content }, finish_reason: 'stop' }],
         usage: {
-          prompt_tokens: result.usage?.input || 0,
+          prompt_tokens:     result.usage?.input  || 0,
           completion_tokens: result.usage?.output || 0,
-          total_tokens: result.usage?.total || 0,
-        }
+          total_tokens:      result.usage?.total  || 0,
+        },
       });
     } catch (e) {
       return errorResp(res, 500, e.message);
     }
   }
 
+  // ── Health ──────────────────────────────────────────────────────────────────
   if (req.method === 'GET' && (url.pathname === '/' || url.pathname === '/health')) {
     return json(res, 200, { status: 'ok', agent: AGENT });
   }
@@ -154,4 +263,5 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, '127.0.0.1', () => {
   console.log(`openclaw-openai-proxy on http://127.0.0.1:${PORT}`);
   console.log(`Agent: ${AGENT}`);
+  console.log(`Latency features: filler-response=on sentence-streaming=on`);
 });

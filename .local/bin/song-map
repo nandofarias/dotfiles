@@ -6,9 +6,12 @@ Usage:
   song-map "Vida aos Sepulcros" --artist "Gabriela Rocha" --key G#
   song-map "Firme Fundamento" --key G#
   song-map --chords "E C#m A B" --key E --title "Test Song"
+  song-map --audio ~/Music/Downloads/song.flac          # auto-detect everything
+  song-map --audio song.flac --key D                    # override key
 """
 
 import argparse
+import os
 import re
 import sys
 
@@ -18,6 +21,10 @@ try:
     HAS_REQUESTS = True
 except ImportError:
     HAS_REQUESTS = False
+
+# ── Audio analysis venv path ─────────────────────────────────────────────────
+ANALYSIS_VENV = os.path.expanduser("~/.local/share/music-analysis/venv")
+HAS_AUDIO = os.path.isdir(ANALYSIS_VENV)
 
 # ── Chromatic scale ──────────────────────────────────────────────────────────
 
@@ -372,6 +379,392 @@ def format_chart(title: str, artist: str, key: str, original_key: str,
 
     return "\n".join(lines)
 
+# ── Audio analysis ───────────────────────────────────────────────────────────
+
+NOTE_NAMES_AUDIO = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+MAJOR_PROFILE = [6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88]
+MINOR_PROFILE = [6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17]
+
+# Chord templates for matching (root, intervals in semitones, quality suffix)
+CHORD_TEMPLATES = [
+    ([0, 4, 7], ""),        # major
+    ([0, 3, 7], "m"),       # minor
+    ([0, 5, 7], "sus4"),    # sus4
+    ([0, 2, 7], "sus2"),    # sus2
+    ([0, 4, 7, 11], "maj7"),# maj7
+    ([0, 3, 7, 10], "m7"),  # min7
+    ([0, 4, 7, 10], "7"),   # dom7
+    ([0, 3, 6], "dim"),     # dim
+    ([0, 4, 8], "aug"),     # aug
+]
+
+def analyze_audio(filepath: str, key_override: str = None):
+    """
+    Analyze audio using demucs (stem separation) + basic-pitch (MIDI) + midi_to_chords.
+    Falls back to librosa chroma-based chords if the pipeline fails.
+    Returns dict with: title, bpm, key, mode, sections (with chords).
+    """
+    import subprocess, json as _json, tempfile, shutil
+
+    filepath = os.path.expanduser(filepath)
+    if not os.path.isfile(filepath):
+        print(f"❌ File not found: {filepath}", file=sys.stderr)
+        sys.exit(1)
+
+    basename = os.path.splitext(os.path.basename(filepath))[0]
+    print(f"🎵 Analyzing: {basename}", file=sys.stderr)
+
+    venv_python = os.path.join(ANALYSIS_VENV, "bin", "python3")
+    midi_to_chords = os.path.expanduser("~/.local/share/music-analysis/midi_to_chords.py")
+
+    # Inline script for BPM, key detection, and section analysis (librosa-based)
+    analysis_script = r'''
+import sys, json, os
+import librosa
+import numpy as np
+
+NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B']
+MAJOR_PROFILE = np.array([6.35,2.23,3.48,2.33,4.38,4.09,2.52,5.19,2.39,3.66,2.29,2.88])
+MINOR_PROFILE = np.array([6.33,2.68,3.52,5.38,2.60,3.53,2.54,4.75,3.98,2.69,3.34,3.17])
+
+def detect_key(chroma):
+    avg = chroma.mean(axis=1)
+    best_corr, best_key, best_mode = -1, 'C', 'major'
+    for i in range(12):
+        for profile, mode in [(MAJOR_PROFILE, 'major'), (MINOR_PROFILE, 'minor')]:
+            corr = np.corrcoef(np.roll(profile, i), avg)[0,1]
+            if corr > best_corr:
+                best_corr, best_key, best_mode = corr, NOTE_NAMES[i], mode
+    return best_key, best_mode, float(best_corr)
+
+def detect_sections(y, sr, beat_times):
+    mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)
+    rms = librosa.feature.rms(y=y, frame_length=2048, hop_length=512)[0]
+    rms_times = librosa.frames_to_time(range(len(rms)), sr=sr)
+    duration = len(y) / sr
+
+    bars = []
+    for i in range(0, len(beat_times)-3, 4):
+        start = librosa.time_to_frames(beat_times[i], sr=sr)
+        end = librosa.time_to_frames(beat_times[min(i+4, len(beat_times)-1)], sr=sr)
+        if start < mfcc.shape[1] and end <= mfcc.shape[1] and start < end:
+            feat = mfcc[:, start:end].mean(axis=1)
+            ri = min(np.searchsorted(rms_times, beat_times[i]), len(rms)-1)
+            bars.append({'time': float(beat_times[i]), 'features': feat, 'energy': float(rms[ri])})
+
+    if len(bars) < 8:
+        return [{'start': 0.0, 'end': duration, 'label': 'song'}]
+
+    feat_matrix = np.array([b['features'] for b in bars])
+    norms = np.linalg.norm(feat_matrix, axis=1, keepdims=True)
+    norms[norms==0] = 1
+    feat_norm = feat_matrix / norms
+    sim = feat_norm @ feat_norm.T
+
+    ks = min(8, len(bars)//4)
+    novelty = np.zeros(len(bars))
+    for i in range(ks, len(bars)-ks):
+        before = sim[i-ks:i, i-ks:i].mean()
+        after = sim[i:i+ks, i:i+ks].mean()
+        cross = sim[i-ks:i, i:i+ks].mean()
+        novelty[i] = (before + after)/2 - cross
+
+    thr = np.percentile(novelty[novelty>0], 70) if np.any(novelty>0) else 0.1
+    bounds = [0]
+    for i in range(1, len(novelty)):
+        if novelty[i] > thr and (i - bounds[-1]) >= 4:
+            bounds.append(i)
+    bounds.append(len(bars)-1)
+
+    energy_vals = np.array([b['energy'] for b in bars])
+    e_med = np.median(energy_vals)
+    e_high = np.percentile(energy_vals, 75)
+
+    sections, sec_feats = [], []
+    for idx in range(len(bounds)-1):
+        sb, eb = bounds[idx], bounds[idx+1]
+        seg_feat = np.mean(feat_matrix[sb:eb+1], axis=0)
+        seg_e = np.mean([bars[b]['energy'] for b in range(sb, min(eb+1, len(bars)))])
+        pos = bars[sb]['time'] / duration
+
+        label = None
+        for pi, pf in enumerate(sec_feats):
+            sc = np.dot(seg_feat, pf) / (np.linalg.norm(seg_feat)*np.linalg.norm(pf)+1e-8)
+            if sc > 0.92:
+                label = sections[pi]['label']; break
+
+        if label is None:
+            if pos < 0.08: label = 'intro'
+            elif seg_e > e_high: label = 'chorus'
+            elif seg_e > e_med: label = 'verse'
+            elif seg_e < np.percentile(energy_vals, 25): label = 'bridge'
+            else: label = 'verse'
+
+        sec_feats.append(seg_feat)
+        sections.append({'start': float(bars[sb]['time']), 'end': float(bars[min(eb, len(bars)-1)]['time']), 'label': label})
+
+    if sections: sections[-1]['end'] = duration
+
+    merged = [sections[0]]
+    for s in sections[1:]:
+        if s['label'] == merged[-1]['label']: merged[-1]['end'] = s['end']
+        else: merged.append(s)
+    return merged
+
+filepath = sys.argv[1]
+key_override = sys.argv[2] if len(sys.argv) > 2 else None
+
+y, sr = librosa.load(filepath, sr=22050)
+duration = len(y)/sr
+
+tempo, beats = librosa.beat.beat_track(y=y, sr=sr)
+bpm = float(tempo[0]) if hasattr(tempo, '__len__') else float(tempo)
+beat_times = librosa.frames_to_time(beats, sr=sr)
+
+chroma = librosa.feature.chroma_cqt(y=y, sr=sr)
+det_key, mode, key_conf = detect_key(chroma)
+key = key_override if key_override else det_key
+
+sections = detect_sections(y, sr, beat_times)
+
+# Output sections without chords (chords come from MIDI pipeline)
+result_sections = []
+for sec in sections:
+    result_sections.append({'name': sec['label'].upper(), 'chords': [], 'start': sec['start'], 'end': sec['end']})
+
+print(json.dumps({
+    "status": "done",
+    "title": os.path.splitext(os.path.basename(filepath))[0],
+    "bpm": round(bpm), "key": key, "mode": mode,
+    "key_confidence": round(key_conf, 3),
+    "sections": result_sections
+}))
+'''
+
+    # Step 1: Run librosa analysis (BPM, key, sections)
+    print(f"   📊 Detecting BPM, key, sections...", file=sys.stderr)
+    cmd = [venv_python, "-c", analysis_script, filepath]
+    if key_override:
+        cmd.append(key_override)
+
+    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+    if proc.returncode != 0:
+        print(f"❌ Librosa analysis failed:\n{proc.stderr}", file=sys.stderr)
+        sys.exit(1)
+
+    analysis = None
+    for line in proc.stdout.strip().split("\n"):
+        try:
+            data = _json.loads(line)
+            if data.get("status") == "done":
+                analysis = data
+        except _json.JSONDecodeError:
+            continue
+
+    if not analysis:
+        print("❌ No analysis result received", file=sys.stderr)
+        sys.exit(1)
+
+    print(f"   BPM: {analysis['bpm']}, Key: {analysis['key']} {analysis['mode']}", file=sys.stderr)
+
+    # Step 2: Run demucs to extract piano stem
+    tmpdir = tempfile.mkdtemp(prefix="songmap-")
+    demucs_out = os.path.join(tmpdir, "demucs")
+    midi_out = os.path.join(tmpdir, "midi")
+    os.makedirs(midi_out, exist_ok=True)
+
+    midi_chords = None
+    try:
+        print(f"   🎹 Separating piano stem (demucs)...", file=sys.stderr)
+        demucs_cmd = [
+            venv_python, "-m", "demucs",
+            "-n", "htdemucs_6s", "--two-stems", "piano",
+            "-d", "cpu", filepath, "-o", demucs_out
+        ]
+        proc = subprocess.run(demucs_cmd, capture_output=True, text=True, timeout=600)
+
+        # Find piano stem
+        piano_stem = None
+        if proc.returncode == 0:
+            candidate = os.path.join(demucs_out, "htdemucs_6s", basename, "piano.wav")
+            if os.path.isfile(candidate):
+                piano_stem = candidate
+
+        # Fallback to htdemucs 4-stem
+        if piano_stem is None:
+            print(f"   ⚠️  6-stem failed, trying 4-stem model...", file=sys.stderr)
+            demucs_cmd = [
+                venv_python, "-m", "demucs",
+                "-n", "htdemucs", "--two-stems", "other",
+                "-d", "cpu", filepath, "-o", demucs_out
+            ]
+            proc = subprocess.run(demucs_cmd, capture_output=True, text=True, timeout=600)
+            if proc.returncode == 0:
+                candidate = os.path.join(demucs_out, "htdemucs", basename, "other.wav")
+                if os.path.isfile(candidate):
+                    piano_stem = candidate
+
+        if piano_stem is None:
+            print(f"   ⚠️  Demucs failed, falling back to full audio for pitch detection", file=sys.stderr)
+            piano_stem = filepath
+
+        # Step 3: Run basic-pitch on the piano stem
+        print(f"   🎵 Extracting notes (basic-pitch)...", file=sys.stderr)
+        bp_cmd = [
+            os.path.join(ANALYSIS_VENV, "bin", "basic-pitch"),
+            midi_out, piano_stem
+        ]
+        proc = subprocess.run(bp_cmd, capture_output=True, text=True, timeout=120)
+
+        # Find the MIDI file
+        midi_file = None
+        if proc.returncode == 0:
+            for f in os.listdir(midi_out):
+                if f.endswith(".mid"):
+                    midi_file = os.path.join(midi_out, f)
+                    break
+
+        if midi_file:
+            # Step 4: Extract chords from MIDI
+            print(f"   🎶 Extracting chords from MIDI...", file=sys.stderr)
+            chord_cmd = [
+                venv_python, midi_to_chords,
+                midi_file, "--bpm", str(analysis['bpm'])
+            ]
+            proc = subprocess.run(chord_cmd, capture_output=True, text=True, timeout=30)
+            if proc.returncode == 0:
+                midi_chords = _json.loads(proc.stdout)
+        else:
+            print(f"   ⚠️  basic-pitch failed: {proc.stderr[:200]}", file=sys.stderr)
+
+    except Exception as e:
+        print(f"   ⚠️  Pipeline error: {e}", file=sys.stderr)
+    finally:
+        shutil.rmtree(tmpdir, ignore_errors=True)
+
+    # Assign MIDI-derived chords to sections
+    if midi_chords and midi_chords.get("chords"):
+        chord_list = midi_chords["chords"]
+        for sec in analysis["sections"]:
+            sec_start = sec["start"]
+            sec_end = sec["end"]
+            sec_chords = []
+            for ch in chord_list:
+                ch_start = ch["time"]
+                ch_end = ch["time"] + ch["duration"]
+                # Chord overlaps with section
+                if ch_end > sec_start and ch_start < sec_end:
+                    if not sec_chords or ch["chord"] != sec_chords[-1]:
+                        sec_chords.append(ch["chord"])
+            sec["chords"] = sec_chords
+        print(f"   ✅ Chords extracted via demucs+basic-pitch pipeline", file=sys.stderr)
+    else:
+        print(f"   ⚠️  MIDI chord extraction failed, using chroma fallback", file=sys.stderr)
+        # Fallback: run old chroma-based chord detection
+        fallback_script = r'''
+import sys, json, os
+import librosa
+import numpy as np
+
+NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B']
+CHORD_TEMPLATES = [
+    ([0,4,7], ""), ([0,3,7], "m"), ([0,5,7], "sus4"), ([0,2,7], "sus2"),
+    ([0,4,7,11], "maj7"), ([0,3,7,10], "m7"), ([0,4,7,10], "7"),
+    ([0,3,6], "dim"), ([0,4,8], "aug"),
+]
+
+def detect_chord(bar_chroma):
+    best_corr, best_chord = -1, 'N'
+    for ri, rn in enumerate(NOTE_NAMES):
+        for intervals, suffix in CHORD_TEMPLATES:
+            t = np.zeros(12)
+            for iv in intervals: t[(ri+iv)%12] = 1.0
+            corr = np.corrcoef(t, bar_chroma)[0,1]
+            if corr > best_corr:
+                best_corr, best_chord = corr, f"{rn}{suffix}"
+    return best_chord
+
+filepath = sys.argv[1]
+sections = json.loads(sys.argv[2])
+
+y, sr = librosa.load(filepath, sr=22050)
+tempo, beats = librosa.beat.beat_track(y=y, sr=sr)
+beat_times = librosa.frames_to_time(beats, sr=sr)
+chroma = librosa.feature.chroma_cqt(y=y, sr=sr)
+
+for sec in sections:
+    sec_mask = (beat_times >= sec['start']) & (beat_times < sec['end'])
+    sec_beats = beat_times[sec_mask]
+    bar_chords = []
+    for i in range(0, len(sec_beats)-3, 4):
+        sf = librosa.time_to_frames(sec_beats[i], sr=sr)
+        ef = librosa.time_to_frames(sec_beats[min(i+4, len(sec_beats)-1)], sr=sr)
+        if sf < chroma.shape[1] and ef <= chroma.shape[1] and sf < ef:
+            bc = chroma[:, sf:ef].mean(axis=1)
+            bar_chords.append(detect_chord(bc))
+    deduped = []
+    for c in bar_chords:
+        if not deduped or c != deduped[-1]: deduped.append(c)
+    sec['chords'] = deduped
+
+print(json.dumps(sections))
+'''
+        import shlex
+        sections_json = _json.dumps(analysis["sections"])
+        cmd = [venv_python, "-c", fallback_script, filepath, sections_json]
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+        if proc.returncode == 0:
+            analysis["sections"] = _json.loads(proc.stdout)
+
+    return analysis
+
+def format_audio_chart(analysis: dict, artist: str = "") -> str:
+    """Format audio analysis results as a Nashville Number System chart."""
+    key = analysis['key']
+    title = analysis['title']
+    bpm = analysis['bpm']
+    sections = analysis['sections']
+
+    width = 60
+    lines = []
+    lines.append("═" * width)
+    header = f" {title}  |  Key: {key}  |  4/4  |  BPM ~{bpm}"
+    lines.append(header)
+    if artist:
+        lines.append(f" {artist}")
+    lines.append(f" (auto-detected from audio)")
+    lines.append("═" * width)
+    lines.append("")
+
+    all_chords = []
+    for sec in sections:
+        chords = sec['chords']
+        if not chords:
+            continue
+        all_chords.extend(chords)
+
+        nns_chords = [chord_to_nashville(c, key) for c in chords]
+        # Format as bar notation: | chord . . . |
+        bar_parts = []
+        for nns in nns_chords:
+            bar_parts.append(f"| {nns} . . . ")
+        bar_line = " ".join(bar_parts) + "|" if bar_parts else ""
+
+        dur = sec['end'] - sec['start']
+        label = f"[{sec['name']}]"
+        time_info = f"({sec['start']:.0f}s-{sec['end']:.0f}s, {dur:.0f}s)"
+
+        lines.append(f"{label:<12} {bar_line}")
+        lines.append(f"{'':12} {time_info}")
+        lines.append("")
+
+    lines.append("─" * width)
+    unique = list(dict.fromkeys(all_chords))
+    lines.append(chord_reference(key, unique))
+    lines.append("═" * width)
+
+    return "\n".join(lines)
+
 # ── Main ─────────────────────────────────────────────────────────────────────
 
 def main():
@@ -380,15 +773,45 @@ def main():
     )
     parser.add_argument("song", nargs="?", help="Song title to search")
     parser.add_argument("--artist", "-a", default="", help="Artist name")
-    parser.add_argument("--key", "-k", required=True, help="Target key (e.g. G#, C, E)")
-    parser.add_argument("--title", "-t", default="", help="Title override (for --chords mode)")
+    parser.add_argument("--key", "-k", default="", help="Target key (e.g. G#, C, E)")
+    parser.add_argument("--title", "-t", default="", help="Title override")
     parser.add_argument("--chords", "-c", default="",
                         help="Manual chord list (space-separated, skips search)")
+    parser.add_argument("--audio", default="",
+                        help="Audio file path (auto-detect BPM, key, chords, structure)")
 
     args = parser.parse_args()
 
+    # ── Audio mode ───────────────────────────────────────────────────────
+    if args.audio:
+        if not HAS_AUDIO:
+            print(f"❌ Audio analysis venv not found at {ANALYSIS_VENV}", file=sys.stderr)
+            print(f"   Set it up: python3 -m venv {ANALYSIS_VENV}", file=sys.stderr)
+            print(f"   Then: {ANALYSIS_VENV}/bin/pip install librosa numpy", file=sys.stderr)
+            sys.exit(1)
+
+        key_override = None
+        if args.key:
+            key_override = args.key.strip()
+            kn = normalize_root(key_override)
+            if kn not in CHROMATIC:
+                print(f"❌ Unknown key: {key_override}", file=sys.stderr)
+                sys.exit(1)
+
+        analysis = analyze_audio(args.audio, key_override=key_override)
+
+        if args.title:
+            analysis['title'] = args.title
+
+        print(format_audio_chart(analysis, artist=args.artist))
+        return
+
+    # ── Key required for non-audio modes ─────────────────────────────────
+    if not args.key:
+        print("❌ --key is required (or use --audio for auto-detection)", file=sys.stderr)
+        sys.exit(1)
+
     key = args.key.strip()
-    # Validate key
     key_norm = normalize_root(key)
     if key_norm not in CHROMATIC:
         print(f"❌ Unknown key: {key}", file=sys.stderr)

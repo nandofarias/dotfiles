@@ -5,16 +5,23 @@ set -euo pipefail
 # Usage: music-dl "Artist - Song Name"
 #        music-dl "Laufey - From The Start" --mp3
 #        music-dl "query" --dir ~/Music/Snowsky
+#        music-dl --playlist "https://youtube.com/playlist?list=..."
+#        music-dl --album "Pink Floyd - The Dark Side of the Moon"
 
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 CYAN='\033[0;36m'
+RED='\033[0;31m'
 BOLD='\033[1m'
 RESET='\033[0m'
 
 FORMAT="flac"
 OUTPUT_DIR="$HOME/Music/Downloads"
 QUERY=""
+PLAYLIST_URL=""
+ALBUM_QUERY=""
+MODE="single"  # single | playlist | album
+NO_TAG=false
 
 usage() {
   echo "Usage: music-dl [options] <search query>"
@@ -22,17 +29,22 @@ usage() {
   echo "Search YouTube for a song and download the best quality audio."
   echo ""
   echo "Options:"
-  echo "  --flac         Download as FLAC (default)"
-  echo "  --mp3          Download as MP3 320kbps"
-  echo "  --m4a          Download as M4A (AAC)"
-  echo "  --wav          Download as WAV"
-  echo "  --dir <path>   Output directory (default: ~/Music/Downloads)"
-  echo "  -h, --help     Show this help"
+  echo "  --flac              Download as FLAC (default)"
+  echo "  --mp3               Download as MP3 320kbps"
+  echo "  --m4a               Download as M4A (AAC)"
+  echo "  --wav               Download as WAV"
+  echo "  --no-tag            Skip MusicBrainz metadata lookup"
+  echo "  --dir <path>        Output directory (default: ~/Music/Downloads)"
+  echo "  --playlist <url>    Download all tracks from a YouTube playlist"
+  echo "  --album \"Artist - Album\"  Search for an album playlist and download"
+  echo "  -h, --help          Show this help"
   echo ""
   echo "Examples:"
   echo "  music-dl \"Laufey - From The Start\""
   echo "  music-dl \"Hillsong - Oceans\" --mp3"
   echo "  music-dl \"Kind of Blue Miles Davis\" --dir ~/Music/Snowsky"
+  echo "  music-dl --playlist \"https://youtube.com/playlist?list=PLxyz\""
+  echo "  music-dl --album \"Pink Floyd - The Dark Side of the Moon\""
 }
 
 while [[ $# -gt 0 ]]; do
@@ -41,7 +53,10 @@ while [[ $# -gt 0 ]]; do
     --mp3)  FORMAT="mp3"; shift ;;
     --m4a)  FORMAT="m4a"; shift ;;
     --wav)  FORMAT="wav"; shift ;;
+    --no-tag) NO_TAG=true; shift ;;
     --dir)  OUTPUT_DIR="$2"; shift 2 ;;
+    --playlist) PLAYLIST_URL="$2"; MODE="playlist"; shift 2 ;;
+    --album)    ALBUM_QUERY="$2"; MODE="album"; shift 2 ;;
     -h|--help) usage; exit 0 ;;
     *) QUERY="$QUERY $1"; shift ;;
   esac
@@ -49,13 +64,496 @@ done
 
 QUERY="${QUERY## }"
 
-if [[ -z "$QUERY" ]]; then
+# Validate: need at least one mode
+if [[ "$MODE" == "single" && -z "$QUERY" ]]; then
   usage
   exit 1
 fi
 
 mkdir -p "$OUTPUT_DIR"
 
+# --- Helper: fetch and embed album art ---
+embed_album_art() {
+  local file="$1"
+  local artist="$2"
+  local title="$3"
+  local album="$4"
+
+  # Try Cover Art Archive via MusicBrainz release search
+  local search_query=""
+  if [[ -n "$album" && -n "$artist" ]]; then
+    search_query="release:\"$album\" AND artist:\"$artist\""
+  elif [[ -n "$artist" && -n "$title" ]]; then
+    search_query="recording:\"$title\" AND artist:\"$artist\""
+  else
+    return 0
+  fi
+
+  local encoded_query
+  encoded_query=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$search_query'))")
+
+  local mb_id=""
+  if [[ -n "$album" ]]; then
+    mb_id=$(curl -s -H "User-Agent: music-dl/1.0" \
+      "https://musicbrainz.org/ws/2/release/?query=${encoded_query}&fmt=json&limit=1" 2>/dev/null \
+      | jq -r '.releases[0].id // empty' 2>/dev/null)
+  fi
+
+  if [[ -z "$mb_id" ]]; then
+    return 0
+  fi
+
+  # Download cover from Cover Art Archive
+  local cover_url="https://coverartarchive.org/release/${mb_id}/front-500"
+  local tmp_cover="${file}.cover.jpg"
+
+  if curl -sL -o "$tmp_cover" -w "%{http_code}" "$cover_url" 2>/dev/null | grep -q "200"; then
+    # Verify it's actually a JPEG
+    local mime
+    mime=$(file -b --mime-type "$tmp_cover" 2>/dev/null)
+    if [[ "$mime" == "image/jpeg" ]]; then
+      local ext="${file##*.}"
+      ext=$(echo "$ext" | tr '[:upper:]' '[:lower:]')
+      if [[ "$ext" == "flac" ]] && command -v metaflac &>/dev/null; then
+        # Crop to square then resize to 500x500 JPG for Echo Mini compatibility
+        local tmp_resized="${tmp_cover}.resized.jpg"
+        local aw ah asize
+        aw=$(sips -g pixelWidth "$tmp_cover" 2>/dev/null | awk '/pixelWidth/{print $2}')
+        ah=$(sips -g pixelHeight "$tmp_cover" 2>/dev/null | awk '/pixelHeight/{print $2}')
+        asize=$ah; [[ $aw -lt $ah ]] && asize=$aw
+        sips -s format jpeg -s formatOptions 90 \
+          --cropToHeightWidth $asize $asize \
+          --resampleHeightWidth 500 500 \
+          "$tmp_cover" --out "$tmp_resized" 2>/dev/null
+        if [[ -s "$tmp_resized" ]]; then
+          tmp_cover="$tmp_resized"
+        fi
+        metaflac --remove --block-type=PICTURE "$file" 2>/dev/null
+        metaflac --import-picture-from="$tmp_cover" "$file" 2>/dev/null && \
+          echo -e "${GREEN}   ✓ Album art embedded${RESET}"
+        rm -f "$tmp_resized"
+      else
+        # For MP3, use ffmpeg
+        local tmp_tagged="${file}.art.${ext}"
+        ffmpeg -y -i "$file" -i "$tmp_cover" -map 0:a -map 1 -c copy \
+          -metadata:s:v title="Album cover" -metadata:s:v comment="Cover (front)" \
+          -disposition:v attached_pic "$tmp_tagged" 2>/dev/null && \
+          mv "$tmp_tagged" "$file" && \
+          echo -e "${GREEN}   ✓ Album art embedded${RESET}"
+      fi
+    else
+      echo -e "${YELLOW}   ⚠ Cover art not JPEG, skipping${RESET}"
+    fi
+  fi
+  rm -f "$tmp_cover"
+}
+
+# --- Helper: fetch synced lyrics (.lrc) ---
+fetch_lyrics() {
+  local file="$1"
+  local artist="$2"
+  local title="$3"
+
+  if [[ -z "$artist" || -z "$title" ]]; then
+    return 0
+  fi
+
+  local encoded_artist encoded_title
+  encoded_artist=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$artist'))")
+  encoded_title=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$title'))")
+
+  local lrc_data
+  lrc_data=$(curl -s "https://lrclib.net/api/get?artist_name=${encoded_artist}&track_name=${encoded_title}" 2>/dev/null)
+
+  local synced
+  synced=$(echo "$lrc_data" | jq -r '.syncedLyrics // empty' 2>/dev/null)
+
+  if [[ -n "$synced" ]]; then
+    # Write .lrc file next to the audio file
+    local lrc_path="${file%.*}.lrc"
+    echo "$synced" > "$lrc_path"
+    echo -e "${GREEN}   ✓ Synced lyrics saved${RESET}"
+  else
+    # Try plain lyrics as fallback
+    local plain
+    plain=$(echo "$lrc_data" | jq -r '.plainLyrics // empty' 2>/dev/null)
+    if [[ -n "$plain" ]]; then
+      local lrc_path="${file%.*}.lrc"
+      echo "$plain" > "$lrc_path"
+      echo -e "${GREEN}   ✓ Plain lyrics saved${RESET}"
+    fi
+  fi
+}
+
+# --- Helper: post-process tracks (art + lyrics) ---
+post_process_tracks() {
+  local dest="$1"
+  local format="$2"
+
+  echo -e "${CYAN}🎨 Fetching album art & lyrics...${RESET}"
+
+  # Get album art once per folder (same album)
+  local art_done=false
+  local album_artist="" album_name=""
+
+  for file in "$dest"/*."$format"; do
+    [ -f "$file" ] || continue
+
+    local artist="" title="" album=""
+    if [[ "$format" == "flac" ]] && command -v metaflac &>/dev/null; then
+      artist=$(metaflac --show-tag=ARTIST "$file" 2>/dev/null | sed 's/^[^=]*=//')
+      title=$(metaflac --show-tag=TITLE "$file" 2>/dev/null | sed 's/^[^=]*=//')
+      album=$(metaflac --show-tag=ALBUM "$file" 2>/dev/null | sed 's/^[^=]*=//')
+    else
+      artist=$(ffprobe -v quiet -print_format json -show_format "$file" 2>/dev/null | python3 -c "import sys,json; print(json.load(sys.stdin).get('format',{}).get('tags',{}).get('artist',''))" 2>/dev/null)
+      title=$(ffprobe -v quiet -print_format json -show_format "$file" 2>/dev/null | python3 -c "import sys,json; print(json.load(sys.stdin).get('format',{}).get('tags',{}).get('title',''))" 2>/dev/null)
+      album=$(ffprobe -v quiet -print_format json -show_format "$file" 2>/dev/null | python3 -c "import sys,json; print(json.load(sys.stdin).get('format',{}).get('tags',{}).get('album',''))" 2>/dev/null)
+    fi
+
+    # Strip collab artists for lookups
+    local primary_artist="${artist%%,*}"
+    primary_artist="$(echo "$primary_artist" | xargs)"
+
+    # Clean title (remove "Artist - " prefix that YouTube adds)
+    title=$(echo "$title" | sed "s/^${primary_artist} - //")
+
+    # Album art: once per album
+    if [[ "$art_done" == false ]]; then
+      album_artist="$primary_artist"
+      album_name="$album"
+      embed_album_art "$file" "$primary_artist" "$title" "$album"
+      art_done=true
+      # If it worked, embed same art in all files
+      local cover_check
+      if [[ "$format" == "flac" ]]; then
+        cover_check=$(metaflac --export-picture-to=- "$file" 2>/dev/null | wc -c)
+      fi
+      if [[ "${cover_check:-0}" -gt 0 ]]; then
+        local tmp_art="${dest}/.cover_tmp.jpg"
+        metaflac --export-picture-to="$tmp_art" "$file" 2>/dev/null
+        for other in "$dest"/*."$format"; do
+          [[ "$other" == "$file" ]] && continue
+          [ -f "$other" ] || continue
+          if [[ "$format" == "flac" ]]; then
+            metaflac --remove --block-type=PICTURE "$other" 2>/dev/null
+            metaflac --import-picture-from="$tmp_art" "$other" 2>/dev/null
+          fi
+        done
+        rm -f "$tmp_art"
+        echo -e "${GREEN}   ✓ Art embedded in all tracks${RESET}"
+      fi
+    fi
+
+    # Lyrics: per track
+    fetch_lyrics "$file" "$primary_artist" "$title"
+
+    # Rate limit MusicBrainz/LRCLIB
+    sleep 0.5
+  done
+}
+
+# --- Helper: download a playlist URL into a subfolder ---
+download_playlist() {
+  local url="$1"
+  local folder_name="$2"
+  local dest="$OUTPUT_DIR/$folder_name"
+
+  mkdir -p "$dest"
+
+  echo ""
+  echo -e "${CYAN}⬇️  Downloading playlist into:${RESET} $dest"
+  echo -e "${CYAN}🎵 Format:${RESET} $FORMAT"
+  echo ""
+
+  yt-dlp \
+    --ignore-errors \
+    --output "$dest/%(playlist_index)02d - %(title)s.%(ext)s" \
+    --extract-audio \
+    --audio-format "$FORMAT" \
+    --audio-quality 0 \
+    --embed-thumbnail \
+    --embed-metadata \
+    --parse-metadata "%(playlist_index)s:%(track_number)s" \
+    --yes-playlist \
+    "$url"
+
+  # Fix ALBUMARTIST: extract primary artist (before first comma) and set on all tracks
+  echo -e "${CYAN}🏷️  Fixing album artist tags...${RESET}"
+  for file in "$dest"/*."$FORMAT"; do
+    [ -f "$file" ] || continue
+    local artist=""
+    if [[ "$FORMAT" == "flac" ]] && command -v metaflac &>/dev/null; then
+      artist=$(metaflac --show-tag=ARTIST "$file" 2>/dev/null | sed 's/^[^=]*=//')
+      local primary="${artist%%,*}"
+      primary="$(echo "$primary" | xargs)"
+      if [[ -n "$primary" ]]; then
+        metaflac --remove-tag=ALBUMARTIST --set-tag="ALBUMARTIST=$primary" "$file"
+      fi
+    elif command -v ffprobe &>/dev/null; then
+      artist=$(ffprobe -v quiet -print_format json -show_format "$file" 2>/dev/null | python3 -c "import sys,json; print(json.load(sys.stdin).get('format',{}).get('tags',{}).get('artist',''))" 2>/dev/null)
+      local primary="${artist%%,*}"
+      primary="$(echo "$primary" | xargs)"
+      if [[ -n "$primary" ]]; then
+        local tmp="${file}.tmp.${FORMAT}"
+        ffmpeg -y -i "$file" -metadata "album_artist=$primary" -c copy "$tmp" 2>/dev/null && mv "$tmp" "$file"
+      fi
+    fi
+  done
+  echo -e "${GREEN}   ✓ Album artist set${RESET}"
+
+  # Fetch album art & lyrics
+  post_process_tracks "$dest" "$FORMAT"
+
+  echo ""
+  echo -e "${GREEN}✅ Done!${RESET} Check: $dest"
+  ls -lh "$dest"/*.${FORMAT} 2>/dev/null | head -20
+}
+
+# =============================================================
+# MODE: PLAYLIST
+# =============================================================
+if [[ "$MODE" == "playlist" ]]; then
+  if [[ -z "$PLAYLIST_URL" ]]; then
+    echo -e "${RED}❌ No playlist URL provided.${RESET}"
+    exit 1
+  fi
+
+  echo -e "${CYAN}🔍 Fetching playlist info...${RESET}"
+
+  # Get playlist title for the folder name
+  playlist_title=$(yt-dlp --print "%(playlist_title)s" --playlist-items 1 --no-download "$PLAYLIST_URL" 2>/dev/null || echo "")
+  if [[ -z "$playlist_title" || "$playlist_title" == "NA" ]]; then
+    playlist_title="Playlist"
+  fi
+
+  echo -e "${CYAN}📀 Playlist:${RESET} $playlist_title"
+
+  download_playlist "$PLAYLIST_URL" "$playlist_title"
+  exit 0
+fi
+# =============================================================
+# MODE: ALBUM
+# =============================================================
+if [[ "$MODE" == "album" ]]; then
+  if [[ -z "$ALBUM_QUERY" ]]; then
+    echo -e "${RED}❌ No album query provided.${RESET}"
+    exit 1
+  fi
+
+  search_term="$ALBUM_QUERY"
+  echo -e "${CYAN}🔍 Searching for album:${RESET} $search_term"
+  echo ""
+
+  # Search for actual YouTube playlists using the playlist filter (sp=EgIQAw)
+  encoded_query=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$search_term album'))")
+  echo -e "${CYAN}📋 Looking for playlists...${RESET}"
+  playlist_results=$(yt-dlp "https://www.youtube.com/results?search_query=${encoded_query}&sp=EgIQAw%253D%253D" \
+    --flat-playlist --print "%(id)s|%(title)s|%(playlist_count)s|%(channel)s|%(url)s" \
+    --no-download --playlist-items 1-10 2>/dev/null || echo "")
+
+  # Also search regular videos as fallback
+  echo -e "${CYAN}🎬 Looking for videos...${RESET}"
+  video_results=$(yt-dlp "ytsearch10:$search_term full album" \
+    --print "%(id)s|%(title)s|%(duration_string)s|%(channel)s|%(duration)s" \
+    --no-download 2>/dev/null || echo "")
+
+  echo ""
+  echo -e "${BOLD}Results:${RESET}"
+  i=1
+  declare -a result_urls=()
+  declare -a result_titles=()
+  declare -a result_types=()
+
+  # Show playlist results first (preferred)
+  if [[ -n "$playlist_results" ]]; then
+    while IFS='|' read -r id title count channel url; do
+      [[ -z "$id" ]] && continue
+      [[ "$title" == "NA" || -z "$title" ]] && continue
+      result_urls+=("$url")
+      result_titles+=("$title")
+      result_types+=("playlist")
+      count_display="${count:-?}"
+      echo -e "  ${GREEN}$i)${RESET} 📋 $title ${YELLOW}[${count_display} tracks]${RESET} — $channel"
+      ((i++))
+      [[ $i -gt 6 ]] && break
+    done <<< "$playlist_results"
+  fi
+
+  # Then video results with duration warnings
+  if [[ -n "$video_results" ]]; then
+    while IFS='|' read -r id title duration channel duration_secs; do
+      [[ -z "$id" ]] && continue
+      result_urls+=("https://www.youtube.com/watch?v=$id")
+      result_titles+=("$title")
+      result_types+=("video")
+      warning=""
+      if [[ -n "$duration_secs" && "$duration_secs" =~ ^[0-9]+$ && "$duration_secs" -gt 900 ]]; then
+        warning=" ${RED}⚠️  single file, not split${RESET}"
+      fi
+      echo -e "  ${GREEN}$i)${RESET} 🎬 $title ${YELLOW}[$duration]${RESET} — $channel$warning"
+      ((i++))
+      [[ $i -gt 15 ]] && break
+    done <<< "$video_results"
+  fi
+
+  if [[ ${#result_urls[@]} -eq 0 ]]; then
+    echo -e "${RED}❌ No results found for:${RESET} $search_term"
+    exit 1
+  fi
+
+  echo ""
+  read -r -p "Pick a number (1-${#result_urls[@]}, or Enter for 1): " choice
+  choice="${choice:-1}"
+
+  if [[ "$choice" -lt 1 || "$choice" -gt "${#result_urls[@]}" ]]; then
+    echo -e "${RED}❌ Invalid choice.${RESET}"
+    exit 1
+  fi
+
+  selected_url="${result_urls[$((choice-1))]}"
+  selected_title="${result_titles[$((choice-1))]}"
+  selected_type="${result_types[$((choice-1))]}"
+
+  folder_name="$ALBUM_QUERY"
+
+  echo ""
+  echo -e "${CYAN}📀 Selected:${RESET} $selected_title"
+
+  if [[ "$selected_type" == "playlist" ]]; then
+    download_playlist "$selected_url" "$folder_name"
+  else
+    echo -e "${YELLOW}⚠️  This is a single video, not a playlist — downloading as one file.${RESET}"
+    echo -e "${YELLOW}   Tip: prefer 📋 playlist results for separate tracks.${RESET}"
+
+    dest="$OUTPUT_DIR/$folder_name"
+    mkdir -p "$dest"
+
+    yt-dlp \
+      --ignore-errors \
+      --output "$dest/%(title)s.%(ext)s" \
+      --extract-audio \
+      --audio-format "$FORMAT" \
+      --audio-quality 0 \
+      --embed-thumbnail \
+      --embed-metadata \
+      --no-playlist \
+      "$selected_url"
+
+    echo ""
+    echo -e "${GREEN}✅ Done!${RESET} Check: $dest"
+    ls -lh "$dest"/*.${FORMAT} 2>/dev/null | head -20
+  fi
+
+  exit 0
+fi
+
+# --- Helper: lookup metadata and tag a downloaded file ---
+tag_single_track() {
+  local file="$1"
+  local query="$2"
+
+  if [[ "$NO_TAG" == true ]]; then
+    return 0
+  fi
+
+  # Parse artist/title from query
+  local mb_artist="" mb_title=""
+  if [[ "$query" == *" - "* ]]; then
+    mb_artist="${query%% - *}"
+    mb_title="${query#* - }"
+  else
+    mb_title="$query"
+  fi
+
+  # Trim whitespace
+  mb_artist="$(echo "$mb_artist" | xargs)"
+  mb_title="$(echo "$mb_title" | xargs)"
+
+  echo ""
+  echo -e "${CYAN}🏷️  Looking up metadata...${RESET}"
+  if [[ -n "$mb_artist" ]]; then
+    echo -e "   Artist: ${BOLD}$mb_artist${RESET}"
+  fi
+  echo -e "   Title:  ${BOLD}$mb_title${RESET}"
+
+  # Build MusicBrainz query
+  local mb_query=""
+  if [[ -n "$mb_artist" ]]; then
+    mb_query="artist:\"$mb_artist\"+recording:\"$mb_title\""
+  else
+    mb_query="recording:\"$mb_title\""
+  fi
+
+  local encoded_query
+  encoded_query=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$mb_query', safe=':+\"'))")
+
+  local mb_url="https://musicbrainz.org/ws/2/recording/?query=${encoded_query}&fmt=json&limit=1"
+
+  local mb_response
+  mb_response=$(curl -s -H "User-Agent: music-dl/1.0 (https://github.com/nandofarias)" "$mb_url" 2>/dev/null || echo "")
+
+  local album="" year="" genre=""
+
+  if [[ -n "$mb_response" ]] && echo "$mb_response" | jq -e '.recordings[0]' &>/dev/null; then
+    local rec
+    rec=$(echo "$mb_response" | jq '.recordings[0]')
+
+    # Get album from first release
+    album=$(echo "$rec" | jq -r '.releases[0].title // empty' 2>/dev/null || echo "")
+    year=$(echo "$rec" | jq -r '.releases[0].date // empty' 2>/dev/null || echo "")
+    # Extract just the year
+    year="${year%%-*}"
+
+    # Get genre/tag (highest scored)
+    genre=$(echo "$rec" | jq -r '(.tags // []) | sort_by(-.count) | .[0].name // empty' 2>/dev/null || echo "")
+
+    # If no recording-level tags, try release-level
+    if [[ -z "$genre" ]]; then
+      genre=$(echo "$rec" | jq -r '(.releases[0].tags // []) | sort_by(-.count) | .[0].name // empty' 2>/dev/null || echo "")
+    fi
+
+    # Also pick up artist from MB if we didn't parse one
+    if [[ -z "$mb_artist" ]]; then
+      mb_artist=$(echo "$rec" | jq -r '.["artist-credit"][0].name // empty' 2>/dev/null || echo "")
+    fi
+
+    echo -e "${GREEN}   ✓ MusicBrainz match found${RESET}"
+    [[ -n "$album" ]] && echo -e "   Album:  ${BOLD}$album${RESET}"
+    [[ -n "$year" ]]  && echo -e "   Year:   ${BOLD}$year${RESET}"
+    [[ -n "$genre" ]] && echo -e "   Genre:  ${BOLD}$genre${RESET}"
+  else
+    echo -e "${YELLOW}   ⚠ No MusicBrainz results, using parsed metadata only${RESET}"
+  fi
+
+  # Build ffmpeg metadata args
+  local -a meta_args=()
+  [[ -n "$mb_artist" ]] && meta_args+=(-metadata "artist=$mb_artist")
+  [[ -n "$mb_artist" ]] && meta_args+=(-metadata "album_artist=$mb_artist")
+  [[ -n "$mb_title" ]]  && meta_args+=(-metadata "title=$mb_title")
+  [[ -n "$album" ]]     && meta_args+=(-metadata "album=$album")
+  [[ -n "$year" ]]      && meta_args+=(-metadata "date=$year")
+  [[ -n "$genre" ]]     && meta_args+=(-metadata "genre=$genre")
+
+  if [[ ${#meta_args[@]} -eq 0 ]]; then
+    echo -e "${YELLOW}   No metadata to apply, skipping.${RESET}"
+    return 0
+  fi
+
+  echo -e "${CYAN}   Writing tags with ffmpeg...${RESET}"
+
+  local tmp_file="${file}.tagged.${file##*.}"
+  if ffmpeg -y -i "$file" "${meta_args[@]}" -c copy "$tmp_file" 2>/dev/null; then
+    mv "$tmp_file" "$file"
+    echo -e "${GREEN}   ✓ Tags applied${RESET}"
+  else
+    rm -f "$tmp_file"
+    echo -e "${YELLOW}   ⚠ Failed to write tags (file unchanged)${RESET}"
+  fi
+}
+
+# =============================================================
+# MODE: SINGLE SONG (original behavior)
+# =============================================================
 echo -e "${CYAN}🔍 Searching:${RESET} $QUERY"
 echo -e "${CYAN}📁 Output:${RESET}    $OUTPUT_DIR"
 echo -e "${CYAN}🎵 Format:${RESET}    $FORMAT"
@@ -93,7 +591,8 @@ url="https://www.youtube.com/watch?v=$video_id"
 echo ""
 echo -e "${CYAN}⬇️  Downloading...${RESET}"
 
-yt-dlp \
+# Capture the output filename
+downloaded_file=$(yt-dlp \
   --ignore-errors \
   --output "$OUTPUT_DIR/%(title)s.%(ext)s" \
   --extract-audio \
@@ -102,7 +601,22 @@ yt-dlp \
   --embed-thumbnail \
   --embed-metadata \
   --no-playlist \
-  "$url"
+  --print after_move:filepath \
+  "$url")
+
+if [[ -n "$downloaded_file" && -f "$downloaded_file" ]]; then
+  tag_single_track "$downloaded_file" "$QUERY"
+
+  # Fetch art & lyrics for single track
+  local_artist="${QUERY%% - *}"
+  local_title="${QUERY#* - }"
+  if [[ "$QUERY" != *" - "* ]]; then
+    local_artist=""
+    local_title="$QUERY"
+  fi
+  embed_album_art "$downloaded_file" "$local_artist" "$local_title" ""
+  fetch_lyrics "$downloaded_file" "$local_artist" "$local_title"
+fi
 
 echo ""
 echo -e "${GREEN}✅ Done!${RESET} Check: $OUTPUT_DIR"
