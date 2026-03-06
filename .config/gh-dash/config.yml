@@ -60,7 +60,7 @@ keybindings:
         tmux new-window -n "diff-{{.PrNumber}}" -c {{.RepoPath}} '
         gh pr diff {{.PrNumber}} --repo {{.RepoName}} | delta --paging=always
         '
-    - key: X
+    - key: x
       command: >
         tmux new-window -n "claude-{{.PrNumber}}" -c {{.RepoPath}} '
         gh pr diff {{.PrNumber}} --repo {{.RepoName}} > /tmp/pr-review-{{.PrNumber}}.md &&
@@ -74,7 +74,7 @@ keybindings:
         gh pr review --repo {{.RepoName}} --comment
         --body "$(gum write --placeholder='Leave a comment...')"
         {{.PrNumber}}
-    - key: x
+    - key: X
       name: Request changes
       command: >
         gh pr review --repo {{.RepoName}} --request-changes
