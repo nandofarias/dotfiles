@@ -19,7 +19,7 @@ return {
             auto_preview = false,
           },
         })
-        vim.keymap.set({ 'n', 't' }, '<leader>so', '<cmd>Lspsaga outline<CR>')
+        vim.keymap.set('n', '<leader>so', '<cmd>Lspsaga outline<CR>')
       end
     },
   },
