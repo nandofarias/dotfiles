@@ -23,6 +23,8 @@
 
 [alias]
   st = status -s
+  branches = branch --sort=-committerdate --format='%(if)%(HEAD)%(then)▸ %(color:green)%(else)  %(color:yellow)%(end)%(refname:short)%(color:reset) %(color:dim)%(committerdate:relative)%(color:reset)'
+  reword = commit --amend
   ht = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(magenta)%h%C(reset) %C(green)(%ar)%C(reset) %C(red)%d%C(reset) %C(white)%s%C(reset) - %C(blue)%an%C(reset)'
 
   # Git Commit, Add all and Push — in one step.
