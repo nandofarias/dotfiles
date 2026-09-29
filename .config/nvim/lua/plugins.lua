@@ -21,7 +21,7 @@ return {
   -- Utilities
   'tpope/vim-abolish',
   { 'windwp/nvim-autopairs',    config = true },
-  { 'tversteeg/registers.nvim', config = true },
+  { 'https://codeberg.org/fosk/registers.nvim', config = true },
   { 'chentoast/marks.nvim',     config = true },
   'dstein64/vim-startuptime',
   'rhysd/clever-f.vim',

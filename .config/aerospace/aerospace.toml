@@ -67,12 +67,12 @@ preset = 'qwerty'
 #                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
 #                 See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitorr
 [gaps]
-inner.horizontal = 0
-inner.vertical =   0
-outer.left =       0
-outer.bottom =     0
-outer.top = [{ monitor."Built-in" = 8 }, { monitor."ASUS" = 40 }, { monitor."Sidecar" = 40 }, 40]
-outer.right =      0
+inner.horizontal = 10
+inner.vertical =   10
+outer.left =       10
+outer.bottom =     10
+outer.top = [{ monitor."Built-in" = 18 }, { monitor."ASUS" = 50 }, { monitor."Sidecar" = 50 }, 50]
+outer.right =      10
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -108,6 +108,7 @@ outer.right =      0
 alt-slash = 'layout tiles horizontal vertical'
 alt-comma = 'layout accordion horizontal vertical'
 alt-m = 'layout tiles floating'
+alt-shift-c = 'exec-and-forget /Users/ffarias/.local/bin/aerospace-center-window'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
 alt-h = 'focus left'
@@ -146,6 +147,12 @@ alt-shift-6 = 'move-node-to-workspace 6'
 alt-shift-7 = 'move-node-to-workspace 7'
 alt-shift-8 = 'move-node-to-workspace 8'
 alt-shift-9 = 'move-node-to-workspace 9'
+
+# Join windows (i3-style grouping)
+# alt-shift-s: join focused window with the one to the right
+# alt-shift-v: join focused window with the one below
+alt-shift-s = 'join-with right'
+alt-shift-v = 'join-with down'
 
 # Reload config
 alt-shift-r = 'reload-config'
@@ -212,4 +219,8 @@ run = ['move-node-to-workspace 9']
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'open-llm-vtuber'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'X AIR'
 run = ['layout floating']

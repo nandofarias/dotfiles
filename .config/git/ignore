@@ -11,3 +11,4 @@ packer_compiled.lua
 claude.md
 *.backup
 *.bkp
+.claude/settings.json

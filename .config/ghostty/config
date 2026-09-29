@@ -30,7 +30,7 @@ keybind = super+k=text:\x63\x6C\x65\x61\x72\x0A
 keybind = global:cmd+grave_accent=toggle_quick_terminal
 
 # Window
-window-decoration = false
+window-decoration = true
 window-padding-x = 15
 window-padding-y = 15
 

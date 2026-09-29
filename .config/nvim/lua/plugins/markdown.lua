@@ -5,5 +5,5 @@ return {
     file_types = { "markdown", "livemd" },
   },
   ft = { "markdown", "livemd" },
-  dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
+  dependencies = { 'arborist-ts/arborist.nvim', 'nvim-tree/nvim-web-devicons' },
 }

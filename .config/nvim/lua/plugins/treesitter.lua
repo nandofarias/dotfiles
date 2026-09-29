@@ -1,15 +1,13 @@
 return {
-  'nvim-treesitter/nvim-treesitter',
+  'arborist-ts/arborist.nvim',
   dependencies = {
-    'nvim-treesitter/nvim-treesitter-textobjects',
-    'RRethy/nvim-treesitter-textsubjects',
     'windwp/nvim-ts-autotag',
     'JoosepAlviste/nvim-ts-context-commentstring',
-    'IndianBoy42/tree-sitter-just',
+    'andymass/vim-matchup',
   },
   config = function()
-    require('tree-sitter-just').setup {}
-    require('nvim-treesitter.configs').setup({
+    require('arborist').setup({
+      update_cadence = 'weekly',
       ensure_installed = {
         'bash', 'c', 'comment', 'css', 'csv', 'diff', 'dockerfile', 'eex', 'elixir', 'erlang',
         'fish', 'git_config', 'git_rebase', 'gitattributes', 'gitcommit', 'gitignore', 'gleam',
@@ -18,64 +16,20 @@ return {
         'regex', 'ruby', 'rust', 'scss', 'sql', 'ssh_config', 'surface', 'terraform', 'toml',
         'tsx', 'typescript', 'vim', 'vimdoc', 'xml', 'yaml', 'zig',
       },
-      indent = {
-        enable = true,
-        disable = function(_, buf)
-          local max_filesize = 10 * 1024 -- 10 KB
-          local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
-          if ok and stats and stats.size > max_filesize then
-            return true
-          end
-        end,
-      },
-      highlight = {
-        enable = true,
-        use_languagetree = true,
-        additional_vim_regex_highlighting = false,
-      },
-      autotag = {
-        enable = true,
-      },
-      textobjects = {
-        select = {
-          enable = true,
-          lookahead = true,
-          keymaps = {
-            ["af"] = "@function.outer",
-            ["if"] = "@function.inner",
-            ["am"] = "@class.outer",
-            ["im"] = "@class.inner",
-            ["ac"] = "@comment.outer",
-            ["as"] = "@statement.outer"
-          },
-        },
-        move = {
-          enable = true,
-          set_jumps = true, -- whether to set jumps in the jumplist
-          goto_next_start = {
-            ["]m"] = "@function.outer",
-            ["]]"] = "@class.outer",
-          },
-          goto_next_end = {
-            ["]M"] = "@function.outer",
-            ["]["] = "@class.outer",
-          },
-          goto_previous_start = {
-            ["[m"] = "@function.outer",
-            ["[["] = "@class.outer",
-          },
-          goto_previous_end = {
-            ["[M"] = "@function.outer",
-            ["[]"] = "@class.outer",
-          },
-        },
-      },
-      textsubjects = {
-        enable = true,
-        keymaps = {
-          ['.'] = 'textsubjects-smart',
-        }
+    })
+
+    require('nvim-ts-autotag').setup({
+      opts = {
+        enable_close = true,
+        enable_rename = true,
+        enable_close_on_slash = false,
       },
     })
-  end
+
+    require('ts_context_commentstring').setup({
+      enable_autocmd = false,
+    })
+
+    vim.g.matchup_matchparen_offscreen = { method = 'popup' }
+  end,
 }

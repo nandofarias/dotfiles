@@ -1,8 +1,9 @@
 [tools]
-elixir = "1.18.0-otp-27"
-erlang = "27.2"
+elixir = "1.20.2-otp-29"
+erlang = "29.0.4"
 gleam = "1.6.3"
-neovim = "stable"
+neovim = "0.12.2"
+tree-sitter = "latest"
 rust = "stable"
 python = "3.13.1"
 node = "latest"

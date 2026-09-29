@@ -1,0 +1,39 @@
+#!/bin/bash
+# wallpaper — toggle iWallpaper on/off or set a static wallpaper
+#   wallpaper on       → launch iWallpaper
+#   wallpaper off      → kill iWallpaper, set static blue wallpaper
+#   wallpaper set PATH → kill iWallpaper, set custom image
+
+STATIC_DEFAULT="/System/Library/Desktop Pictures/Mac Blue.heic"
+
+case "${1:-}" in
+  on)
+    open -a iwallpaper
+    echo "✨ iWallpaper is on"
+    ;;
+  off)
+    killall iwallpaper 2>/dev/null
+    osascript -e "tell application \"System Events\" to tell every desktop to set picture to \"$STATIC_DEFAULT\"" 2>/dev/null
+    echo "🌙 iWallpaper off — static wallpaper set"
+    ;;
+  set)
+    if [ -z "${2:-}" ]; then
+      echo "Usage: wallpaper set /path/to/image"
+      exit 1
+    fi
+    killall iwallpaper 2>/dev/null
+    osascript -e "tell application \"System Events\" to tell every desktop to set picture to \"$2\"" 2>/dev/null
+    echo "🌙 Wallpaper set to: $2"
+    ;;
+  toggle)
+    if pgrep -x iwallpaper >/dev/null 2>&1; then
+      "$0" off
+    else
+      "$0" on
+    fi
+    ;;
+  *)
+    echo "Usage: wallpaper [on|off|toggle|set /path/to/image]"
+    exit 1
+    ;;
+esac

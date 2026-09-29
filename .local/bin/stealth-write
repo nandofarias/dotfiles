@@ -1,0 +1,168 @@
+#!/usr/bin/env python3
+"""
+Stealth Writer — type secret messages with scrambled display.
+Hold Ctrl+R to reveal the real text. Release to re-scramble.
+Ctrl+S to copy to clipboard. Ctrl+Q to quit.
+"""
+
+import curses
+import random
+import string
+import subprocess
+import sys
+
+SCRAMBLE_CHARS = string.ascii_letters + string.digits + "!@#$%^&*()[]{}|;:,.<>?/~`"
+
+def scramble(text):
+    return "".join(
+        random.choice(SCRAMBLE_CHARS) if ch not in ("\n", " ") else ch
+        for ch in text
+    )
+
+def copy_to_clipboard(text):
+    try:
+        p = subprocess.Popen(["pbcopy"], stdin=subprocess.PIPE)
+        p.communicate(text.encode("utf-8"))
+        return True
+    except Exception:
+        return False
+
+def main(stdscr):
+    curses.curs_set(1)
+    curses.use_default_colors()
+    curses.init_pair(1, curses.COLOR_GREEN, -1)
+    curses.init_pair(2, curses.COLOR_RED, -1)
+    curses.init_pair(3, curses.COLOR_YELLOW, -1)
+    stdscr.nodelay(False)
+    stdscr.timeout(50)
+
+    buffer = []
+    reveal = False
+    status = ""
+    status_timer = 0
+
+    while True:
+        stdscr.erase()
+        h, w = stdscr.getmaxyx()
+
+        # Header
+        mode = "REVEALED" if reveal else "SCRAMBLED"
+        color = 1 if reveal else 2
+        header = f" STEALTH WRITER [{mode}] "
+        stdscr.attron(curses.color_pair(color) | curses.A_BOLD)
+        stdscr.addnstr(0, 0, header.center(w), w - 1)
+        stdscr.attroff(curses.color_pair(color) | curses.A_BOLD)
+
+        # Help line
+        help_text = "Hold Ctrl+R: reveal | Ctrl+S: copy | Ctrl+Q: quit | Ctrl+X: clear"
+        stdscr.attron(curses.color_pair(3))
+        stdscr.addnstr(1, 0, help_text.center(w), w - 1)
+        stdscr.attroff(curses.color_pair(3))
+
+        # Text area
+        text = "".join(buffer)
+        display = text if reveal else scramble(text)
+
+        row = 3
+        col = 0
+        for ch in display:
+            if ch == "\n":
+                row += 1
+                col = 0
+            else:
+                if row < h - 2 and col < w - 1:
+                    try:
+                        stdscr.addch(row, col, ch)
+                    except curses.error:
+                        pass
+                col += 1
+
+        # Cursor position (based on real text)
+        crow, ccol = 3, 0
+        for ch in buffer:
+            if ch == "\n":
+                crow += 1
+                ccol = 0
+            else:
+                ccol += 1
+        try:
+            stdscr.move(min(crow, h - 2), min(ccol, w - 1))
+        except curses.error:
+            pass
+
+        # Status bar
+        if status_timer > 0:
+            stdscr.attron(curses.color_pair(1) | curses.A_BOLD)
+            stdscr.addnstr(h - 1, 0, status.center(w), w - 1)
+            stdscr.attroff(curses.color_pair(1) | curses.A_BOLD)
+            status_timer -= 1
+
+        stdscr.refresh()
+
+        try:
+            key = stdscr.getch()
+        except curses.error:
+            continue
+
+        if key == -1:
+            # No key pressed, if was revealing, stop
+            if reveal:
+                reveal = False
+            continue
+
+        # Ctrl+R (18) = reveal while held
+        if key == 18:
+            reveal = True
+            continue
+        else:
+            reveal = False
+
+        # Ctrl+Q (17) = quit
+        if key == 17:
+            break
+
+        # Ctrl+S (19) = copy to clipboard
+        if key == 19:
+            text = "".join(buffer)
+            if copy_to_clipboard(text):
+                status = "✓ Copied to clipboard!"
+            else:
+                status = "✗ Failed to copy"
+            status_timer = 40
+            continue
+
+        # Ctrl+X (24) = clear
+        if key == 24:
+            buffer.clear()
+            status = "✓ Cleared"
+            status_timer = 40
+            continue
+
+        # Backspace
+        if key in (curses.KEY_BACKSPACE, 127, 8):
+            if buffer:
+                buffer.pop()
+            continue
+
+        # Enter
+        if key in (curses.KEY_ENTER, 10, 13):
+            buffer.append("\n")
+            continue
+
+        # Regular character
+        if 32 <= key <= 126:
+            buffer.append(chr(key))
+        # Handle UTF-8 (basic)
+        elif key > 127:
+            try:
+                buffer.append(chr(key))
+            except (ValueError, OverflowError):
+                pass
+
+    # Return the text
+    return "".join(buffer)
+
+if __name__ == "__main__":
+    text = curses.wrapper(main)
+    if text.strip():
+        print(f"\n[Final text copied/available — {len(text)} chars]")

@@ -130,7 +130,6 @@ if status is-interactive
   abbr -ag barenvim "nvim -u NONE"
 
   abbr -ag icat "kitty icat"
-  alias frieren='openclaw agent --session-id main --message'
 
   # Fix ctrl-n in hybrid (vi) mode
   bind -M insert ctrl-n down-or-search
@@ -197,6 +196,3 @@ end
 # Added by OrbStack: command-line tools and integration
 # This won't be added again if you remove it.
 source ~/.orbstack/shell/init2.fish 2>/dev/null || :
-
-# OpenClaw Completion
-source "/Users/ffarias/.openclaw/completions/openclaw.fish"

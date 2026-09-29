@@ -9,6 +9,12 @@
 	name = Fernando Farias
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAYfInuPmQ2VISW7BAS0KyIFOSKpGjYTuIEAlsFNG2Wh
 
+[includeIf "gitdir:/Users/ffarias/Developer/Boulevard/"]
+	path = /Users/ffarias/.config/git/config-blvd
+
+[includeIf "gitdir:/Users/ffarias/Developer/ddcli/"]
+	path = /Users/ffarias/.config/git/config-blvd
+
 [http]
 	postBuffer = 1048576000
 

@@ -1,0 +1,52 @@
+#!/bin/bash
+# Center the focused floating window on its monitor
+# Uses Aerospace + osascript (Accessibility API)
+
+# Get focused window ID
+WINDOW_ID=$(aerospace list-windows --focused --format '%{window-id}' 2>/dev/null)
+if [ -z "$WINDOW_ID" ]; then
+  exit 1
+fi
+
+# Get monitor info for the focused window
+read MON_X MON_Y MON_W MON_H < <(aerospace list-monitors --focused --format '%{monitor-appkit-nsscreen-screens-id}' 2>/dev/null | head -1 | xargs -I{} bash -c '
+  # Get monitor frame from system_profiler is too slow, use osascript
+  osascript -e "
+    use framework \"AppKit\"
+    set screens to current application'\''s NSScreen'\''s screens()
+    set focusedScreen to item 1 of screens
+    repeat with s in screens
+      set f to (s'\''s frame())
+      -- find the screen that contains our window
+    end repeat
+    set mainFrame to (focusedScreen'\''s frame())
+    set x to (item 1 of item 1 of mainFrame) as integer
+    set y to (item 2 of item 1 of mainFrame) as integer
+    set w to (item 1 of item 2 of mainFrame) as integer
+    set h to (item 2 of item 2 of mainFrame) as integer
+    return (x as text) & \" \" & (y as text) & \" \" & (w as text) & \" \" & (h as text)
+  " 2>/dev/null
+')
+
+# Simpler approach: use osascript to get screen size and center the frontmost window
+osascript -e '
+use framework "AppKit"
+
+-- Get the focused screen dimensions
+set mainScreen to current application'"'"'s NSScreen'"'"'s mainScreen()
+set visFrame to mainScreen'"'"'s visibleFrame()
+set scrX to (item 1 of item 1 of visFrame) as integer
+set scrY to (item 2 of item 1 of visFrame) as integer
+set scrW to (item 1 of item 2 of visFrame) as integer
+set scrH to (item 2 of item 2 of visFrame) as integer
+
+-- Get frontmost app window size and center it
+tell application "System Events"
+    set frontApp to first application process whose frontmost is true
+    set frontWindow to window 1 of frontApp
+    set {winW, winH} to size of frontWindow
+    set newX to scrX + ((scrW - winW) / 2) as integer
+    set newY to ((scrH - winH) / 2) as integer
+    set position of frontWindow to {newX, newY}
+end tell
+' 2>/dev/null
