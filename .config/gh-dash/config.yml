@@ -53,7 +53,7 @@ keybindings:
     - key: enter
       command: >
         tmux new-window -n "pr-{{.PrNumber}}" -c {{.RepoPath}} '
-        nvim -c ":Octo pr edit {{.PrNumber}}"
+        nvim -c ":Atlas open https://github.com/{{.RepoName}}/pull/{{.PrNumber}}"
         '
     - key: d
       command: >
