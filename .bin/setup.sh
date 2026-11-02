@@ -52,12 +52,23 @@ if test ! -d ~/.config/tmux/plugins/tpm; then
     git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
 fi
 ~/.config/tmux/plugins/tpm/bin/install_plugins
+# tmux-agent-sidebar ships a prebuilt binary; ~/.local/bin/tmux-agent-sidebar
+# (tracked symlink) points at it so agent hooks can always find it
+bash ~/.config/tmux/plugins/tmux-agent-sidebar/install-wizard.sh download-binary || true
 
 echo "Setting up languages and tools …"
 mise install
 
 echo "Install npm packages …"
 npmg i
+
+echo "Setting up Claude Code plugins …"
+if command -v claude &>/dev/null; then
+  claude plugin marketplace add ~/.config/tmux/plugins/tmux-agent-sidebar
+  claude plugin install tmux-agent-sidebar@hiroppy
+else
+  echo "claude not found, skipping (rerun the two 'claude plugin' lines later)"
+fi
 
 echo "Setting macos defaults …"
 ~/.bin/macos
