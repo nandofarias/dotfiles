@@ -114,6 +114,7 @@ if status is-interactive
   abbr -ag tc "sesh connect (sesh list -i | gum filter --limit 1 --placeholder 'Pick a sesh' --height 50 --prompt='⚡')"
 
   abbr -ag ss "cmatrix -C blue"
+  abbr -ag tj tjournal
 
   abbr -ag v nvim
   abbr -ag vu 'mise uninstall neovim@stable && mise install neovim@stable'
