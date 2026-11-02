@@ -1,7 +1,7 @@
 # vim: ft=conf
 
 # Theme
-theme = tokyonight
+theme = TokyoNight
 background-opacity = 0.9
 
 # Font
