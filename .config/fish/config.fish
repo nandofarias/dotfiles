@@ -1,6 +1,7 @@
 if status is-interactive
   # Fish
   set -gx fish_greeting "Welcome to Summoner's Rift"
+  set -g fish_key_bindings fish_hybrid_key_bindings
 
   # General
   set -gx LC_ALL en_US.UTF-8
@@ -16,12 +17,6 @@ if status is-interactive
   end
   if [ -s "/usr/local/bin/brew" ];
     eval "$(/usr/local/bin/brew shellenv)"
-  end
-  if test -d (brew --prefix)"/share/fish/completions"
-    set -p fish_complete_path (brew --prefix)/share/fish/completions
-  end
-  if test -d (brew --prefix)"/share/fish/vendor_completions.d"
-    set -p fish_complete_path (brew --prefix)/share/fish/vendor_completions.d
   end
 
   # Fix curl
