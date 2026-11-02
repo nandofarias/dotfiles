@@ -56,6 +56,8 @@ return {
       },
       repo_config = {
         paths = {
+          -- sched is a worktree layout (bare repo + develop worktree), as in gh-dash
+          ["Boulevard/sched"] = "~/Developer/Boulevard/sched/develop",
           ["Boulevard/*"] = "~/Developer/Boulevard/*",
           ["nandofarias/*"] = "~/Developer/personal/*",
         },
