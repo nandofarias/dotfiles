@@ -38,6 +38,7 @@ window-padding-y = 15
 shell-integration = fish
 
 # Misc
-macos-option-as-alt = true
+# Left Option = Alt; right Option types accents (ç, ã, é)
+macos-option-as-alt = left
 mouse-hide-while-typing = true
 desktop-notifications = true
