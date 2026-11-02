@@ -88,6 +88,12 @@ keybindings:
     - key: b
       command: >
         gh pr view {{.PrNumber}} --repo {{.RepoName}} --web
+    - key: T
+      name: Review in tuicr
+      command: >
+        tmux new-window -n "tuicr-{{.PrNumber}}" -c {{.RepoPath}} '
+        tuicr pr https://github.com/{{.RepoName}}/pull/{{.PrNumber}}
+        '
 repoPaths:
   Boulevard/sched: ~/Developer/Boulevard/sched/develop
   Boulevard/*: ~/Developer/Boulevard/*
