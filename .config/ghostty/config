@@ -26,7 +26,7 @@ keybind = super+shift+h=text:\x02\x3c
 keybind = super+shift+j=text:\x02\x2d
 keybind = super+shift+k=text:\x02\x2b
 keybind = super+shift+l=text:\x02\x3e
-keybind = super+k=text:\x63\x6C\x65\x61\x72\x0A
+keybind = super+k=text:\x63\x6C\x65\x61\x72\x0D
 keybind = global:cmd+grave_accent=toggle_quick_terminal
 
 # Window
