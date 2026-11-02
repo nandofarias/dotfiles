@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Install the tuicr agent skill (matching the installed tuicr version) for
+# Claude Code (~/.claude/skills) and other agents (~/.agents/skills).
+# Rerun after `brew upgrade tuicr`.
+set -euo pipefail
+
+command -v tuicr >/dev/null || { echo "tuicr not installed"; exit 1; }
+v=$(tuicr --version | awk '{print $2}')
+tmp=$(mktemp -d)
+trap 'rm -r "$tmp"' EXIT
+
+curl -fsSL "https://github.com/agavra/tuicr/archive/refs/tags/v$v.tar.gz" |
+  tar -xz -C "$tmp" --strip-components=2 "tuicr-$v/skills/tuicr"
+
+for d in ~/.claude/skills ~/.agents/skills; do
+  mkdir -p "$d/tuicr"
+  cp -R "$tmp/tuicr/." "$d/tuicr/"
+done
+echo "tuicr skill v$v installed"

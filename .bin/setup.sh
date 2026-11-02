@@ -70,6 +70,9 @@ else
   echo "claude not found, skipping (rerun the two 'claude plugin' lines later)"
 fi
 
+echo "Installing tuicr agent skill …"
+~/.bin/tuicr-skill-update || echo "tuicr skill install failed, rerun ~/.bin/tuicr-skill-update later"
+
 echo "Setting macos defaults …"
 ~/.bin/macos
 
