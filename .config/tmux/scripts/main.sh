@@ -104,7 +104,6 @@ main()
   tmux set-option -g pane-border-style "fg=${grey}"
 
   # message styling
-  # tmux 3.7+ only fills the whole status line when message-style has fill
   tmux set-option -g message-style "bg=${grey},fg=${white},fill=${grey}"
 
   # status bar

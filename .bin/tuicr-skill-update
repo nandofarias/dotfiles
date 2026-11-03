@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-# Install the tuicr agent skill (matching the installed tuicr version) for
-# Claude Code (~/.claude/skills) and other agents (~/.agents/skills).
-# Rerun after `brew upgrade tuicr`.
 set -euo pipefail
 
 command -v tuicr >/dev/null || { echo "tuicr not installed"; exit 1; }

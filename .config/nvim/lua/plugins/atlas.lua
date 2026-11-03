@@ -1,5 +1,3 @@
--- atlas.nvim: PR review + issues dashboard (trial alongside octo.nvim)
--- Early development upstream; expect breaking changes on update.
 return {
   "emrearmagan/atlas.nvim",
   cmd = { "Atlas" },
@@ -7,19 +5,15 @@ return {
     "nvim-tree/nvim-web-devicons",
     "sindrets/diffview.nvim",
   },
-  -- Only two keys to remember; everything else lives in menus:
-  --   :Atlas lists every command, and g? inside Atlas shows its keys.
   keys = {
     { "<leader>gp", "<cmd>Atlas pulls .<cr>", desc = "PR dashboard (Atlas)" },
     { "<leader>gP", "<cmd>Atlas<cr>", desc = "Atlas commands" },
   },
-  ---@type AtlasConfig
   opts = {
     ui = {
       picker = "snacks",
     },
     providers = {
-      -- Uses the gh CLI login; no token here
       github = {},
     },
     pulls = {
@@ -56,7 +50,6 @@ return {
       },
       repo_config = {
         paths = {
-          -- sched is a worktree layout (bare repo + develop worktree), as in gh-dash
           ["Boulevard/sched"] = "~/Developer/Boulevard/sched/develop",
           ["Boulevard/*"] = "~/Developer/Boulevard/*",
           ["nandofarias/*"] = "~/Developer/personal/*",

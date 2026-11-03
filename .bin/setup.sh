@@ -52,8 +52,6 @@ if test ! -d ~/.config/tmux/plugins/tpm; then
     git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
 fi
 ~/.config/tmux/plugins/tpm/bin/install_plugins
-# tmux-agent-sidebar ships a prebuilt binary; ~/.local/bin/tmux-agent-sidebar
-# (tracked symlink) points at it so agent hooks can always find it
 bash ~/.config/tmux/plugins/tmux-agent-sidebar/install-wizard.sh download-binary || true
 
 echo "Setting up languages and tools …"

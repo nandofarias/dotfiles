@@ -1,5 +1,1 @@
-# tui-journal settings (loaded via `tjournal -c ~/.config/tui-journal`,
-# see ~/.config/fish/functions/tjournal.fish). Unset keys use defaults.
-
-# Copy/cut/paste in the editor (e.g. `y` in visual mode) also use the macOS clipboard
 sync_os_clipboard = true
