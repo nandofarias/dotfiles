@@ -163,7 +163,6 @@ brew "starship"
 brew "stylua"
 brew "subversion"
 brew "summarize"
-brew "svim"
 brew "switchaudio-osx"
 brew "tailspin"
 brew "tcl-tk"
@@ -327,7 +326,6 @@ mas "Xcode", id: 497799835
 mas "iMovie", id: 408981434
 mas "iWallpaper - Live Wallpaper", id: 1552826194
 tap "1password/tap"
-tap "FelixKratz/formulae"
 tap "ammarabouzor/tui-journal"
 tap "ankitpokhrel/jira-cli"
 tap "aws/tap"
