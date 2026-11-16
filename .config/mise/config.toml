@@ -23,3 +23,7 @@ node = "latest"
 "npm:granola-cli" = { version = "latest", allow_low_downloads = true }
 "npm:quota-axi" = "latest"
 "npm:tasks-axi" = "latest"
+"github:k1-c/linear-tui" = "latest"
+"pipx:mlx-whisper" = "latest"
+"pipx:awscli-local" = "latest"
+"pipx:edge-tts" = "latest"

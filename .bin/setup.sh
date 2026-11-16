@@ -56,6 +56,7 @@ bash ~/.config/tmux/plugins/tmux-agent-sidebar/install-wizard.sh download-binary
 
 echo "Setting up languages and tools …"
 mise install
+command -v no-mistakes >/dev/null || curl -fsSL https://raw.githubusercontent.com/kunchenguid/no-mistakes/main/docs/install.sh | sh
 
 echo "Setting up Claude Code plugins …"
 if command -v claude &>/dev/null; then
