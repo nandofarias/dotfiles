@@ -1,0 +1,30 @@
+collections:
+  notes:
+    path: /Users/ffarias/Brain/Notes
+    pattern: "**/*.md"
+    context:
+      "": "Work and tech notes: Boulevard, Elixir, tooling, presentations, music charts"
+  life:
+    path: /Users/ffarias/Brain/Life
+    pattern: "**/*.md"
+    context:
+      "": "Personal life notes: band, Bible study, keys, mentoring, tasks"
+  people:
+    path: /Users/ffarias/Brain/People
+    pattern: "**/*.md"
+    context:
+      "": "One living profile note per person"
+  memory:
+    path: /Users/ffarias/Brain/Memory
+    pattern: "**/*.md"
+    context:
+      "": "Fernando's people directory, work context, projects, plans, courses and long-term learnings"
+  hermes:
+    path: /Users/ffarias/.hermes/memories
+    pattern: "*.md"
+    context:
+      "": "Hermes persistent memory: MEMORY.md (agent notes) and USER.md (user profile)"
+models:
+  embed: hf:ggml-org/embeddinggemma-300M-GGUF/embeddinggemma-300M-Q8_0.gguf
+  generate: hf:tobil/qmd-query-expansion-1.7B-gguf/qmd-query-expansion-1.7B-q4_k_m.gguf
+  rerank: hf:ggml-org/Qwen3-Reranker-0.6B-Q8_0-GGUF/qwen3-reranker-0.6b-q8_0.gguf

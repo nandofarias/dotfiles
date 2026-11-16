@@ -1,0 +1,21 @@
+#!/bin/bash
+set -u
+export PATH="$HOME/.local/share/mise/shims:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
+export GIT_TERMINAL_PROMPT=0
+BRAIN="${BRAIN_DIR:-$HOME/Brain}"
+LOCK="${TMPDIR:-/tmp}/brain-sync.lock"
+
+mkdir "$LOCK" 2>/dev/null || exit 0
+trap 'rmdir "$LOCK"' EXIT
+
+cd "$BRAIN" || exit 1
+
+if [ -n "$(git status --porcelain)" ]; then
+  git add -A
+  git commit -q -m "sync: $(date '+%Y-%m-%d %H:%M')"
+fi
+
+git pull -q --rebase --autostash origin main || { git rebase --abort 2>/dev/null; echo "pull failed" >&2; }
+git push -q origin main || echo "push failed" >&2
+
+qmd update >/dev/null && qmd embed >/dev/null
