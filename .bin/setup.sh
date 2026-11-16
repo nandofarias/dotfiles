@@ -34,6 +34,17 @@ export HOMEBREW_BUNDLE_FILE=~/.config/brew/Brewfile
 export HOMEBREW_FORCE_BREWED_CURL=1
 brew update --auto-update
 brew bundle install
+if [ ! -d /Applications/Kiri.app ]; then
+  echo "Installing Kiri …"
+  kiri_dmg="$(mktemp -d)/Kiri.dmg"
+  curl -fsSL -o "$kiri_dmg" "$(curl -fsSL https://api.github.com/repos/libracoder/kiri/releases/latest | grep -o 'https://[^"]*-arm64\.dmg' | head -1)"
+  kiri_mnt="$(hdiutil attach -nobrowse -readonly "$kiri_dmg" | awk -F'\t' '/\/Volumes\//{print $NF}')"
+  ditto "$kiri_mnt/Kiri.app" /Applications/Kiri.app
+  hdiutil detach "$kiri_mnt" -quiet
+  mkdir -p "$HOME/.kiri"
+  [ -e "$HOME/.kiri/share.json" ] || printf '{\n  "server": "127.0.0.1:9",\n  "device": ""\n}\n' > "$HOME/.kiri/share.json"
+  /Applications/Kiri.app/Contents/MacOS/kiri setup --use
+fi
 
 echo "Setting up fish …"
 echo $(which fish) | sudo tee -a /etc/shells
@@ -57,6 +68,11 @@ bash ~/.config/tmux/plugins/tmux-agent-sidebar/install-wizard.sh download-binary
 echo "Setting up languages and tools …"
 mise install
 command -v no-mistakes >/dev/null || curl -fsSL https://raw.githubusercontent.com/kunchenguid/no-mistakes/main/docs/install.sh | sh
+
+echo "Setting up the Brain vault …"
+[ -d "$HOME/Brain/.git" ] || gh repo clone nandofarias/brain "$HOME/Brain"
+qmd update && qmd embed
+launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/com.ffarias.brain-sync.plist" 2>/dev/null || true
 
 echo "Setting up Claude Code plugins …"
 if command -v claude &>/dev/null; then
