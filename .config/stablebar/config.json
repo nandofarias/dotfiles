@@ -1,0 +1,258 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Seb-GRAF/StableBar/v0.17.0/stablebar.schema.json",
+  "includes": [
+    "sketchybar-app-font.json"
+  ],
+  "bar": {
+    "height": 40,
+    "offset": 0,
+    "inset": 12,
+    "spacing": 8,
+    "appearance": "dark",
+    "keepNotificationsClear": true,
+    "keepWindowsClear": true,
+    "style": {
+      "background": "#00000000"
+    }
+  },
+  "widgets": [
+    {
+      "id": "spaces",
+      "type": "workspaces",
+      "position": "left",
+      "workspace": {
+        "showEmpty": true,
+        "appGlyphs": "@token.appGlyphs",
+        "appStyle": {
+          "fontName": "sketchybar-app-font",
+          "fontSize": 16
+        }
+      }
+    },
+    {
+      "id": "meeting",
+      "layout": {
+        "children": [
+          {
+            "source": "icon",
+            "type": "symbol"
+          },
+          {
+            "field": "text",
+            "type": "field"
+          },
+          {
+            "field": "start",
+            "hideWhenEmpty": "start",
+            "role": "secondary",
+            "type": "field"
+          }
+        ],
+        "type": "row"
+      },
+      "popup": {
+        "layout": {
+          "children": [
+            {
+              "role": "heading",
+              "text": "Today",
+              "type": "text"
+            },
+            {
+              "row": {
+                "children": [
+                  {
+                    "field": "start",
+                    "role": "key",
+                    "style": {
+                      "width": 56
+                    },
+                    "type": "field"
+                  },
+                  {
+                    "field": "title",
+                    "role": "primary",
+                    "type": "field"
+                  }
+                ],
+                "openField": "link",
+                "type": "row"
+              },
+              "source": "today",
+              "type": "list"
+            },
+            {
+              "role": "separator",
+              "type": "divider"
+            },
+            {
+              "open": "com.apple.iCal",
+              "role": "button",
+              "text": "Calendar",
+              "type": "text"
+            }
+          ],
+          "type": "column"
+        },
+        "style": {
+          "width": 320
+        }
+      },
+      "position": "right",
+      "type": "calendar"
+    },
+    {
+      "id": "system-monitor",
+      "layout": {
+        "children": [
+          {
+            "name": "cpu",
+            "type": "symbol"
+          },
+          {
+            "field": "text",
+            "type": "field"
+          },
+          {
+            "name": "memorychip",
+            "type": "symbol"
+          },
+          {
+            "children": [
+              {
+                "field": "memory",
+                "type": "field"
+              },
+              {
+                "text": "%",
+                "type": "text"
+              }
+            ],
+            "style": {
+              "spacing": 0
+            },
+            "type": "row"
+          }
+        ],
+        "type": "row"
+      },
+      "popup": {
+        "layout": {
+          "children": [
+            {
+              "role": "heading",
+              "text": "System",
+              "type": "text"
+            },
+            {
+              "height": 36,
+              "type": "graph"
+            },
+            {
+              "children": [
+                {
+                  "role": "key",
+                  "text": "CPU",
+                  "type": "text"
+                },
+                {
+                  "alignment": "trailing",
+                  "field": "cpu",
+                  "role": "value",
+                  "type": "field"
+                },
+                {
+                  "role": "value",
+                  "style": {
+                    "width": 14
+                  },
+                  "text": "%",
+                  "type": "text"
+                }
+              ],
+              "type": "row"
+            },
+            {
+              "height": 3,
+              "role": "meter",
+              "source": "cpu",
+              "type": "progress"
+            },
+            {
+              "children": [
+                {
+                  "role": "key",
+                  "text": "Memory",
+                  "type": "text"
+                },
+                {
+                  "alignment": "trailing",
+                  "field": "memory",
+                  "role": "value",
+                  "type": "field"
+                },
+                {
+                  "role": "value",
+                  "style": {
+                    "width": 14
+                  },
+                  "text": "%",
+                  "type": "text"
+                }
+              ],
+              "type": "row"
+            },
+            {
+              "height": 3,
+              "role": "meter",
+              "source": "memory",
+              "type": "progress"
+            },
+            {
+              "role": "separator",
+              "type": "divider"
+            },
+            {
+              "open": "com.apple.ActivityMonitor",
+              "role": "button",
+              "text": "Activity Monitor",
+              "type": "text"
+            }
+          ],
+          "type": "column"
+        },
+        "style": {
+          "width": 280
+        }
+      },
+      "position": "right",
+      "type": "system"
+    },
+    {
+      "id": "sound",
+      "position": "right",
+      "type": "audio"
+    },
+    {
+      "details": true,
+      "id": "battery",
+      "position": "right",
+      "type": "battery"
+    },
+    {
+      "id": "clock",
+      "type": "clock",
+      "position": "right",
+      "format": "EEE MMM d  HH:mm",
+      "onClick": "open -a Calendar"
+    },
+    {
+      "id": "menu-bar-items",
+      "position": "right",
+      "type": "menuBarItems"
+    }
+  ],
+  "theme": {
+    "id": "catppuccin"
+  }
+}
