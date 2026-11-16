@@ -34,6 +34,17 @@ export HOMEBREW_BUNDLE_FILE=~/.config/brew/Brewfile
 export HOMEBREW_FORCE_BREWED_CURL=1
 brew update --auto-update
 brew bundle install
+echo "Installing apps without a Homebrew cask …"
+install_dmg_app() {
+  [ -d "/Applications/$1.app" ] && return 0
+  local dmg mnt
+  dmg="$(mktemp -d)/$1.dmg"
+  curl -fsSL -o "$dmg" "$2" || return 1
+  mnt="$(hdiutil attach -nobrowse -readonly "$dmg" | awk -F'\t' '/\/Volumes\//{print $NF}')"
+  ditto "$mnt/$1.app" "/Applications/$1.app"
+  hdiutil detach "$mnt" -quiet
+}
+install_dmg_app Glance https://github.com/jonnyoo/glance/releases/latest/download/Glance.dmg
 
 echo "Setting up fish …"
 echo $(which fish) | sudo tee -a /etc/shells
