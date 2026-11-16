@@ -68,9 +68,6 @@ bash ~/.config/tmux/plugins/tmux-agent-sidebar/install-wizard.sh download-binary
 echo "Setting up languages and tools …"
 mise install
 
-echo "Install npm packages …"
-npmg i
-
 echo "Setting up Claude Code plugins …"
 if command -v claude &>/dev/null; then
   claude plugin marketplace add ~/.config/tmux/plugins/tmux-agent-sidebar
